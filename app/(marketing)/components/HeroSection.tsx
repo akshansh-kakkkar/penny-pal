@@ -37,7 +37,7 @@ export default function HearoSection() {
           Tracking expenses has never been this sweet. Join PennyPal and turn
           your savings into treats.
         </div>
-        <div className="mt-4 font-semibold text-xl sm:text-2xl gap-8 flex ">
+        <div className="mt-4 font-semibold text-xl sm:text-2xl gap-4 sm:gap-8 flex ">
           <button className="bg-[#715767] border-2 py-4 px-4 md:py-6.5 md:px-10 text-white rounded-full">
             Join the Club
           </button>

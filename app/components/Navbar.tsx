@@ -1,13 +1,20 @@
 "use client";
 import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(()=>{
+    const handleScroll = ()=>{
+        setScrolled(window.scrollY > 50);
+    }
+    window.addEventListener("scroll", handleScroll);
+  }, [])
   return (
     <>
-      <div className=" px-5 lg:px-20 xl:px-40 py-6 text-[#715767] bg-[#FAF9F6] flex items-center text-center justify-between">
+      <div className={`sticky z-50   text-[#715767] bg-[#FAF9F6] flex items-center text-center justify-between ${scrolled ? "px-5 lg:px-12 xl:px-24 py-3 mx-4 mt-12 rounded-full shadow-lg top-4" : "px-5 top-0 lg:px-20 xl:px-40 py-6"}`}>
         <div className="font-bold text-2xl">PennyPal</div>
         <div className="hidden md:flex gap-10 text-md font-semibold capitalize text-center items-center">
           <Link href={"/about-us"}>About Us</Link>
@@ -45,9 +52,9 @@ export default function Navbar() {
             transition={{ duration: 0.5 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -100, opacity: 0 }}
-            className="md:hidden z-500 flex relative"
+            className="md:hidden z-50 flex relative"
           >
-            <div className="absolute bg-[#FAF9F6] text-[#715767]  shadow-[0px_60px_60px_rgba(244,210,229,0.4)] left-4 rounded-4xl   min-w-[180px] min-h-[120px] top-3  justify-center items-center text-center">
+            <div className="fixed bg-[#FAF9F6] text-[#715767]  shadow-[0px_60px_60px_rgba(244,210,229,0.4)] left-4 rounded-4xl   min-w-[180px] min-h-[120px] top-24 shadow-lg  justify-center items-center text-center">
               <div
                 className="flex absolute right-6 top-4"
                 onClick={() => {
