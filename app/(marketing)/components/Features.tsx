@@ -1,64 +1,53 @@
-import { faUsers } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { BadgeCheck } from "lucide-react";
-import Image from "next/image";
+import { ArrowRight, ChartPie, Hand, Laugh } from "lucide-react";
 
 export default function Features() {
+  const Content = [
+    {
+      id: 1,
+      title: "Easy Peasy Tracking",
+      description:
+        "Record every treat with just a tap. Our interface is designed to be so simple, you'll actually look forward to logging to your coffee.",
+      hook: "Try it now",
+      icon: <Hand />,
+      backgroundColor: "bg-[#C8E9E2]/30",
+      iconColor: "bg-[#C8E9E2] text-[#46645F]",
+    },
+    {
+      id: 2,
+      title: "Budgeting with a Smile",
+      description:
+        "Set goals that feel like high-fives. Watch your progress bars fill with happy mint green as you reach your milestones.",
+      hook: "Learn how",
+      icon: <Laugh />,
+      backgroundColor: "bg-[#FFFFFF]/30",
+      iconColor: "bg-[#F4D2E5] text-[#715767]",
+    },
+    {
+        id : 3,
+        title : "Cute Insights",
+        description : "See where your pennies go with adorable charts. Our visual reports are as delightful as they are informative",
+        hook : "View demo",
+        icon : <ChartPie />,
+        backgroundColor : "bg-[#F9D5B4]/30",
+        iconColor : "bg-[#F9D5B4] text-[#74593F]"
+    }
+  ];
   return (
-    <div
-      className={`flex justify-center items-center md:px-40 py-24 bg-gradient-to-b from-[#F4D2E5]/40 to-[#FFFFFF]`}
-    >
-      <div className="flex lg:flex-row flex-col gap-6 ">
-        <div
-          className={`hover:scale-[105%] transition-all duration-500  shadow-[0px_20px_40px_rgba(113,87,103,0.1)] sm:w-110 h-130 w-70 flex justify-start items-start  flex-col shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] bg-[#FFFFFF] px-10 py-12 rounded-4xl gap-6`}
-        >
-          <div className="text-4xl max-w-80 font-bold text-[#715767]">
-            A safe space for your wallet
-          </div>
-          <div className="text-md text-[#4D4449] font-medium">
-            PennyPal is more than an app, it's a sanctuary for your financial
-            wellness. We use bank-level security wrapped in a marshmallow cloud
-            of comfort.
-          </div>
-          <div className="relative rounded-4xl w-[200px] h-[250px] md:w-[360px] md:h-[220px]">
-            <Image
-              src={"/assets/landing-page-features.png"}
-              alt="landing-page image"
-              className="absolute rounded-4xl "
-              fill
-            />
-          </div>
-        </div>
-        <div className="flex flex-col gap-4">
-          <div className=" relative hover:scale-[105%] transition-all duration-500 shadow-[0px_20px_40px_rgba(113,87,103,0.1)] w-70 sm:w-110 h-60 flex justify-start items-start  flex-col shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] bg-[#715767] px-10 py-6 rounded-4xl ">
-            <div className="text-white text-xl font-semibold">
-              Sweet Savings
+    <div className=" py-16 bg-gradient-to-b from-[#F4D2E5]/40 to-[#FFFFFF]">
+    <div className="text-[#715767]  flex gap-4 justify-center items-center text-center flex-col ">
+        <div className="text-3xl capitalize font-bold">Why You'll Love PennyPal</div>
+        <div className="font-medium text-xl max-w-180">We've stripped away the scary spreadsheets and replaced them with softness, smiles, and sweet success.</div>
+    </div>
+    <div className="flex gap-10 px-10 xl:px-40 flex-wrap mt-12  justify-center items-center min-h-[70vh]">
+        {Content.map((item)=>(
+            <div className={`${item.backgroundColor} cursor-pointer group transition-all duration-500 hover:scale-[110%] w-80 h-120 sm:h-110 text-[#715767] shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]  p-10  flex flex-col justify-start text-start gap-6 rounded-4xl`} key={item.id}>
+                <div className={`rounded-full ${item.iconColor} w-fit flex justify-center items-center text-center p-4 `}>{item.icon}</div>
+                <div className="font-semibold  text-3xl">{item.title}</div>
+                <div className="text-[#4D4449] font-medium text-lg">{item.description}</div>
+                <div className="font-bold mt-auto flex gap-2 text-sm items-center text-center  ">{item.hook}<span className="transition-all duration-300 group-hover:translate-x-2">< ArrowRight size={16} strokeWidth={3} /></span></div>
             </div>
-            <div className="text-white text-md font-normal">
-              Users save an average of $240/month using PennyPal
-            </div>
-            <div className="absolute z-10 -bottom-0 -right-4 rounded-full">
-              <Image
-                src="/assets/stars.svg"
-                alt="stars"
-                className="rounded-full opacity-40"
-                width={120}
-                height={50}
-              />
-            </div>
-          </div>
-          <div className="gap-6 md:flex-row flex-col  flex justify-start items-start rounded-4xl ">
-            <div className="bg-[#C8E9E2] hover:scale-[105%] transition-all duration-500 text-[#46645F] justify-center gap-4 items-center shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] py-6 rounded-3xl w-70 md:w-52 h-65 flex flex-col gap-2">
-              <FontAwesomeIcon icon={faUsers} width={48} />
-              <div className="text-xs font-bold">become a club members</div>
-            </div>
-            <div className="bg-[#F9D5B4] hover:scale-[105%] transition-all duration-500 text-[#74593F] justify-center items-center flex flex-col gap-2 shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] py-6  rounded-3xl md:w-52 w-70 h-65">
-              <BadgeCheck size={48} fill="#74593F" className="text-[#F9D5B4]" />
-              <div className="text-xs font-bold">Trust Verified</div>
-            </div>
-          </div>
-        </div>
-      </div>
+        ))}
+    </div>
     </div>
   );
 }
