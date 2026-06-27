@@ -5,7 +5,7 @@ import { Heart, PiggyBank } from "lucide-react";
 export default function HearoSection() {
   return (
     <div
-      className={`bg-gradient-to-b lg:flex-row flex-col min-h-[85vh] relative h-full flex gap-24 justify-center items-center text-center md:px-40  from-[#F4D2E5]/40 to-[#FFFFFF]`}
+      className={`bg-gradient-to-b lg:flex-row flex-col min-h-[92vh] relative h-full flex gap-24 justify-center items-center text-center md:px-40  from-[#F4D2E5]/40 to-[#FFFFFF]`}
     >
       <div className="absolute hidden md:block top-2 opacity-40 text-[#715767] right-12">
         <FontAwesomeIcon
@@ -15,7 +15,7 @@ export default function HearoSection() {
           className="text-xl "
         />
       </div>
-            <div className="absolute hidden md:block bottom-2 opacity-40 text-[#46645F] left-12">
+            <div className="absolute hidden md:block bottom-6 opacity-40 text-[#46645F] left-12">
         <FontAwesomeIcon
           width={100}
           height={100}
