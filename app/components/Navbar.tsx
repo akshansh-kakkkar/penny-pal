@@ -45,7 +45,7 @@ export default function Navbar() {
             transition={{ duration: 0.5 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -100, opacity: 0 }}
-            className="md:hidden flex relative"
+            className="md:hidden z-500 flex relative"
           >
             <div className="absolute bg-[#FAF9F6] text-[#715767]  shadow-[0px_60px_60px_rgba(244,210,229,0.4)] left-4 rounded-4xl   min-w-[180px] min-h-[120px] top-3  justify-center items-center text-center">
               <div
