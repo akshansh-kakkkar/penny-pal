@@ -1,36 +1,37 @@
+"use client";
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   ArrowRight,
-  Divide,
-  Dot,
-  EyeClosed,
+  Eye,
   EyeOff,
   LockIcon,
   MailIcon,
   Smile,
 } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function page() {
+  const [eyeStatus, setEyeStatus] = useState(false);
+
   return (
     <div
       className={`bg-gradient-to-b min-h-screen overflow-hidden from-[#F4D2E5]/40 to-[#FFFFFF] flex flex-col justify-center items-center relative`}
     >
-      <div
-      className="absolute -top-30 -left-30 w-[350px] h-[350px]  sm:w-[500px] sm:h-[500px] bg-[#F4D2E5] rounded-full blur-[120px] z-10"
-       />
+      <div className="absolute -top-30 -left-30 w-[350px] h-[350px]  sm:w-[500px] sm:h-[500px] bg-[#F4D2E5] rounded-full blur-[120px] z-10" />
       <div className="rounded-4xl bg-[#FFFFFF] gap-6 z-50 p-10 flex flex-col shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]">
         <div className="flex flex-col `">
-         <div className="flex w-full justify-center items-center text-center p-2">
-          <div className="flex bg-[#F4D2E5] rounded-full animate-bounce justify-center items-center text-center p-2">
-            <FontAwesomeIcon
-              color="#725868"
-              className="p-4 animate-squish"
-              width={64}
-              height={64}
-              icon={faPiggyBank}
-            />
-          </div>
+          <div className="flex w-full justify-center items-center text-center p-2">
+            <div className="flex bg-[#F4D2E5] rounded-full animate-bounce justify-center items-center text-center p-2">
+              <FontAwesomeIcon
+                color="#725868"
+                className="p-4 animate-squish"
+                width={64}
+                height={64}
+                icon={faPiggyBank}
+              />
+            </div>
           </div>
           <div className="flex justify-center items-center flex-col">
             <div className="text-xl text-[#715767] font-bold">
@@ -48,7 +49,7 @@ export default function page() {
             </div>
             <div className="relative">
               <input
-                className="rounded-full peer bg-[#F4F3F1]  w-full  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
+                className="rounded-full peer bg-[#F4F3F1]  w-full  p-2.5 pl-10 px-4 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
                 placeholder="Buddy"
                 type="text"
               />
@@ -65,7 +66,7 @@ export default function page() {
             </div>
             <div className="relative">
               <input
-                className="rounded-full peer bg-[#F4F3F1]  w-full  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
+                className="rounded-full peer bg-[#F4F3F1]  w-full px-4  p-2.5 pl-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
                 placeholder="buddy@example.com"
                 type="email"
               />
@@ -82,15 +83,30 @@ export default function page() {
             </div>
             <div className="relative">
               <input
-                className="rounded-full peer placeholder:text-2xl placeholder:text-center placeholder:translate-y-1 bg-[#F4F3F1]  w-full  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
-                placeholder={"•  ".repeat(8)}
-                type="password"
+                className="rounded-full peer placeholder:text-2xl  placeholder:translate-y-1 bg-[#F4F3F1]  w-full  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
+                placeholder={"• ".repeat(8)}
+                type={eyeStatus ? "text" : "password"}
               />
-              <EyeOff
-                className="absolute  flex justify-center  items-center z-20 top-1/4 transition-all duration-300 right-2 peer-focus:text-[#715767] text-[#D0C3C9]"
+              {
+                eyeStatus ? (
+
+              <Eye
+              onClick={()=>setEyeStatus(false)}
+                className="absolute cursor-pointer  flex justify-center  items-center z-20 top-1/4 transition-all duration-300 right-2 peer-focus:text-[#715767] text-[#D0C3C9]"
                 size={18}
                 strokeWidth={2}
               />
+                ) : (
+
+
+              <EyeOff
+              onClick={()=>setEyeStatus(true)}
+                className="absolute cursor-pointer  flex justify-center  items-center z-20 top-1/4 transition-all duration-300 right-2 peer-focus:text-[#715767] text-[#D0C3C9]"
+                size={18}
+                strokeWidth={2}
+              />
+                              )
+              }
               <LockIcon
                 className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
                 size={24}
@@ -104,15 +120,26 @@ export default function page() {
             </div>
             <div className="relative">
               <input
-                className="rounded-full peer placeholder:text-2xl placeholder:text-center placeholder:translate-y-1 bg-[#F4F3F1]  w-full  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
-                placeholder={"•  ".repeat(8)}
-                type="password"
+                className="rounded-full peer placeholder:text-2xl placeholder:translate-y-1 bg-[#F4F3F1]  w-full  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
+                placeholder={"• ".repeat(8)}
+                type={eyeStatus ? "text" : "password"}
               />
-              <EyeOff
-                className="absolute  flex justify-center  items-center z-20 top-1/4 transition-all duration-300 right-2 peer-focus:text-[#715767] text-[#D0C3C9]"
-                size={18}
-                strokeWidth={2}
-              />
+              {eyeStatus ? (
+                <Eye
+                  onClick={() => setEyeStatus(false)}
+                  className="absolute  flex justify-center cursor-pointer  items-center z-20 top-1/4 transition-all duration-300 right-2 peer-focus:text-[#715767] text-[#D0C3C9]"
+                  size={18}
+                  strokeWidth={2}
+                />
+              ) : (
+                <EyeOff
+                  onClick={() => setEyeStatus(true)}
+                  className="absolute  flex justify-center cursor-pointer  items-center z-20 top-1/4 transition-all duration-300 right-2 peer-focus:text-[#715767] text-[#D0C3C9]"
+                  size={18}
+                  strokeWidth={2}
+                />
+              )}
+
               <LockIcon
                 className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
                 size={24}
@@ -129,12 +156,12 @@ export default function page() {
         </div>
         <div className="text-[#4D4449] text-xs flex justify-center font-semibold">
           Already have a pal account?
-          <span className="text-[#725868] font-bold">&nbsp;Sign in</span>
+          <Link href={`/auth/login`} className="text-[#725868] font-bold hover:underline  underline-offset-2">
+            &nbsp;Sign in
+          </Link>
         </div>
       </div>
-            <div
-      className="absolute z-10 -bottom-30 -right-30 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] bg-[#C8E9E2] rounded-full blur-[120px]"
-       />
+      <div className="absolute z-10 -bottom-30 -right-30 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] bg-[#C8E9E2] rounded-full blur-[120px]" />
     </div>
   );
 }
