@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Quicksand } from "next/font/google";
+import LayoutWrapper from "./components/LayoutWrapper";
 const quickSand = Quicksand({
   subsets : ['latin']
 })
@@ -22,10 +23,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`relative flex flex-col min-h-screen antialiased ${quickSand.className}`}>
-        <Navbar />
+        <LayoutWrapper>
         <main className="flex-1">{children}</main>
+        </LayoutWrapper>
       </body>
-      <Footer />
     </html>
   );
 }

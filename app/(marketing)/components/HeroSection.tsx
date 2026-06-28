@@ -1,18 +1,21 @@
+"use client"
 import { faMoneyBill, faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Heart, PiggyBank } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function HearoSection() {
+  const router = useRouter();
   return (
     <div
       className={`bg-gradient-to-b lg:flex-row flex-col min-h-[92vh] relative h-full flex gap-24 justify-center items-center text-center md:px-40  from-[#F4D2E5]/40 to-[#FFFFFF]`}
     >
-      <div className="absolute hidden md:block top-2 opacity-40 text-[#715767] right-12">
+      <div className="absolute hidden md:block top-4 opacity-40 text-[#715767] right-12">
         <FontAwesomeIcon
           width={100}
           height={100}
           icon={faPiggyBank}
-          className="text-xl "
+          className="text-7xl "
         />
       </div>
             <div className="absolute hidden md:block bottom-6 opacity-40 text-[#46645F] left-12">
@@ -20,7 +23,7 @@ export default function HearoSection() {
           width={100}
           height={100}
           icon={faMoneyBill}
-          className="text-xl "
+          className="text-7xl "
         />
       </div>
       <div className="flex flex-col text-center md:text-start justify-center items-center md:items-start md:justify-start gap-6">
@@ -38,10 +41,10 @@ export default function HearoSection() {
           your savings into treats.
         </div>
         <div className="mt-4 font-semibold text-xl sm:text-2xl gap-4 sm:gap-8 flex ">
-          <button className="bg-[#715767] border-2 py-4 px-4 md:py-6.5 md:px-10 text-white rounded-full">
+          <button onClick={()=>router.push('/auth/sign-in')} className="bg-[#715767] cursor-pointer hover:scale-[90%] duration-300 transition-all border-2 py-4 px-4 md:py-6.5 md:px-10 text-white rounded-full">
             Join the Club
           </button>
-          <button className="border-2 border-[#715767] text-[#715767] md:py-6.5 md:px-10 py-4 px-4 rounded-full">
+          <button className="border-2 cursor-pointer duration-300 transition-all hover:scale-[90%] border-[#715767] text-[#715767] md:py-6.5 md:px-10 py-4 px-4 rounded-full">
             Explore Me!
           </button>
         </div>
@@ -49,10 +52,10 @@ export default function HearoSection() {
 
       <div className="xl:block hidden">
         <FontAwesomeIcon
-          width={400}
-          height={400}
+          width={800}
+          height={800}
           icon={faPiggyBank}
-          className="text-8xl  bg-gradient-to-b rounded-full p-12 from-[#715767] to-[#e4b0d0] text-white"
+          className="text-[264px]  bg-gradient-to-b rounded-full p-12 from-[#715767] to-[#e4b0d0] text-white"
         />
       </div>
     </div>
