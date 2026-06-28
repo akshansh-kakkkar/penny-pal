@@ -10,7 +10,7 @@ export default function AboutUs() {
     >
       <div className="flex lg:flex-row flex-col gap-6 ">
         <div
-          className={`hover:scale-[105%] transition-all duration-500  shadow-[0px_20px_40px_rgba(113,87,103,0.1)] sm:w-110 h-130 w-70 flex justify-start items-start  flex-col shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] bg-[#FFFFFF] px-10 py-12 rounded-4xl gap-6`}
+          className={`md:hover:scale-[105%] hover:scale-[115%] transition-all duration-500  shadow-[0px_20px_40px_rgba(113,87,103,0.1)] sm:w-110 h-130 w-70 flex justify-start items-start  flex-col shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] bg-[#FFFFFF] px-10 py-12 rounded-4xl gap-6`}
         >
           <div className="text-4xl max-w-80 font-bold text-[#715767]">
             A safe space for your wallet
