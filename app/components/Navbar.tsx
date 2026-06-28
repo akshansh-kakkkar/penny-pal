@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { div } from "framer-motion/client";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -29,7 +30,6 @@ export default function Navbar() {
             Log In
           </button>
         </div>
-        <AnimatePresence>
           <motion.div
             transition={{ duration: 0.5 }}
             initial={{ rotate: 0 }}
@@ -43,41 +43,32 @@ export default function Navbar() {
               <Menu strokeWidth={3} size={24} />
             )}
           </motion.div>
-        </AnimatePresence>
       </div>
       <AnimatePresence>
         {isOpen && (
+          <div className="flex justify-center items-center">
           <motion.div
-            initial={{ x: -100, opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -100, opacity: 0 }}
-            className="md:hidden z-50 flex relative"
-          >
-            <div className="fixed bg-[#FAF9F6] text-[#715767]  shadow-[0px_60px_60px_rgba(244,210,229,0.4)] left-4 rounded-4xl   min-w-[180px] min-h-[120px] top-24 shadow-lg  justify-center items-center text-center">
-              <div
-                className="flex absolute right-6 top-4"
-                onClick={() => {
-                  setIsOpen(false);
-                }}
-              >
-                <X />
-              </div>
-              <div className="font-semibold py-12 px-12 text-left text-xl gap-4 flex-col flex">
+            initial={{opacity : 0, y:-20}}
+            transition={{ duration: 0.3 }}
+            animate={{opacity : 1, y:0}}
+            exit={{opacity : 0, y:-20}}
+             className={`fixed z-50 md:hidden bg-[#FAF9F6] text-[#715767] shadow-[0px_60px_60px_rgba(244,210,229,0.4)]  min-h-[120px] shadow-lg ${scrolled ? " rounded-4xl top-20 w-[calc(100vw-2rem)] mx-4 flex justify-center items-center " : " rounded-b-4xl top-20 w-full"}`}>
+
+              <div className="font-semibold justify-center items-center py-4 px-4  text-xl gap-4 flex-col flex">
                 <Link href={"/about-us"}>About Us</Link>
                 <Link href={"/features"}>Features</Link>
                 <Link href={"/join-the-club"}>Join the Club</Link>
                 <div className="flex gap-2 flex-col">
-                  <button className="bg-[#715767] text-md px-3 py-1 border-2 cursor-pointer transition-all hover:text-[#715767] hover:bg-white duration-300 border-[#715767] text-white rounded-full">
+                  <button className="bg-[#715767]  text-md px-22 py-1 border-2 cursor-pointer transition-all hover:text-[#715767] hover:bg-white duration-300 border-[#715767] text-white rounded-full">
                     Sign In
                   </button>
-                  <button className="border-[#715767] text-md cursor-pointer transition-all duration-300 hover:bg-[#715767] hover:text-white px-3 py-1 border-2 rounded-full">
+                  <button className="border-[#715767] px-22 text-md cursor-pointer transition-all duration-300 hover:bg-[#715767] hover:text-white px-3 py-1 border-2 rounded-full">
                     Log In
                   </button>
                 </div>
               </div>
-            </div>
           </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </>
