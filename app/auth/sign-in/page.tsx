@@ -1,22 +1,36 @@
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ArrowRight, Dot } from "lucide-react";
+import {
+  ArrowRight,
+  Divide,
+  Dot,
+  EyeClosed,
+  EyeOff,
+  LockIcon,
+  MailIcon,
+  Smile,
+} from "lucide-react";
 
 export default function page() {
   return (
     <div
-      className={`bg-gradient-to-b min-h-screen from-[#F4D2E5]/40 to-[#FFFFFF] flex flex-col justify-center items-center`}
+      className={`bg-gradient-to-b min-h-screen overflow-hidden from-[#F4D2E5]/40 to-[#FFFFFF] flex flex-col justify-center items-center relative`}
     >
-      <div className="rounded-4xl bg-[#FFFFFF] gap-6  p-10 flex flex-col shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]">
+      <div
+      className="absolute -top-30 -left-30 w-[350px] h-[350px]  sm:w-[500px] sm:h-[500px] bg-[#F4D2E5] rounded-full blur-[120px] z-10"
+       />
+      <div className="rounded-4xl bg-[#FFFFFF] gap-6 z-50 p-10 flex flex-col shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]">
         <div className="flex flex-col `">
-          <div className="flex w-full justify-center items-center text-center p-2">
+         <div className="flex w-full justify-center items-center text-center p-2">
+          <div className="flex bg-[#F4D2E5] rounded-full animate-bounce justify-center items-center text-center p-2">
             <FontAwesomeIcon
               color="#725868"
-              className="bg-[#F4D2E5] p-4 rounded-full"
+              className="p-4 animate-squish"
               width={64}
               height={64}
               icon={faPiggyBank}
             />
+          </div>
           </div>
           <div className="flex justify-center items-center flex-col">
             <div className="text-xl text-[#715767] font-bold">
@@ -29,33 +43,98 @@ export default function page() {
         </div>
         <div className="flex flex-col gap-4 ">
           <div className="flex gap-2 flex-col">
-            <div className="text-xs px-4 text-[#715767] font-semibold">What's your name, pal?</div>
-            <div>
-                
-              <input className="rounded-full bg-[#F4F3F1]  w-full  p-2.5 px-4.5 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]" placeholder="Buddy" type="text" />
+            <div className="text-xs px-2 text-[#715767] font-semibold">
+              What's your name, pal?
+            </div>
+            <div className="relative">
+              <input
+                className="rounded-full peer bg-[#F4F3F1]  w-full  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
+                placeholder="Buddy"
+                type="text"
+              />
+              <Smile
+                className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
+                size={24}
+                strokeWidth={2}
+              />
             </div>
           </div>
-          <div>
-            <div>Where should we send letters?</div>
-            <div>
-              <input placeholder="buddy@example.com" type="email" />
+          <div className="flex flex-col gap-2">
+            <div className="text-xs px-2 text-[#715767] font-semibold">
+              Where should we send letters?
+            </div>
+            <div className="relative">
+              <input
+                className="rounded-full peer bg-[#F4F3F1]  w-full  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
+                placeholder="buddy@example.com"
+                type="email"
+              />
+              <MailIcon
+                className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
+                size={24}
+                strokeWidth={2}
+              />
             </div>
           </div>
-          <div>
-            <div>Create a secret password</div>
+          <div className="flex flex-col gap-2">
+            <div className="text-xs px-2 text-[#715767] font-semibold">
+              Create a secret password
+            </div>
+            <div className="relative">
+              <input
+                className="rounded-full peer placeholder:text-2xl placeholder:text-center placeholder:translate-y-1 bg-[#F4F3F1]  w-full  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
+                placeholder={"•  ".repeat(8)}
+                type="password"
+              />
+              <EyeOff
+                className="absolute  flex justify-center  items-center z-20 top-1/4 transition-all duration-300 right-2 peer-focus:text-[#715767] text-[#D0C3C9]"
+                size={18}
+                strokeWidth={2}
+              />
+              <LockIcon
+                className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
+                size={24}
+                strokeWidth={2}
+              />
+            </div>
           </div>
-          <div>
-            <input placeholder={"."} type="password" />
+          <div className="flex flex-col gap-2">
+            <div className="text-xs px-2 text-[#715767] font-semibold">
+              Confirm secret password
+            </div>
+            <div className="relative">
+              <input
+                className="rounded-full peer placeholder:text-2xl placeholder:text-center placeholder:translate-y-1 bg-[#F4F3F1]  w-full  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
+                placeholder={"•  ".repeat(8)}
+                type="password"
+              />
+              <EyeOff
+                className="absolute  flex justify-center  items-center z-20 top-1/4 transition-all duration-300 right-2 peer-focus:text-[#715767] text-[#D0C3C9]"
+                size={18}
+                strokeWidth={2}
+              />
+              <LockIcon
+                className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
+                size={24}
+                strokeWidth={2}
+              />
+            </div>
           </div>
         </div>
-        <div>
-          <span>Let's Go!</span>
+        <div className="flex  py-4 justify-center items-center bg-[#F4D2E5] text-[#725868] rounded-full w-full gap-2">
+          <span className="font-bold ">Let's Go!</span>
           <span>
-            <ArrowRight />
+            <ArrowRight size={20} strokeWidth={3} />
           </span>
         </div>
-        <div>Already have a pal account? Signin</div>
+        <div className="text-[#4D4449] text-xs flex justify-center font-semibold">
+          Already have a pal account?
+          <span className="text-[#725868] font-bold">&nbsp;Sign in</span>
+        </div>
       </div>
+            <div
+      className="absolute z-10 -bottom-30 -right-30 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] bg-[#C8E9E2] rounded-full blur-[120px]"
+       />
     </div>
   );
 }

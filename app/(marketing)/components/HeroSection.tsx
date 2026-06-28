@@ -52,10 +52,8 @@ export default function HearoSection() {
 
       <div className="xl:block hidden">
         <FontAwesomeIcon
-          width={800}
-          height={800}
           icon={faPiggyBank}
-          className="text-[264px]  bg-gradient-to-b rounded-full p-12 from-[#715767] to-[#e4b0d0] text-white"
+          className="text-[264px]  bg-gradient-to-b rounded-full py-18 px-12 from-[#715767] to-[#e4b0d0] text-white"
         />
       </div>
     </div>

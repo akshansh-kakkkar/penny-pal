@@ -1,1 +1,20 @@
 @import "tailwindcss";
+
+@keyframes squish {
+    0%, 100% { 
+        transform:  scale(1);
+    }
+    20% { 
+        transform:  scaleX(1.15) scaleY(0.85);
+    }
+    40%{
+        transform: scaleX(0.9) scaleY(1.1);
+    }
+    60% {
+        transform: scaleX(1.08) scaleY(0.92);
+    }
+}
+
+.animate-squish{
+    animation: squish 1s ease-in-out infinite;
+}
