@@ -1,9 +1,9 @@
 import { betterAuth } from "better-auth";
+import {prismaAdapter} from "better-auth/adapters/prisma"
 import { prisma } from "../prisma";
-import { metadata } from "../../layout";
 export const auth = betterAuth({
   database:
-    (prisma,
+    prismaAdapter(prisma,
     {
       provider: "postgresql",
     }),
@@ -22,7 +22,7 @@ export const auth = betterAuth({
       trustedProviders: ["google"],
     },
   },
-  trustedOrigins : ["http://localhost:3000", "https://penny-pal-silk.vercel.app/"],
+  trustedOrigins : ["http://localhost:3000", "https://penny-pal-silk.vercel.app"],
   secret : process.env.BETTER_AUTH_SECRET,
   baseURL : process.env.BETTER_AUTH_URL
 });

@@ -28,7 +28,7 @@ model Account {
   idToken               String?
   providerId            String
   password              String?
-  refreshToken          DateTime?
+  refreshToken          String?
   refreshTokenExpiredAt DateTime?
   createdAt             DateTime  @default(now())
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
