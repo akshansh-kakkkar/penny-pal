@@ -6,9 +6,11 @@ import {
   Eye,
   EyeOff,
   LockIcon,
+  LucideAArrowDown,
   MailIcon,
   Smile,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -19,16 +21,14 @@ export default function page() {
     <div
       className={`bg-gradient-to-b min-h-screen overflow-hidden from-[#F4D2E5]/40 to-[#FFFFFF] flex flex-col justify-center items-center relative`}
     >
-      <div className="absolute -top-30 -left-30 w-[350px] h-[350px]  sm:w-[500px] sm:h-[500px] bg-[#F4D2E5] rounded-full blur-[120px] z-10" />
+      <div className="absolute -top-30 -left-30 w-[350px] h-[350px]  sm:w-[400px] sm:h-[400px] bg-[#F4D2E5] rounded-full blur-[40px] z-10" />
       <div className="rounded-4xl bg-[#FFFFFF] gap-6 z-50 p-10 flex flex-col shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]">
         <div className="flex flex-col `">
           <div className="flex w-full justify-center items-center text-center p-2">
-            <div className="flex bg-[#F4D2E5] rounded-full animate-bounce justify-center items-center text-center p-2">
+            <div className="flex bg-[#F4D2E5] rounded-full w-18 h-18  animate-bounce justify-center items-center text-center p-2">
               <FontAwesomeIcon
                 color="#725868"
-                className="p-4 animate-squish"
-                width={64}
-                height={64}
+                className=" animate-squish text-4xl"
                 icon={faPiggyBank}
               />
             </div>
@@ -77,6 +77,7 @@ export default function page() {
               />
             </div>
           </div>
+          <div className="flex sm:flex-row flex-col gap-4 sm:gap-4">
           <div className="flex flex-col gap-2">
             <div className="text-xs px-2 text-[#715767] font-semibold">
               Create a secret password
@@ -87,26 +88,21 @@ export default function page() {
                 placeholder={"• ".repeat(8)}
                 type={eyeStatus ? "text" : "password"}
               />
-              {
-                eyeStatus ? (
-
-              <Eye
-              onClick={()=>setEyeStatus(false)}
-                className="absolute cursor-pointer  flex justify-center  items-center z-20 top-1/4 transition-all duration-300 right-2 peer-focus:text-[#715767] text-[#D0C3C9]"
-                size={18}
-                strokeWidth={2}
-              />
-                ) : (
-
-
-              <EyeOff
-              onClick={()=>setEyeStatus(true)}
-                className="absolute cursor-pointer  flex justify-center  items-center z-20 top-1/4 transition-all duration-300 right-2 peer-focus:text-[#715767] text-[#D0C3C9]"
-                size={18}
-                strokeWidth={2}
-              />
-                              )
-              }
+              {eyeStatus ? (
+                <Eye
+                  onClick={() => setEyeStatus(false)}
+                  className="absolute cursor-pointer  flex justify-center  items-center z-20 top-1/4 transition-all duration-300 right-2 peer-focus:text-[#715767] text-[#D0C3C9]"
+                  size={18}
+                  strokeWidth={2}
+                />
+              ) : (
+                <EyeOff
+                  onClick={() => setEyeStatus(true)}
+                  className="absolute cursor-pointer  flex justify-center  items-center z-20 top-1/4 transition-all duration-300 right-2 peer-focus:text-[#715767] text-[#D0C3C9]"
+                  size={18}
+                  strokeWidth={2}
+                />
+              )}
               <LockIcon
                 className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
                 size={24}
@@ -147,6 +143,7 @@ export default function page() {
               />
             </div>
           </div>
+          </div>
         </div>
         <div className="flex  py-4 justify-center items-center bg-[#F4D2E5] text-[#725868] rounded-full w-full gap-2">
           <span className="font-bold ">Let's Go!</span>
@@ -154,14 +151,28 @@ export default function page() {
             <ArrowRight size={20} strokeWidth={3} />
           </span>
         </div>
+        <div className="flex gap-2 flex-col flex-col-reverse">
         <div className="text-[#4D4449] text-xs flex justify-center font-semibold">
           Already have a pal account?
-          <Link href={`/auth/login`} className="text-[#725868] font-bold hover:underline  underline-offset-2">
+          <Link
+            href={`/auth/login`}
+            className="text-[#725868] font-bold hover:underline  underline-offset-2"
+          >
             &nbsp;Sign in
           </Link>
         </div>
+                <div className="text-[#4D4449] text-xs flex justify-center font-semibold">
+         have a google account?
+          <Link
+            href={`/auth/login`}
+            className="text-[#725868] font-bold hover:underline  underline-offset-2"
+          >
+            &nbsp;continue with google
+          </Link>
+        </div>
+        </div>
       </div>
-      <div className="absolute z-10 -bottom-30 -right-30 w-[350px] h-[350px] sm:w-[500px] sm:h-[500px] bg-[#C8E9E2] rounded-full blur-[120px]" />
+      <div className="absolute z-10 -bottom-30 -right-30 w-[350px] h-[350px] sm:w-[400px] sm:h-[400px] bg-[#C8E9E2] rounded-full blur-[40px]" />
     </div>
   );
 }
