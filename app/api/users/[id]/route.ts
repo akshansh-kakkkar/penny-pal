@@ -12,7 +12,7 @@ export async function GET(
     if (!userId) {
       return NextResponse.json({ error: "Invalid user Id" }, { status: 400 });
     }
-    const user = await prisma.User.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         id: userId,
       },
