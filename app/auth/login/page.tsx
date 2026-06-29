@@ -1,13 +1,31 @@
-"use client"
+"use client";
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ArrowRight, Eye, EyeClosed, EyeOff, LockIcon, MailIcon } from "lucide-react";
+import {
+  ArrowRight,
+  Eye,
+  EyeOff,
+  LockIcon,
+  MailIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function page() {
-    const [togglePassword, setTogglePassword] = useState(false);
+  const [togglePassword, setTogglePassword] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [authLoading, setauthLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [touched, setTouched] = useState({
+    name : false,
+    email : false,
+    password : false,
+    confirmPassword : false
+  });
   return (
     <div
       className={`bg-gradient-to-b min-h-screen overflow-hidden from-[#F4D2E5]/40 to-[#FFFFFF] flex flex-col justify-center items-center relative`}
@@ -55,26 +73,26 @@ export default function page() {
               </div>
               <div className="relative">
                 <input
-                className="rounded-full peer placeholder:text-2xl placeholder:translate-y-1 bg-[#F4F3F1]  w-full pl-10  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
+                  className="rounded-full peer placeholder:text-2xl placeholder:translate-y-1 bg-[#F4F3F1]  w-full pl-10  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
                   placeholder={"• ".repeat(8)}
                   type={togglePassword ? "text" : "password"}
                 />
                 {togglePassword ? (
-                    <Eye
-               onClick={()=>setTogglePassword(!togglePassword)}
-                  className="absolute z-20 top-1/4 transition-all duration-300 right-4 peer-focus:text-[#715767] text-[#D0C3C9]"
-                  size={18}
-                  strokeWidth={2}
-                />               
-) : (
-               <EyeOff
-               onClick={()=>setTogglePassword(!togglePassword)}
-                  className="absolute z-20 top-1/4 transition-all duration-300 right-4 peer-focus:text-[#715767] text-[#D0C3C9]"
-                  size={18}
-                  strokeWidth={2}
-                />
+                  <Eye
+                    onClick={() => setTogglePassword(!togglePassword)}
+                    className="absolute z-20 cursor-pointer top-1/4 transition-all duration-300 right-4 peer-focus:text-[#715767] text-[#D0C3C9]"
+                    size={18}
+                    strokeWidth={2}
+                  />
+                ) : (
+                  <EyeOff
+                    onClick={() => setTogglePassword(!togglePassword)}
+                    className="absolute z-20 top-1/4 transition-all cursor-pointer duration-300 right-4 peer-focus:text-[#715767] text-[#D0C3C9]"
+                    size={18}
+                    strokeWidth={2}
+                  />
                 )}
- 
+
                 <LockIcon
                   className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
                   size={24}
@@ -84,7 +102,12 @@ export default function page() {
               <div className="flex mt-2 flex-col gap-4">
                 <div className="flex py-3 justify-center items-center bg-[#f4d2e543] text-[#725868] rounded-full w-full gap-2">
                   <span>
-                    <Image src={'/assets/google-logo.png'} height={24} width={24} alt="google-logo" />
+                    <Image
+                      src={"/assets/google-logo.png"}
+                      height={24}
+                      width={24}
+                      alt="google-logo"
+                    />
                   </span>
                   <span className="font-bold ">Continue with google</span>
                 </div>
@@ -94,15 +117,15 @@ export default function page() {
                     <ArrowRight size={20} strokeWidth={3} />
                   </span>
                 </div>
-                 <div className="text-[#4D4449] text-xs flex justify-center font-semibold">
-          Don't have a pal account?
-          <Link
-            href={`/auth/sign-in`}
-            className="text-[#725868] font-bold hover:underline  underline-offset-2"
-          >
-            &nbsp;Log in
-          </Link>
-          </div>
+                <div className="text-[#4D4449] text-xs flex justify-center font-semibold">
+                  Don't have a pal account?
+                  <Link
+                    href={`/auth/sign-in`}
+                    className="text-[#725868] font-bold hover:underline  underline-offset-2"
+                  >
+                    &nbsp;Sign in
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
