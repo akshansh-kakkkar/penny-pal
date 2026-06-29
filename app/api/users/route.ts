@@ -4,7 +4,7 @@ import { title } from "process";
 
 export async function GET() {
     try{
-        const users = await prisma.User.findMany({
+        const users = await prisma.user.findMany({
             id : true, 
             name : true
         })

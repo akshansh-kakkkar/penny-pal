@@ -10,12 +10,13 @@ datasource db {
 model User {
   id            String    @id @default(cuid())
   name          String?
+  image         String?
   email         String    @unique
   emailVerified Boolean   @default(false)
   createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+  updatedAt     DateTime  @updatedAt
 }
 
 model Account {
@@ -29,9 +30,10 @@ model Account {
   providerId            String
   password              String?
   refreshToken          String?
-  refreshTokenExpiredAt DateTime?
+  refreshTokenExpiresAt DateTime?
   createdAt             DateTime  @default(now())
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  updatedAt             DateTime  @updatedAt
 
   @@unique([providerId, accountId])
 }
@@ -40,7 +42,7 @@ model Session {
   id        String   @id @default(cuid())
   userId    String
   createdAt DateTime @default(now())
-  expiredAt DateTime
+  expiresAt DateTime
   ipAddress String?
   token     String   @unique
   updatedAt DateTime @updatedAt

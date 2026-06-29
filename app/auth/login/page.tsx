@@ -17,14 +17,12 @@ export default function page() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [authLoading, setauthLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [touched, setTouched] = useState({
     name : false,
     email : false,
-    password : false,
-    confirmPassword : false
+    password : false
   });
   return (
     <div
