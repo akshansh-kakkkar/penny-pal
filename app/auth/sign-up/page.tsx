@@ -107,6 +107,15 @@ export default function page() {
       setauthLoading(false);
     }
   };
+  const isDisabled =
+    !formData.name.trim() ||
+    !formData.email.trim() ||
+    !formData.password.trim() ||
+    !formData.confirmPassword.trim() ||
+    authLoading ||
+    googleLoading ||
+    Object.values(errors).some((error) => error !== "");
+  const disableGoogle = authLoading || googleLoading
   return (
     <div
       className={`bg-gradient-to-b min-h-screen overflow-hidden from-[#F4D2E5]/40 to-[#FFFFFF] flex flex-col justify-center items-center relative`}
@@ -134,8 +143,9 @@ export default function page() {
         </div>
         <div>
           <button
+          disabled={disableGoogle}
             onClick={googleSignIn}
-            className=" py-3  bg-[#f4d2e543] hover:text-white text-[#715767] hover:bg-[#715767] cursor-pointer transition-all duration-100  flex justify-center items-center w-full gap-4 rounded-full text-center font-bold"
+            className=" py-3  bg-[#f4d2e543] disabled:cursor-not-allowed hover:text-white text-[#715767] hover:bg-[#715767] cursor-pointer transition-all duration-100  flex justify-center items-center w-full gap-4 rounded-full text-center font-bold"
           >
             {googleLoading ? (
               <Loader2 size={32} className="animate-spin" strokeWidth={2} />
@@ -296,12 +306,19 @@ export default function page() {
         </div>
         <button
           onClick={handleSignIn}
-          className="flex cursor-pointer hover:text-white transition-all duration-300 hover:bg-[#715767] py-4 justify-center items-center bg-[#F4D2E5] text-[#725868] rounded-full w-full gap-2"
+          disabled={isDisabled}
+          className="flex cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed disabled:bg-gray-100 hover:text-white transition-all duration-300 hover:bg-[#715767] py-4 justify-center items-center bg-[#F4D2E5] text-[#725868] rounded-full w-full gap-2"
         >
-          <span className="font-bold ">Let's Go!</span>
-          <span>
-            <ArrowRight size={20} strokeWidth={3} />
-          </span>
+          {authLoading ? (
+            <Loader2 width={32} className="animate-spin" />
+          ) : (
+            <>
+              <span className="font-bold ">Let's Go!</span>
+              <span>
+                <ArrowRight size={20} strokeWidth={3} />
+              </span>
+            </>
+          )}
         </button>
         <div className="flex gap-2 flex-col flex-col-reverse">
           <div className="text-[#4D4449] text-xs flex justify-center font-semibold">

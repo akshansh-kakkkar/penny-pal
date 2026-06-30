@@ -42,7 +42,7 @@ export function validateField(
           error = "must contain a lowercase letter";
         } else if (!/[0-9]/.test(value)) {
           error = "must contain a number";
-        } else if (!/[!@#$%^&*(),.?"{}|<>]/.test(value)) {
+        } else if (!/[!@#$%^&*(),.?"{}|<>_]/.test(value)) {
           error = "must contain a special character";
         }
       }

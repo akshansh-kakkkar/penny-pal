@@ -5,6 +5,7 @@ import {
   ArrowRight,
   Eye,
   EyeOff,
+  Loader,
   Loader2,
   LockIcon,
   MailIcon,
@@ -91,7 +92,13 @@ export default function page() {
       setauthLoading(false);
     }
   };
-  const isDisabled = !formData.password.trim() || !formData.email.trim() || authLoading || googleLoading
+  const isDisabled =
+    !formData.password.trim() ||
+    !formData.email.trim() ||
+    authLoading ||
+    googleLoading ||
+    Object.values(errors).some((error) => error !== "");
+  const disabledGoogle = authLoading || googleLoading;
   return (
     <div
       className={`bg-gradient-to-b min-h-screen overflow-hidden from-[#F4D2E5]/40 to-[#FFFFFF] flex flex-col justify-center items-center relative`}
@@ -186,10 +193,15 @@ export default function page() {
               <div className="flex mt-2 flex-col gap-4">
                 <button
                   onClick={googleLogin}
-                  className="flex cursor-pointer cursor-pointer hover:text-white hover:bg-[#715767] duration-300  py-3 justify-center items-center bg-[#f4d2e543] text-[#725868] rounded-full w-full gap-2"
+                  disabled={googleLoading}
+                  className="flex disabled:cursor-not-allowed cursor-pointer  hover:text-white hover:bg-[#715767] duration-300  py-3 justify-center items-center bg-[#f4d2e543] text-[#725868] rounded-full w-full gap-2"
                 >
                   {googleLoading ? (
-                    <Loader2 size={32} strokeWidth={2} className="animate-spin" />
+                    <Loader2
+                      size={32}
+                      strokeWidth={2}
+                      className="animate-spin"
+                    />
                   ) : (
                     <>
                       <span>
@@ -205,14 +217,20 @@ export default function page() {
                   )}
                 </button>
                 <button
-                disabled={isDisabled}
+                  disabled={isDisabled}
                   onClick={handleLogin}
                   className="flex py-3 hover:bg-[#715767] disabled:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed hover:text-white cursor-pointer transition-all duration-300 justify-center items-center bg-[#F4D2E5] text-[#725868] rounded-full w-full gap-2"
                 >
-                  <span className="font-bold ">Let's Go!</span>
-                  <span>
-                    <ArrowRight size={20} strokeWidth={3} />
-                  </span>
+                  {authLoading ? (
+                    <Loader className="animate-spin" width={32} />
+                  ) : (
+                    <>
+                      <span className="font-bold ">Let's Go!</span>
+                      <span>
+                        <ArrowRight size={20} strokeWidth={3} />
+                      </span>
+                    </>
+                  )}
                 </button>
                 <div className="text-[#4D4449]  text-xs flex justify-center font-semibold">
                   Don't have a pal account?
