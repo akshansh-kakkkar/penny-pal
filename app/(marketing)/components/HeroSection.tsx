@@ -41,7 +41,7 @@ export default function HearoSection() {
           your savings into treats.
         </div>
         <div className="mt-4 font-semibold text-xl sm:text-2xl gap-4 sm:gap-8 flex ">
-          <button onClick={()=>router.push('/auth/sign-in')} className="bg-[#715767] cursor-pointer hover:scale-[90%] duration-300 transition-all border-2 py-4 px-4 md:py-6.5 md:px-10 text-white rounded-full">
+          <button onClick={()=>router.push('/auth/sign-up')} className="bg-[#715767] cursor-pointer hover:scale-[90%] duration-300 transition-all border-2 py-4 px-4 md:py-6.5 md:px-10 text-white rounded-full">
             Join the Club
           </button>
           <button className="border-2 cursor-pointer duration-300 transition-all hover:scale-[90%] border-[#715767] text-[#715767] md:py-6.5 md:px-10 py-4 px-4 rounded-full">
