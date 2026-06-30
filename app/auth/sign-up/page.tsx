@@ -1,4 +1,5 @@
 "use client";
+import { validateField } from "@/app/components/lib/validator";
 import { signIn, signUp } from "@/app/lib/auth/auth-client";
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,14 +15,10 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 export default function page() {
   const [eyeStatus, setEyeStatus] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [authLoading, setauthLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [touched, setTouched] = useState({
@@ -30,6 +27,38 @@ export default function page() {
     password: false,
     confirmPassword: false,
   });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setTouched((prev) => ({
+      ...prev,
+    }));
+    const error = validateField(name, value, "signUp", {
+      password: formData.password,
+    });
+    setErrors((prev) => ({
+      ...prev,
+      [name]: error,
+    }));
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
   const router = useRouter();
   const googleSignIn = async () => {
     try {
@@ -44,20 +73,34 @@ export default function page() {
       setGoogleLoading(false);
     }
   };
+
   const handleSignIn = async () => {
     try {
       setauthLoading(true);
-      const response = await signUp.email({
-        email,
-        password,
-        name,
-      });
-      console.log(response);
-      if (response.error) {
-        toast.error(response.error.message);
+      const newErrors = {
+        name: validateField("name", formData.name, "signUp"),
+        email: validateField("email", formData.email, "signUp"),
+        password: validateField("password", formData.password, "signUp"),
+        confirmPassword: validateField(
+          "confirmPassword",
+          formData.confirmPassword,
+          "signUp",
+          { password: formData.password },
+        ),
+      };
+      setErrors(newErrors);
+      if (Object.values(newErrors).some((e) => e !== "")) {
         return;
       }
-      router.push("/toast=signup-success");
+      const response = await signUp.email({
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+      });
+      if (response.error) {
+        toast.error(response.error.message);
+      }
+      router.push("/");
     } catch (error) {
       console.error(error);
     } finally {
@@ -95,17 +138,17 @@ export default function page() {
             className=" py-2 bg-[#f4d2e543] text-[#725868] cursor-pointer hover:border-2 transition-all duration-100  flex justify-center items-center w-full gap-4 rounded-full text-center font-bold"
           >
             {googleLoading ? (
-                <Loader2 size={32} className="animate-spin" strokeWidth={2} />
+              <Loader2 size={32} className="animate-spin" strokeWidth={2} />
             ) : (
-             <>
-            <Image
-              src={"/assets/google-logo.png"}
-              alt="google-auth"
-              width={24}
-              height={24}
-            />
-            <span>Continue with Google</span>
-            </> 
+              <>
+                <Image
+                  src={"/assets/google-logo.png"}
+                  alt="google-auth"
+                  width={24}
+                  height={24}
+                />
+                <span>Continue with Google</span>
+              </>
             )}
           </button>
           <div className="flex text-xs translate-y-4 justify-center items-center font-bold text-[#725868]">
@@ -122,9 +165,16 @@ export default function page() {
                 className="rounded-full peer bg-[#F4F3F1]  w-full  p-2.5 pl-10 px-4 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
                 placeholder="Buddy"
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
+              {errors.name && (
+                <p className="absolute top-10 left-2 text-xs text-red-500 font-bold">
+                  *{errors.name}
+                </p>
+              )}
               <Smile
                 className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
                 size={24}
@@ -141,14 +191,21 @@ export default function page() {
                 className="rounded-full peer bg-[#F4F3F1]  w-full px-4  p-2.5 pl-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
                 placeholder="buddy@example.com"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
               <MailIcon
                 className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
                 size={24}
                 strokeWidth={2}
               />
+              {errors.email && (
+                <p className="absolute top-10 left-2 text-xs text-red-500 font-bold">
+                  *{errors.email}
+                </p>
+              )}
             </div>
           </div>
           <div className="flex sm:flex-row flex-col gap-4 sm:gap-4">
@@ -161,8 +218,10 @@ export default function page() {
                   className="rounded-full peer placeholder:text-2xl  placeholder:translate-y-1 bg-[#F4F3F1]  w-full  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
                   placeholder={"• ".repeat(8)}
                   type={eyeStatus ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={handleChange}
+                  name="password"
+                  onBlur={handleBlur}
                 />
                 {eyeStatus ? (
                   <Eye
@@ -184,6 +243,11 @@ export default function page() {
                   size={24}
                   strokeWidth={2}
                 />
+                {errors.password && (
+                  <p className="absolute top-10 left-2 text-xs text-red-500 font-bold">
+                    *{errors.password}
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex flex-col gap-2">
@@ -195,8 +259,10 @@ export default function page() {
                   className="rounded-full peer placeholder:text-2xl placeholder:translate-y-1 bg-[#F4F3F1]  w-full  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
                   placeholder={"• ".repeat(8)}
                   type={eyeStatus ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  name="confirmPassword"
+                  onBlur={handleBlur}
                 />
                 {eyeStatus ? (
                   <Eye
@@ -219,6 +285,11 @@ export default function page() {
                   size={24}
                   strokeWidth={2}
                 />
+                {errors.confirmPassword && (
+                  <p className="absolute top-10 left-2 text-xs text-red-500 font-bold">
+                    *{errors.confirmPassword}
+                  </p>
+                )}
               </div>
             </div>
           </div>
