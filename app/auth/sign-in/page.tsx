@@ -1,27 +1,57 @@
 "use client";
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ArrowRight, Eye, EyeOff, LockIcon, MailIcon } from "lucide-react";
+import {
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Loader2,
+  LockIcon,
+  MailIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState } from "react";
 import { signIn } from "@/app/lib/auth/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { validateField } from "../../components/lib/validator";
 
 export default function page() {
   const [togglePassword, setTogglePassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [authLoading, setauthLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [errors, setErrors] = useState({ email: "", password: "" });
   const router = useRouter();
+
   const [touched, setTouched] = useState({
-    name: false,
     email: false,
     password: false,
   });
-
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setTouched((prev) => ({
+      ...prev,
+    }));
+    const error = validateField(name, value, "signIn", {
+      password: formData.password,
+    });
+    setErrors((prev) => ({
+      ...prev,
+      [name]: error,
+    }));
+  };
   const googleLogin = async () => {
     try {
       setGoogleLoading(true);
@@ -29,20 +59,26 @@ export default function page() {
         provider: "google",
         callbackURL: "/?toast=google-singin-success",
       });
-      router.push("/");
     } catch (error) {
       toast.error("Something went wrong try refreshing");
     } finally {
       setGoogleLoading(false);
     }
   };
-  
   const handleLogin = async () => {
     try {
       setauthLoading(true);
+      const newErrors = {
+        email: validateField("email", formData.email, "signIn"),
+        password: validateField("email", formData.password, "signIn"),
+      };
+      setErrors(newErrors);
+      if (Object.values(newErrors).some((e) => e !== "")) {
+        return;
+      }
       const response = await signIn.email({
-        email,
-        password,
+        email: formData.email,
+        password: formData.password,
       });
       if (response.error) {
         toast.error("Login Failed try refreshing the page.");
@@ -55,6 +91,7 @@ export default function page() {
       setauthLoading(false);
     }
   };
+  const isDisabled = !formData.password.trim() || !formData.email.trim() || authLoading || googleLoading
   return (
     <div
       className={`bg-gradient-to-b min-h-screen overflow-hidden from-[#F4D2E5]/40 to-[#FFFFFF] flex flex-col justify-center items-center relative`}
@@ -88,14 +125,21 @@ export default function page() {
                   className="rounded-full peer bg-[#F4F3F1]  w-full px-4  p-2.5 pl-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
                   placeholder="buddy@example.com"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  name="email"
                 />
                 <MailIcon
                   className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
                   size={24}
                   strokeWidth={2}
                 />
+                {errors.email && (
+                  <p className="absolute top-10 left-2 text-xs text-red-500 font-bold">
+                    *{errors.email}
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex flex-col gap-2">
@@ -107,8 +151,10 @@ export default function page() {
                   className="rounded-full peer placeholder:text-2xl placeholder:translate-y-1 bg-[#F4F3F1]  w-full pl-10  p-2.5 px-10 text-sm font-semibold  outline-[#715767] placeholder:font-medium placeholder:text-[#D0C3C9] text-[#715767]"
                   placeholder={"• ".repeat(8)}
                   type={togglePassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  name="password"
                 />
                 {togglePassword ? (
                   <Eye
@@ -131,25 +177,37 @@ export default function page() {
                   size={24}
                   strokeWidth={2}
                 />
+                {errors.password && (
+                  <p className="absolute top-10 left-2 text-xs text-red-500 font-bold">
+                    *{errors.password}
+                  </p>
+                )}
               </div>
               <div className="flex mt-2 flex-col gap-4">
                 <button
                   onClick={googleLogin}
-                  className="flex cursor-pointer hover:border-2 duration-100  py-3 justify-center items-center bg-[#f4d2e543] text-[#725868] rounded-full w-full gap-2"
+                  className="flex cursor-pointer cursor-pointer hover:text-white hover:bg-[#715767] duration-300  py-3 justify-center items-center bg-[#f4d2e543] text-[#725868] rounded-full w-full gap-2"
                 >
-                  <span>
-                    <Image
-                      src={"/assets/google-logo.png"}
-                      height={24}
-                      width={24}
-                      alt="google-logo"
-                    />
-                  </span>
-                  <span className="font-bold ">Continue with google</span>
+                  {googleLoading ? (
+                    <Loader2 size={32} strokeWidth={2} className="animate-spin" />
+                  ) : (
+                    <>
+                      <span>
+                        <Image
+                          src={"/assets/google-logo.png"}
+                          height={24}
+                          width={24}
+                          alt="google-logo"
+                        />
+                      </span>
+                      <span className="font-bold ">Continue with google</span>
+                    </>
+                  )}
                 </button>
                 <button
+                disabled={isDisabled}
                   onClick={handleLogin}
-                  className="flex py-3 justify-center items-center bg-[#F4D2E5] text-[#725868] rounded-full w-full gap-2"
+                  className="flex py-3 hover:bg-[#715767] disabled:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed hover:text-white cursor-pointer transition-all duration-300 justify-center items-center bg-[#F4D2E5] text-[#725868] rounded-full w-full gap-2"
                 >
                   <span className="font-bold ">Let's Go!</span>
                   <span>

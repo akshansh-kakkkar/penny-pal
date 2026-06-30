@@ -135,7 +135,7 @@ export default function page() {
         <div>
           <button
             onClick={googleSignIn}
-            className=" py-2 bg-[#f4d2e543] text-[#725868] cursor-pointer hover:border-2 transition-all duration-100  flex justify-center items-center w-full gap-4 rounded-full text-center font-bold"
+            className=" py-3  bg-[#f4d2e543] hover:text-white text-[#715767] hover:bg-[#715767] cursor-pointer transition-all duration-100  flex justify-center items-center w-full gap-4 rounded-full text-center font-bold"
           >
             {googleLoading ? (
               <Loader2 size={32} className="animate-spin" strokeWidth={2} />
@@ -296,7 +296,7 @@ export default function page() {
         </div>
         <button
           onClick={handleSignIn}
-          className="flex  py-4 justify-center items-center bg-[#F4D2E5] text-[#725868] rounded-full w-full gap-2"
+          className="flex cursor-pointer hover:text-white transition-all duration-300 hover:bg-[#715767] py-4 justify-center items-center bg-[#F4D2E5] text-[#725868] rounded-full w-full gap-2"
         >
           <span className="font-bold ">Let's Go!</span>
           <span>
