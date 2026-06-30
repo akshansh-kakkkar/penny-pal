@@ -6,11 +6,12 @@ import Footer from "./Footer";
 export default function LayoutWrapper({children} : {children : React.ReactNode}){
     const pathName = usePathname();
     const isAuthPage = pathName.startsWith('/auth')
+    const isDashboard = pathName.startsWith('/dashboard')
     return(
         <div className="flex flex-1 flex-col">
-            {!isAuthPage && <Navbar />}
+            {!isAuthPage || !isDashboard && <Navbar />}
             {children}
-            {!isAuthPage && <Footer />}
+            {!isAuthPage || !isDashboard &&  <Footer />}
         </div>
     )
 }
