@@ -7,11 +7,12 @@ export default function LayoutWrapper({children} : {children : React.ReactNode})
     const pathName = usePathname();
     const isAuthPage = pathName.startsWith('/auth')
     const isDashboard = pathName.startsWith('/dashboard')
+    const hideLayout = isAuthPage || isDashboard
     return(
         <div className="flex flex-1 flex-col">
-            {!isAuthPage || !isDashboard && <Navbar />}
+            {!hideLayout && <Navbar />}
             {children}
-            {!isAuthPage || !isDashboard &&  <Footer />}
+            {!hideLayout &&  <Footer />}
         </div>
     )
 }
