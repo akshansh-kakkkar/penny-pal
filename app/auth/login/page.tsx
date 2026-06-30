@@ -14,6 +14,7 @@ import { useState } from "react";
 import { signIn} from "@/app/lib/auth/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { error } from 'console';
 
 export default function page() {
   const [togglePassword, setTogglePassword] = useState(false);
@@ -40,6 +41,7 @@ export default function page() {
   }
   }
   const handleSignUp=async()=>{
+    try{
     const response = await signIn.email({
       email,
       password
@@ -49,6 +51,10 @@ export default function page() {
       return;
     }
     router.push('/?toast=signin-success');
+  }
+  catch(error){
+    toast.error('Something went wrong while creating the user.')
+  }
   }
   return (
     <div

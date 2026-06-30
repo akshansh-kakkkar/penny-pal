@@ -1,11 +1,12 @@
 "use client";
-import { signIn, signUp} from "@/app/lib/auth/auth-client";
+import { signIn, signUp } from "@/app/lib/auth/auth-client";
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   ArrowRight,
   Eye,
   EyeOff,
+  Loader2,
   LockIcon,
   MailIcon,
   Smile,
@@ -14,7 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {toast} from "sonner"
+import { toast } from "sonner";
 export default function page() {
   const [eyeStatus, setEyeStatus] = useState(false);
   const [name, setName] = useState("");
@@ -29,36 +30,40 @@ export default function page() {
     password: false,
     confirmPassword: false,
   });
-  const router = useRouter()
-  const googleSignIn =async ()=>{
-    try{
+  const router = useRouter();
+  const googleSignIn = async () => {
+    try {
+      setGoogleLoading(true);
       await signIn.social({
-        provider : "google",
-        callbackURL : "/?toast=google-singin-success"
-      })
+        provider: "google",
+        callbackURL: "/?toast=google-singin-success",
+      });
+    } catch (error) {
+      toast.error("Something went wrong try refreshing the page");
+    } finally {
+      setGoogleLoading(false);
     }
-    catch(error){
-      toast.error("Something went wrong try refreshing the page")
+  };
+  const handleSignIn = async () => {
+    try {
+      setauthLoading(true);
+      const response = await signUp.email({
+        email,
+        password,
+        name,
+      });
+      console.log(response);
+      if (response.error) {
+        toast.error(response.error.message);
+        return;
+      }
+      router.push("/toast=signup-success");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setauthLoading(false);
     }
-  }
-  const handleSignIn = async()=>{
-    try{
-    const response = await signUp.email({
-      email,
-      password,
-      name,
-    });
-    console.log(response)
-    if(response.error){
-      toast.error(response.error.message)
-      return;
-    }
-    router.push('/toast=signup-success');
-  }
-  catch(error){
-    console.error(error)
-  }
-  }
+  };
   return (
     <div
       className={`bg-gradient-to-b min-h-screen overflow-hidden from-[#F4D2E5]/40 to-[#FFFFFF] flex flex-col justify-center items-center relative`}
@@ -85,13 +90,27 @@ export default function page() {
           </div>
         </div>
         <div>
-        <button onClick={googleSignIn} className=" py-2 bg-[#f4d2e543] text-[#725868] cursor-pointer hover:border-2 transition-all duration-100  flex justify-center items-center w-full gap-4 rounded-full text-center font-bold">
-          <Image src={'/assets/google-logo.png'} alt="google-auth" width={24} height={24} />
-          <span>Continue with Google</span>
-        </button>
-        <div className="flex text-xs translate-y-4 justify-center items-center font-bold text-[#725868]">
-          or
-        </div>
+          <button
+            onClick={googleSignIn}
+            className=" py-2 bg-[#f4d2e543] text-[#725868] cursor-pointer hover:border-2 transition-all duration-100  flex justify-center items-center w-full gap-4 rounded-full text-center font-bold"
+          >
+            {googleLoading ? (
+                <Loader2 size={32} className="animate-spin" strokeWidth={2} />
+            ) : (
+             <>
+            <Image
+              src={"/assets/google-logo.png"}
+              alt="google-auth"
+              width={24}
+              height={24}
+            />
+            <span>Continue with Google</span>
+            </> 
+            )}
+          </button>
+          <div className="flex text-xs translate-y-4 justify-center items-center font-bold text-[#725868]">
+            or
+          </div>
         </div>
         <div className="flex flex-col gap-4 ">
           <div className="flex gap-2 flex-col">
@@ -104,7 +123,7 @@ export default function page() {
                 placeholder="Buddy"
                 type="text"
                 value={name}
-                onChange={(e)=>setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
               />
               <Smile
                 className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
@@ -123,7 +142,7 @@ export default function page() {
                 placeholder="buddy@example.com"
                 type="email"
                 value={email}
-                onChange={(e)=>setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <MailIcon
                 className="absolute z-20 top-1/5 transition-all duration-300 left-2 peer-focus:text-[#715767] text-[#D0C3C9]"
@@ -143,7 +162,7 @@ export default function page() {
                   placeholder={"• ".repeat(8)}
                   type={eyeStatus ? "text" : "password"}
                   value={password}
-                  onChange={(e)=>setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 {eyeStatus ? (
                   <Eye
@@ -177,7 +196,7 @@ export default function page() {
                   placeholder={"• ".repeat(8)}
                   type={eyeStatus ? "text" : "password"}
                   value={confirmPassword}
-                  onChange={(e)=>setConfirmPassword(e.target.value)}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 {eyeStatus ? (
                   <Eye
@@ -204,7 +223,10 @@ export default function page() {
             </div>
           </div>
         </div>
-        <button onClick={handleSignIn} className="flex  py-4 justify-center items-center bg-[#F4D2E5] text-[#725868] rounded-full w-full gap-2">
+        <button
+          onClick={handleSignIn}
+          className="flex  py-4 justify-center items-center bg-[#F4D2E5] text-[#725868] rounded-full w-full gap-2"
+        >
           <span className="font-bold ">Let's Go!</span>
           <span>
             <ArrowRight size={20} strokeWidth={3} />
