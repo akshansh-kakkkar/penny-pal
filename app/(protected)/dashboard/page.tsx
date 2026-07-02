@@ -1,5 +1,5 @@
 "use client";
-import { Handbag, Pi, PiggyBank, Wallet, BadgeCheck } from "lucide-react";
+import { Handbag, Pi, PiggyBank, Wallet, BadgeCheck, LayoutDashboard } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 export default function page() {
@@ -34,6 +34,10 @@ export default function page() {
   const [currentCard, setCurrentCard] = useState(0);
   return (
     <div className="min-h-screen mx-5 md:mx-10 xl:mx-40  py-20   ">
+       <div className=" sm:flex hidden xl:hidden items-center py-2 border-b-2 border-[#725868] w-fit mx-12  mb-8 gap-2  text-2xl ">
+              <span><LayoutDashboard strokeWidth={3} fill="#725868" color="#725868" size={32} /></span>
+              <span className="font-bold text-[#735868] " >Dashboard</span>
+            </div>
       <div className="hidden  sm:grid  grid-cols-3  xl:gap-24 place-items-center justify-center items-center ">
         <div className="flex  flex-col col-span-1 w-[200px] xl:w-[300px] h-[200px] justify-between h p-6 bg-white rounded-4xl shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]">
           <div className="flex w-full items-start  justify-between">
@@ -87,6 +91,10 @@ export default function page() {
           </div>
         </div>
       </div>
+            <div className="sm:hidden items-center py-2 border-b-2 border-[#725868] w-fit mx-4 mb-2 gap-2 flex text-2xl ">
+              <span><LayoutDashboard strokeWidth={3} fill="#725868" color="#725868" size={32} /></span>
+              <span className="font-bold text-[#735868] " >Dashboard</span>
+            </div>
       <div className={`sm:hidden overflow-hidden`}>
         <motion.div
           drag="x"
@@ -133,16 +141,18 @@ export default function page() {
                   {card.value}
                 </div>
               </div>
-              <div className="flex justify-center gap-3 my-4 ">
-                {cards.map((_,index)=>(
-                    <button key={index} onClick={()=>setCurrentCard(index)} className={`divansition-all cursor-pointer rounded-full ${currentCard === index ? "w-6 h-2 bg-[#725868]" : " w-6 h-2 bg-gray-300"}`}> 
-                        
-                    </button>
-                ))}
-              </div>
             </div>
           ))}
         </motion.div>
+        <div className="flex justify-center gap-3 my-4 ">
+          {cards.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentCard(index)}
+              className={`divansition-all cursor-pointer rounded-full ${currentCard === index ? "w-6 h-2 bg-[#725868]" : " w-6 h-2 bg-gray-300"}`}
+            ></button>
+          ))}
+        </div>
       </div>
     </div>
   );
