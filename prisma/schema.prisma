@@ -8,15 +8,18 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
   image         String?
-  email         String    @unique
-  emailVerified Boolean   @default(false)
-  createdAt     DateTime  @default(now())
+  email         String     @unique
+  emailVerified Boolean    @default(false)
+  createdAt     DateTime   @default(now())
   accounts      Account[]
   sessions      Session[]
-  updatedAt     DateTime  @updatedAt
+  updatedAt     DateTime   @updatedAt
+  categories    Category[]
+  expenses      Expense[]
+  budgets       Budget[]
 }
 
 model Account {
@@ -57,4 +60,38 @@ model Verification {
   expiresAt  DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  color     String?
+  icon      String?
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  expenses  Expense[]
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  title       String
+  amount      Float
+  description String?
+  date        DateTime
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Budget {
+  id        String   @id @default(cuid())
+  amount    Float
+  month     Int
+  year      Int
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }
