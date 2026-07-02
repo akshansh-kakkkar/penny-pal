@@ -12,6 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { AnimatePresence, motion, spring } from "framer-motion";
 import Link from "next/link";
+import { signOut } from "@/app/lib/auth/auth-client";
 export default function AppDrawer() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -20,7 +21,7 @@ export default function AppDrawer() {
     <>
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="md:hidden z-10 flex mx-8 my-4 bg-white w-fit absolute bottom-5  left-4 p-2 rounded-full shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]"
+        className="lg:hidden z-10 flex mx-8 my-4 bg-white w-fit absolute bottom-5  left-4 p-2 rounded-full shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]"
       >
         <LayoutDashboard size={30} className="text-[#725868]" />
       </button>
@@ -31,7 +32,7 @@ export default function AppDrawer() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setOpen(false)}
-            className=" min-w-screen bg-black/20 fixed inset-0 z-40 backdrop-blur-sm md:hidden  "
+            className=" min-w-screen bg-black/20 fixed inset-0 z-40 backdrop-blur-sm lg:hidden  "
           >
             <motion.div
               transition={{ damping: 25, stiffness: 220, type: spring }}
@@ -120,7 +121,7 @@ export default function AppDrawer() {
                       Budgets
                     </span>
                   </Link>
-                  <button className="flex gap-2 flex-col items-center justify-center">
+                  <button onClick={async()=>{ await signOut(); router.refresh()}}  className="flex gap-2 flex-col items-center justify-center">
                     <span className="text-red-400 bg-red-50 p-2 rounded-xl">
                       <LogOut size={32} strokeWidth={2} />
                     </span>

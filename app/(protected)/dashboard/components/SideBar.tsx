@@ -13,7 +13,7 @@ export default function SideBar() {
   const pathName = usePathname();
   const { data: session } = useSession();
   return (
-    <div className="bg-[#FFFFFF] hidden md:flex flex-col justify-between py-16 px-4  shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] rounded-r-3xl w-[400px]">
+    <div className="bg-[#FFFFFF] hidden lg:flex flex-col justify-between py-16 px-4  shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] rounded-r-3xl w-[400px]">
       <div className="flex flex-col gap-10">
         <div className="flex gap-6 flex-col">
           <div className="font-bold text-4xl flex mx-4 items-center mb-4 text-[#715767]">PennyPal</div>

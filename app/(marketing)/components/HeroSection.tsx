@@ -1,7 +1,7 @@
 "use client"
 import { faMoneyBill, faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Heart, PiggyBank } from "lucide-react";
+import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function HearoSection() {
