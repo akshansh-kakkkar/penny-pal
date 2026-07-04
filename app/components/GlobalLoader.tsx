@@ -35,7 +35,6 @@ return ()=>clearInterval(interval)
   }, [])
   return (
     <div className="flex flex-col gap-6 justify-center items-center w-full min-h-screen  bg-gradient-to-b from-[#F4D2E5]/40 to-[#FFFFFF]">
-      <div>
         <div className="flex bg-[#F4D2E5] rounded-full  shadow-[0px_60px_60px_rgba(244,210,229,0.4)]  animate-bounce justify-center items-center text-center py-6 p-4">
           <FontAwesomeIcon
             color="#725868"
@@ -45,8 +44,6 @@ return ()=>clearInterval(interval)
             icon={faPiggyBank}
           />
         </div>
-      </div>
-      <div className="font-semibold text-[#4D4449] text-sm "></div>
             <div className="font-bold text-4xl text-[#715767]">Penny Pal</div>
       <div className="relative   w-72 h-6 bg-[#F4D2E5] overflow-hidden rounded-full border-6 border-white backdrop-blur-2xl">
         <div className="absolute shadow-2xl h-full rounded-full bg-[#715767] transition-all duration-75" style={{width : `${progress}%`}} />
