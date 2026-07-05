@@ -2,14 +2,16 @@
 import { useSession } from "@/app/lib/auth/auth-client";
 import {
   Banknote,
-  Currency,
   LayoutDashboard,
   LogOutIcon,
   WalletIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-export default function SideBar() {
+interface sideBarProps {
+  openModal : ()=>void;
+}
+export default function SideBar({openModal} : sideBarProps) {
   const pathName = usePathname();
   const { data: session } = useSession();
   return (
@@ -55,7 +57,7 @@ export default function SideBar() {
           </span>
           <span>Logout</span>
         </div>
-        <button className="flex justify-center items-center text-center text-2xl bg-[#715767] rounded-full py-4 px-4 font-bold text-white">Add Expenses</button>
+        <button onClick={openModal} className="flex justify-center items-center text-center text-2xl bg-[#715767] rounded-full py-4 px-4 font-bold text-white">Add Expenses</button>
       </div>
     </div>
   );
