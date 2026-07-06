@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+::-webkit-scrollbar-track{
+}
+::-webkit-scrollbar-thumb{
+    background-color: #715767;
+    border-radius: 12px;
+    height: 2px;
+}
+::-webkit-scrollbar{
+    height:6px;
+    width: 4px;
+    background-color: #f4d2ef42;
+    border-radius: 12px;
+}
+
 @keyframes squish {
 
     0%,

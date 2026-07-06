@@ -34,7 +34,7 @@ export default function SideBar({openModal} : sideBarProps) {
         <div className="flex flex-col gap-4 mx-4">
               <Link href={"/dashboard"} className={`flex w-full rounded-full px-6 py-4 text-lg font-semibold text-[#725868] items-center text-center gap-4 ${pathName === "/dashboard" ? "bg-[#F4D2E5]" : ""}`} >
               <span>
-                <LayoutDashboard className="text-[#725868]" size={24} strokeWidth={3} />
+                <LayoutDashboard className="text-[#715767]" size={24} strokeWidth={3} />
               </span>
               <span>Dashboard</span>
             </Link>
