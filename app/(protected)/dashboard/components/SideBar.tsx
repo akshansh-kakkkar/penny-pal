@@ -1,5 +1,6 @@
 "use client";
 import { useSession } from "@/app/lib/auth/auth-client";
+import { signOut } from "better-auth/api";
 import {
   Banknote,
   LayoutDashboard,
@@ -7,11 +8,12 @@ import {
   WalletIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 interface sideBarProps {
   openModal : ()=>void;
 }
 export default function SideBar({openModal} : sideBarProps) {
+  const router = useRouter()
   const pathName = usePathname();
   const { data: session } = useSession();
   return (
@@ -51,13 +53,13 @@ export default function SideBar({openModal} : sideBarProps) {
         </div>
       </div>
       <div className="flex gap-6 flex-col ">
-        <div className="flex gap-6 items-center text-xl font-semibold text-center text-[#4D4449] mx-4 ">
+        <button onClick={async()=>{ await signOut(); router.refresh()}} className="flex transition-all duration-300 cursor-pointer px-6 py-4 rounded-full hover:text-white hover:bg-[#725868a1] gap-6 items-center text-xl font-semibold text-center text-[#4D4449] mx-4 ">
           <span>
             <LogOutIcon strokeWidth={3} />
           </span>
           <span>Logout</span>
-        </div>
-        <button onClick={openModal} className="flex justify-center items-center text-center text-2xl bg-[#715767] rounded-full py-4 px-4 font-bold text-white">Add Expenses</button>
+        </button>
+        <button onClick={openModal} className="flex cursor-pointer hover:scale-[105%] hover:bg-[#725868]/90 duration-300 transition-all justify-center items-center text-center text-2xl bg-[#715767] rounded-full py-4 px-4 font-bold text-white">Add Expenses</button>
       </div>
     </div>
   );
