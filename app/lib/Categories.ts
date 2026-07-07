@@ -20,7 +20,7 @@ export const CATEGORIES = [
     },
     {
         id : "entertainment",
-        name : "Transport",
+        name : "Entertainment",
         icon : TvMinimal,
         color : "#EC4899"
     },
