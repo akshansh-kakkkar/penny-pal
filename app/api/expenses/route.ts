@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const parsed = createExpenseSchema.safeParse(body);
     if (!parsed.success) {
+      console.log(parsed.error.flatten())
       return NextResponse.json(parsed.error.flatten(), { status: 400 });
     }
     const expense = await createExpense(parsed.data, session.user.id);
@@ -37,6 +38,7 @@ export async function POST(req: NextRequest) {
       status: 201,
     });
   } catch (error) {
-    NextResponse.json({ error: "Failed to post expense" }, { status: 500 });
+   console.error(error)
+    return NextResponse.json({ error: "Failed to post expense" }, { status: 500 });
   }
 }

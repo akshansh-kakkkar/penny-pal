@@ -41,6 +41,7 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          title : category,
           amount: Number(amount),
           category,
           date,
@@ -48,7 +49,8 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
         })
       })
       if (!res.ok) {
-        throw new Error("Failed to create expense")
+        const error = await res.json()
+        throw new Error(error.message ||"Failed to create expense")
       }
       const data = await res.json();
       toast.success('Expense added successfully!');
@@ -59,7 +61,12 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
       onClose();
 
     } catch (error) {
-      console.error(error);
+      if(error instanceof Error){
+        toast.error(error.message);
+      }
+      else{
+        toast.error("Something went wrong.")
+      }
     } finally {
       setLoading(false)
     }
