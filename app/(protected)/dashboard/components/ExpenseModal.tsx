@@ -19,6 +19,10 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
   const handleSubmit = async () => {
     try {
       setLoading(true);
+      if (!category && !description.trim() && !amount) {
+        toast.error("All fields are reqired");
+        return
+      }
       if (!amount || Number(amount) <= 0) {
         toast.error("Please enter a valid amount.");
         return;
@@ -41,7 +45,7 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title : category,
+          title: category,
           amount: Number(amount),
           category,
           date,
@@ -50,7 +54,7 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
       })
       if (!res.ok) {
         const error = await res.json()
-        throw new Error(error.message ||"Failed to create expense")
+        throw new Error(error.message || "Failed to create expense")
       }
       const data = await res.json();
       toast.success('Expense added successfully!');
@@ -61,10 +65,10 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
       onClose();
 
     } catch (error) {
-      if(error instanceof Error){
+      if (error instanceof Error) {
         toast.error(error.message);
       }
-      else{
+      else {
         toast.error("Something went wrong.")
       }
     } finally {
@@ -79,7 +83,7 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
           exit={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           onClick={onClose}
-          className={` bg-black/20 fixed  flex inset-0 z-40 backdrop-blur-sm justify-center items-center  `}
+          className={` bg-black/20 fixed  hidden md:flex inset-0 z-40 backdrop-blur-sm justify-center items-center  `}
         >
           <div
             onClick={(e) => e.stopPropagation()}
@@ -130,16 +134,16 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
 
               <div>
                 <button onClick={handleSubmit} className="cursor-pointer hover:scale-[98%] transition-all duration-300 flex justify-center items-center w-full bg-[#715767] rounded-full py-4 text-lg md:text-2xl font-bold text-white gap-2 ">
-                 {loading   ? (
-<Loader2 size={32} className="animate-spin" />
-) : (
-<div className="flex gap-3 items-center text-center justify-center">
-                  <span>
-                    <Heart strokeWidth={3} />
-                  </span>
-                  <span>Save Expense</span>
-                  </div>
-                 )}
+                  {loading ? (
+                    <Loader2 size={32} strokeWidth={2} className="animate-spin" />
+                  ) : (
+                    <div className="flex gap-3 items-center text-center justify-center">
+                      <span>
+                        <Heart strokeWidth={3} />
+                      </span>
+                      <span>Save Expense</span>
+                    </div>
+                  )}
                 </button>
               </div>
             </div>

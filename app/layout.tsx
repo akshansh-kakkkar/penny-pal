@@ -2,6 +2,7 @@ import "./globals.css";
 import { Quicksand } from "next/font/google";
 import LayoutWrapper from "./components/LayoutWrapper";
 import PageTransition from "./components/PageTransition";
+import { Toaster } from "sonner";
 
 const quickSand = Quicksand({
   subsets: ["latin"],
@@ -25,8 +26,10 @@ export default function RootLayout({
         <PageTransition>
           <LayoutWrapper>
             <main className="flex-1">{children}</main>
+            <Toaster richColors position="top-right" />
           </LayoutWrapper>
         </PageTransition>
+
       </body>
     </html>
   );
