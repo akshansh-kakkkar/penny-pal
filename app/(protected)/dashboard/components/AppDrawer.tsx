@@ -23,7 +23,7 @@ export default function AppDrawer() {
         onClick={() => setOpen((prev) => !prev)}
         className="lg:hidden z-10 flex mx-8 my-4 bg-white w-fit absolute bottom-5  left-4 p-2 rounded-full shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]"
       >
-        <LayoutDashboard size={30} className="text-[#725868]" />
+        <LayoutGrid size={30} className="text-[#725868]" />
       </button>
       <AnimatePresence>
         {open && (
@@ -35,7 +35,7 @@ export default function AppDrawer() {
             className=" min-w-screen bg-black/20 fixed inset-0 z-40 backdrop-blur-sm lg:hidden  "
           >
             <motion.div
-              transition={{ damping: 25, stiffness: 220, type: spring }}
+              transition={{ damping: 25, stiffness: 220, type: "spring" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               initial={{ y: "100%" }}

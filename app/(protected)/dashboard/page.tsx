@@ -3,11 +3,10 @@
 import { Handbag, PiggyBank, Wallet, LayoutDashboard, Plus, LayoutGrid } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import ExpenseModal from "./components/ExpenseModal";
-interface dashboardProps {
-  openModal: () => void
-}
-export default function page({ openModal }: dashboardProps) {
+import ExpenseModal from './components/ExpenseModal';
+import ExpensesAppDrawer from "./components/ExpensesAppDrawer";
+
+export default function page() {
   const cards = [
     {
       id: 1,
@@ -39,19 +38,18 @@ export default function page({ openModal }: dashboardProps) {
   const [currentCard, setCurrentCard] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   return (
+    <>
     <div className="min-h-screen mx-5 md:mx-10 xl:mx-40  py-20   ">
-      <div className=" justify-between items-center sm:flex hidden xl:flex mx-8 mb-8">
+      <div className=" justify-between items-center flex  xl:flex sm:mx-8 mb-8">
         <div className="items-center flex py-2 w-fit   gap-2  text-2xl ">
-
-          <span><LayoutGrid strokeWidth={3} fill="#715767" color="#715767" size={32} /></span>
+          <span><LayoutGrid className="hidden sm:block" strokeWidth={3} fill="#715767" color="#715767" size={32} /></span>
           <span className="font-bold text-[#715767] " >Dashboard</span>
         </div>
-        <div>
-          <button onClick={()=>setIsOpen(true)} className="flex cursor-pointer hover:scale-[110%] transition-all duration-300  text-xl justify-center gap-2 bg-[#715767] text-white px-4 py-2 rounded-full font-bold  items-center text-center">
-            <span><Plus strokeWidth={3} /></span>
-            <span>Add Expense</span>
-          </button>
-        </div>
+        <button onClick={() => setIsOpen(true)} className="md:flex hidden cursor-pointer hover:scale-[110%] transition-all duration-300  text-xl justify-center gap-2 bg-[#715767] text-white px-4 py-2 rounded-full font-bold  items-center text-center">
+          <span><Plus strokeWidth={3} /></span>
+          <span>Add Expense</span>
+        </button>
+
       </div>
       <div className="hidden  sm:grid  grid-cols-3  xl:gap-24 place-items-center justify-center items-center ">
         <div className="flex  flex-col col-span-1 w-[200px] xl:w-[300px] h-[200px] justify-between h p-6 bg-white rounded-4xl shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]">
@@ -106,10 +104,7 @@ export default function page({ openModal }: dashboardProps) {
           </div>
         </div>
       </div>
-      <div className="sm:hidden items-center py-2 border-b-2 border-[#715767] w-fit mx-4 mb-2 gap-2 flex text-2xl ">
-        <span><LayoutDashboard strokeWidth={3} fill="#725868" color="#725868" size={32} /></span>
-        <span className="font-bold text-[#715767] " >Dashboard</span>
-      </div>
+
       <div className={`sm:hidden overflow-hidden`}>
         <motion.div
           drag="x"
@@ -169,8 +164,10 @@ export default function page({ openModal }: dashboardProps) {
           ))}
         </div>
       </div>
-                <ExpenseModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-
+      <ExpenseModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </div>
+          <ExpensesAppDrawer />
+
+</>
   );
 }
