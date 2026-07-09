@@ -27,7 +27,7 @@ export default function HearoSection() {
         />
       </div>
       <div className="flex flex-col text-center md:text-start justify-center items-center md:items-start md:justify-start gap-6">
-        <div className="flex  gap-2 px-4 py-2 bg-[#C8E9E2] text-sm items-center text-center text-[#4C6A65] rounded-full font-bold">
+        <div className="flex gap-2 px-4 py-2 bg-[#C8E9E2] text-sm items-center text-center text-[#4C6A65] rounded-full font-bold">
           <span>
             <Heart fill="#4C6A65" />
           </span>

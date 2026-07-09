@@ -43,7 +43,7 @@ export default function Navbar() {
                 Sign In
               </button>
               <button
-                onClick={() => router.push("/auth/login")}
+                onClick={() => router.push("/auth/sign-in")}
                 className="border-[#715767] cursor-pointer transition-all duration-300 hover:text-[#715767] hover:scale-[105%] px-6 py-2 border-2 rounded-full"
               >
                 Log In
@@ -81,16 +81,16 @@ export default function Navbar() {
                 <Link href={"/join-the-club"}>Join the Club</Link>
                 <div className="flex gap-2 flex-col">
                   <button
-                    onClick={() => router.push("/auth/sign-in")}
+                    onClick={() => router.push("/auth/sign-up")}
                     className="bg-[#715767]  text-md px-22 py-1 border-2 cursor-pointer transition-all hover:text-[#715767] hover:bg-white duration-300 border-[#715767] text-white rounded-full"
                   >
-                    Sign In
+                    Sign Up
                   </button>
                   <button
-                    onClick={() => router.push("/auth/login")}
+                    onClick={() => router.push("/auth/sign-in")}
                     className="border-[#715767] px-22 text-md cursor-pointer transition-all duration-300 hover:bg-[#715767] hover:text-white px-3 py-1 border-2 rounded-full"
                   >
-                    Log In
+                    Sign In
                   </button>
                 </div>
               </div>

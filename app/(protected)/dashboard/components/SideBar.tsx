@@ -1,6 +1,5 @@
 "use client";
-import { useSession } from "@/app/lib/auth/auth-client";
-import { signOut } from "better-auth/api";
+import { signOut, useSession } from "@/app/lib/auth/auth-client";
 import {
   Banknote,
   LayoutDashboard,
@@ -59,7 +58,7 @@ export default function SideBar({openModal} : sideBarProps) {
           </span>
           <span>Logout</span>
         </button>
-        <button onClick={openModal} className="flex cursor-pointer hover:scale-[105%] hover:bg-[#725868]/90 duration-300 transition-all justify-center items-center text-center text-2xl bg-[#715767] rounded-full py-4 px-4 font-bold text-white">Add Expenses</button>
+        <button onClick={openModal} className="flex cursor-pointer hover:scale-[105%] hover:bg-[#725868]/90 duration-300 transition-all justify-center items-center text-center text-2xl bg-[#715767] rounded-full py-4 px-4 font-bold text-white">Add Expense</button>
       </div>
     </div>
   );

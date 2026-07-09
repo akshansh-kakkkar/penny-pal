@@ -112,7 +112,7 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
                     return (
                       <div onClick={() => setCategory(item.id)} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-3xl w-35 h-25 flex-shrink-0 flex-col items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`} key={item.id}>
                         <span>
-                          <IconComponent size={32} />
+                          <IconComponent className="transition-all duration-300"  size={category === item.id ? 48 : 32} />
                         </span>
                         <span>{item.name}</span>
                       </div>

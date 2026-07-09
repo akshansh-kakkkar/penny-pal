@@ -4,6 +4,7 @@ import { signIn, signUp } from "@/app/lib/auth/auth-client";
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  ArrowLeft,
   ArrowRight,
   Eye,
   EyeOff,
@@ -121,7 +122,7 @@ export default function page() {
       className={`bg-gradient-to-b min-h-screen overflow-hidden from-[#F4D2E5]/40 to-[#FFFFFF] flex flex-col justify-center items-center relative`}
     >
       <div className="absolute -top-30 -left-30 w-[350px] h-[350px]  sm:w-[400px] sm:h-[400px] bg-[#F4D2E5] rounded-full blur-[40px] z-10" />
-      <div className="rounded-4xl bg-[#FFFFFF] gap-6 z-50 p-10 flex flex-col shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]">
+      <div className="rounded-4xl bg-[#FFFFFF] relative gap-6 z-50 p-10 flex flex-col shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]">
         <div className="flex flex-col `">
           <div className="flex w-full justify-center items-center text-center p-2">
             <div className="flex bg-[#F4D2E5] rounded-full w-18 h-18  animate-bounce justify-center items-center text-center p-2">
@@ -131,6 +132,9 @@ export default function page() {
                 icon={faPiggyBank}
               />
             </div>
+          </div>
+          <div onClick={() => router.push('/')} className="absolute left-4 top-4 hover:text-white hover:bg-[#715767] cursor-pointer transition-all duration-300 bg-[#f4d2e543] p-2 rounded-full text-[#715767] w-fit">
+            <ArrowLeft strokeWidth={3} size={24} />
           </div>
           <div className="flex justify-center items-center flex-col">
             <div className="text-xl text-[#715767] font-bold">
@@ -143,7 +147,7 @@ export default function page() {
         </div>
         <div>
           <button
-          disabled={disableGoogle}
+            disabled={disableGoogle}
             onClick={googleSignIn}
             className=" py-3  bg-[#f4d2e543] disabled:cursor-not-allowed hover:text-white text-[#715767] hover:bg-[#715767] cursor-pointer transition-all duration-100  flex justify-center items-center w-full gap-4 rounded-full text-center font-bold"
           >
