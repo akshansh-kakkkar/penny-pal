@@ -39,7 +39,7 @@ export default function page() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-    <div className="min-h-screen mx-5 md:mx-10 xl:mx-40  py-20   ">
+    <div className="min-h-screen mx-5 md:mx-10 xl:mx-40 py-20">
       <div className=" justify-between items-center flex  xl:flex sm:mx-8 mb-8">
         <div className="items-center flex py-2 w-fit   gap-2  text-2xl ">
           <span><LayoutGrid className="hidden sm:block" strokeWidth={3} fill="#715767" color="#715767" size={32} /></span>

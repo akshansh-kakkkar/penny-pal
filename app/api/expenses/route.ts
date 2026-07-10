@@ -16,8 +16,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(expenses);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch all Expenses" },
-      { status: 500 },
+     { error: "Failed to fetch all Expenses" },
+     { status: 500 },
     );
   }
 }

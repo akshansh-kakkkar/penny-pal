@@ -23,9 +23,6 @@ export async function getExpense(userId: string, page = 1, limit = 10) {
       where: {
         userId,
       },
-      include: {
-        category: true,
-      },
       orderBy: {
         date: "desc",
       },
@@ -52,9 +49,6 @@ export async function getExpenseById(id: string, userId: string) {
             id,
             userId,
         },
-        include : {
-            category : true
-        }
     })
 }
 
