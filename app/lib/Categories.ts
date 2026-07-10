@@ -1,63 +1,73 @@
-import {Box, CarTaxiFront, GraduationCap, HandPlatter, Hospital, House, Plane, ReceiptText, ShoppingBag, TvMinimal} from "lucide-react"
+import { Box, CarTaxiFront, GraduationCap, HandPlatter, Hospital, House, Plane, ReceiptText, ShoppingBag, TvMinimal } from "lucide-react"
 export const CATEGORIES = [
     {
-        id : "food",
-        name : "Food",
-        icon : HandPlatter,
-        color : "#EF4444",
+        id: "food",
+        name: "Food",
+        icon: HandPlatter,
+        color: "#B85E3D",
+        background: "#F9EBE7"
     },
     {
-        id : "shopping",
-        name : "Shopping",
-        icon : ShoppingBag,
-        color : "#8B5CF6",
+        id: "shopping",
+        name: "Shopping",
+        icon: ShoppingBag,
+        color: "#815991",
+        background: "#EFE8F3"
     },
     {
-        id : "transport",
-        name : "Transport",
-        icon : CarTaxiFront,
-        color : '#3B62F6'
+        id: "transport",
+        name: "Transport",
+        icon: CarTaxiFront,
+        color: '#5A7BAF',
+        background: "#EAEEF6"
     },
     {
-        id : "entertainment",
-        name : "Entertainment",
-        icon : TvMinimal,
-        color : "#EC4899"
+        id: "entertainment",
+        name: "Entertainment",
+        icon: TvMinimal,
+        color: "#B65D7E",
+        background: "#F7E9EE"
     },
     {
-        id : "health",
-        name : "Health",
-        icon : Hospital,
-        color : "#10B981",
+        id: "health",
+        name: "Health",
+        icon: Hospital,
+        color: "#4F876B",
+        background: "#E1EFE8"
     },
     {
-        id : "education",
-        name : "Education",
-        icon : GraduationCap,
-        color : "#F59E0B"
+        id: "education",
+        name: "Education",
+        icon: GraduationCap,
+        color: "#BD8C42",
+        background: "#F7EFE3"
     },
     {
-        id : "bills",
-        name : "Bills",
-        icon : ReceiptText,
-        color : "#6366F1"
+        id: "bills",
+        name: "Bills",
+        icon: ReceiptText,
+        color: "#756FAE",
+        background: "#EBEAF5"
     },
     {
-        id : "rent",
-        name : "Rent",
-        icon : House,
-        color : "#14B8A6",
+        id: "rent",
+        name: "Rent",
+        icon: House,
+        color: "#3F837C",
+        background: "#DFF1EF"
     },
     {
-        id : "travel",
-        name :"Travel",
-        icon : Plane,
-        color : "#06B6D4",
+        id: "travel",
+        name: "Travel",
+        icon: Plane,
+        color: "#5091A5",
+        background: "#E6F1F5"
     },
     {
-        id :"other",
-        name : "Other",
-        icon : Box,
-        color : "#6B7280"   
+        id: "other",
+        name: "Other",
+        icon: Box,
+        color: "#806F60",
+        background: "#F1EDEA"
     }
 ]
