@@ -13,9 +13,11 @@ import { useState } from "react";
 import { AnimatePresence, motion, spring } from "framer-motion";
 import Link from "next/link";
 import { signOut } from "better-auth/api";
+import { getCategoryStats } from '@/app/server/stats.service';
 export default function AppDrawer() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [getCategoryStats, setGetCategoryStats] = useState('');
   const pathName = usePathname();
   return (
     <>

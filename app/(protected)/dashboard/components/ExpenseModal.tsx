@@ -104,7 +104,7 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
               <div className="flex flex-col gap-2">
                 <p className="text-md text-[#4D4449] font-bold">Where did it go?</p>
               </div>
-
+          
               <div className=" overflow-x-auto w-full ">
                 <div className="min-w-max flex gap-8 my-2">
                   {categories.map((item) => {
