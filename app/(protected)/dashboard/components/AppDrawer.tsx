@@ -13,7 +13,6 @@ import { useState } from "react";
 import { AnimatePresence, motion, spring } from "framer-motion";
 import Link from "next/link";
 import { signOut } from "better-auth/api";
-import { getCategoryStats } from '@/app/server/stats.service';
 export default function AppDrawer() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -23,7 +22,7 @@ export default function AppDrawer() {
     <>
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="lg:hidden z-10 flex mx-8 my-4 bg-white w-fit absolute bottom-5  left-4 p-2 rounded-full shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]"
+        className="lg:hidden fixed z-10 flex mx-8 my-4 bg-white w-fit  bottom-5  left-4 p-2 rounded-full shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]"
       >
         <LayoutGrid size={30} className="text-[#725868]" />
       </button>

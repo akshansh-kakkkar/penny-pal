@@ -7,11 +7,11 @@ export default function ({ children }: { children: React.ReactNode }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isExpenseDrawer, setIsExpenseDrawer] = useState(false);
     return (
-        <div className="flex bg-[#FAF9F6] min-h-screen flex-1">
+        <div className="flex relative bg-[#FAF9F6] min-h-screen flex-1">
             <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             <SideBar openModal={() => setIsModalOpen(true)} />
             <AppDrawer />
-            <main className="w-full">
+            <main className="w-full lg:ml-[400px]">
                 {children}
             </main>
         </div>

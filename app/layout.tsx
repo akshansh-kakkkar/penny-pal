@@ -1,8 +1,11 @@
 import "./globals.css";
-import { Quicksand } from "next/font/google";
+import { Quicksand, Geist } from "next/font/google";
 import LayoutWrapper from "./components/LayoutWrapper";
 import PageTransition from "./components/PageTransition";
 import { Toaster } from "sonner";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const quickSand = Quicksand({
   subsets: ["latin"],
@@ -19,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <body
         className={`relative flex flex-col min-h-screen antialiased ${quickSand.className}`}
       >
