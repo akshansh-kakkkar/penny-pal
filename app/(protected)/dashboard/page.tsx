@@ -1,10 +1,11 @@
 
 "use client";
-import { Handbag, PiggyBank, Wallet, LayoutDashboard, Plus, LayoutGrid } from "lucide-react";
+import { Handbag, PiggyBank, Wallet, Plus, LayoutGrid } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import ExpenseModal from './components/ExpenseModal';
 import ExpensesAppDrawer from "./components/ExpensesAppDrawer";
+import { useExpenseModal } from "@/app/store/useExpenseModal";
 
 export default function page() {
   const cards = [
@@ -37,6 +38,7 @@ export default function page() {
   ];
   const [currentCard, setCurrentCard] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const {open} = useExpenseModal();
   return (
     <>
     <div className="min-h-screen mx-5 md:mx-10 xl:mx-40 py-20">
@@ -49,7 +51,10 @@ export default function page() {
           <span><Plus strokeWidth={3} /></span>
           <span>Add Expense</span>
         </button>
-
+        <button onClick={()=>open()} className="absolute flex top-21 right-8 md:hidden cursor-pointer hover:scale-[110%] transition-all duration-300  text-xl justify-center gap-2 bg-[#715767] text-white px-4 py-2 rounded-full font-bold  items-center text-center">
+            <span className="hidden sm:block"><Plus strokeWidth={3} /></span>
+            <span className="text-sm sm:text-xl">Add Expense</span>
+        </button>
       </div>
       <div className="hidden  sm:grid  grid-cols-3  xl:gap-24 place-items-center justify-center items-center ">
         <div className="flex  flex-col col-span-1 w-[200px] xl:w-[300px] h-[200px] justify-between h p-6 bg-white rounded-4xl shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]">

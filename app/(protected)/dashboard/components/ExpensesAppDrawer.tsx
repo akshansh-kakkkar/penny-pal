@@ -4,13 +4,15 @@ import { DollarSignIcon, Heart, Icon, Loader2, Plus } from "lucide-react";
 import { useState } from "react";
 import { CATEGORIES } from '../../../lib/Categories';
 import { toast } from "sonner";
+import { usePathname } from "next/navigation";
+import { useExpenseModal } from "@/app/store/useExpenseModal";
 export default function () {
-    const [isOpen, setIsOpen] = useState(false);
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState("");
     const [date, setDate] = useState(new Date().toISOString().split("T")[0])
     const [description, setDescription] = useState("");
     const [loading, setLoading] = useState(false);
+    const { isOpen, close } = useExpenseModal();
     const handleSubmit = async () => {
         try {
             setLoading(true);
@@ -52,7 +54,7 @@ export default function () {
             setDescription("")
             setAmount("")
             setCategory("");
-            setIsOpen(false);
+            close();
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message)
@@ -63,17 +65,13 @@ export default function () {
     }
     const categories = CATEGORIES
     return (<>
-        <button onClick={() => setIsOpen(true)} className="absolute flex top-21 right-8 md:hidden cursor-pointer hover:scale-[110%] transition-all duration-300  text-xl justify-center gap-2 bg-[#715767] text-white px-4 py-2 rounded-full font-bold  items-center text-center">
-            <span className="hidden sm:block"><Plus strokeWidth={3} /></span>
-            <span className="text-sm sm:text-xl">Add Expense</span>
-        </button>
         <AnimatePresence>
             {isOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => close()}
                     className={`min-w-screen bg-black/20 fixed md:hidden flex inset-0 z-40 backdrop-blur-sm justify-center items-center`}>
                     <motion.div
                         transition={{ damping: 25, stiffness: 220, type: "spring" }}
@@ -85,7 +83,7 @@ export default function () {
                         dragElastic={{ top: 0.2, bottom: 0 }}
                         onDragEnd={(e, info) => {
                             if (info.offset.y < -150) {
-                                setIsOpen(false)
+                                close()
                             }
                         }}
                         onClick={(e) => e.stopPropagation()}

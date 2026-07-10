@@ -13,26 +13,28 @@ import { useState } from "react";
 import { AnimatePresence, motion, spring } from "framer-motion";
 import Link from "next/link";
 import { signOut } from "better-auth/api";
+import { useExpenseModal } from "@/app/store/useExpenseModal";
 export default function AppDrawer() {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [getCategoryStats, setGetCategoryStats] = useState('');
   const pathName = usePathname();
+  const { open } = useExpenseModal();
   return (
     <>
       <button
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={() => setIsOpen((prev) => !prev)}
         className="lg:hidden fixed z-10 flex mx-8 my-4 bg-white w-fit  bottom-5  left-4 p-2 rounded-full shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]"
       >
         <LayoutGrid size={30} className="text-[#725868]" />
       </button>
       <AnimatePresence>
-        {open && (
+        {isOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setOpen(false)}
+            onClick={() => setIsOpen(false)}
             className=" min-w-screen bg-black/20 fixed inset-0 z-40 backdrop-blur-sm lg:hidden  "
           >
             <motion.div
@@ -45,7 +47,7 @@ export default function AppDrawer() {
               dragElastic={0.2}
               onDragEnd={(e, info) => {
                 if (info.offset.y > 150) {
-                  setOpen(false);
+                  setIsOpen(false);
                 }
               }}
               onClick={(e) => e.stopPropagation()}
@@ -63,7 +65,7 @@ export default function AppDrawer() {
                     </div>
                   </div>
                   <button
-                    onClick={() => setOpen(false)}
+                    onClick={() => setIsOpen(false)}
                     className="bg-[#F4D2E5] p-2 rounded-full"
                   >
                     <X size={24} className="text-[#725868] rounded-full" />
@@ -83,25 +85,25 @@ export default function AppDrawer() {
                       Dashboard
                     </span>
                   </Link>
-                  <Link
-                    href={"/dashboard/addexpense"}
+                  <button
+                    onClick={() =>{setIsOpen(false), open()}}
                     className="flex gap-2 flex-col items-center justify-center"
                   >
                     <span
-                      className={`rounded-xl text-[#725868] p-2 ${pathName === "/dashboard/addexpense" ? "bg-[#F4D2EF]" : "bg-[#FDF2F8]"}`}
+                      className={`rounded-xl text-[#725868] p-2 bg-[#FDF2F8]`}
                     >
                       <Plus size={32} strokeWidth={2} />
                     </span>
                     <span className="text-sm font-bold text-[#4D4449]">
                       Add Expense
                     </span>
-                  </Link>
+                  </button>
                   <Link
-                    href={"/dashboard/addexpense"}
-                    className={`flex gap-2 flex-col items-center justify-center`}
+                    href={"/dashboard/expenses"}
+                    className="flex gap-2 flex-col items-center justify-center"
                   >
                     <span
-                      className={`rounded-xl text-[#725868] p-2 ${pathName === "/dashboard/addexpense" ? "bg-[#F4D2EF]" : "bg-[#FDF2F8]"} `}
+                      className={`rounded-xl text-[#725868] p-2 ${pathName === "/dashboard/expenses" ? "bg-[#F4D2EF]" : "bg-[#FDF2F8]"}`}
                     >
                       <Banknote size={32} strokeWidth={2} />
                     </span>
@@ -110,11 +112,11 @@ export default function AppDrawer() {
                     </span>
                   </Link>
                   <Link
-                    href={"/dashboard/expenses"}
+                    href={"/dashboard/budget"}
                     className="flex gap-2 flex-col items-center justify-center"
                   >
                     <span
-                      className={`rounded-xl ${pathName === "/dashboard/expense" ? "bg-[#F4D2E5] " : "bg-[#FDF2F8]"} text-[#725868]  p-2 `}
+                      className={`rounded-xl ${pathName === "/dashboard/budget" ? "bg-[#F4D2E5] " : "bg-[#FDF2F8]"} text-[#725868]  p-2 `}
                     >
                       <WalletIcon size={32} strokeWidth={2} />
                     </span>
@@ -122,7 +124,7 @@ export default function AppDrawer() {
                       Budgets
                     </span>
                   </Link>
-                  <button onClick={async()=>{ await signOut(); router.refresh()}}  className="flex gap-2 flex-col items-center justify-center">
+                  <button onClick={async () => { await signOut(); router.refresh() }} className="flex gap-2 flex-col items-center justify-center">
                     <span className="text-red-400 bg-red-50 p-2 rounded-xl">
                       <LogOut size={32} strokeWidth={2} />
                     </span>

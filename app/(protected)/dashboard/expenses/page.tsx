@@ -1,13 +1,18 @@
 "use client"
-import { CircleEllipsis, ListFilter, PencilIcon, Search, Trash2Icon } from "lucide-react";
+import { CircleEllipsis, ListFilter, PencilIcon, Search, Trash2Icon, LoaderPinwheel } from 'lucide-react';
 import { useEffect, useState } from "react";
 import { CATEGORIES } from "@/app/lib/Categories";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 export default function page() {
     const [expenses, setExpenses] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
 
         const fetchExpenses = async () => {
+            try{
+                setLoading(true)
             const res = await fetch('/api/expenses', {
                 method: "GET"
             })
@@ -16,13 +21,26 @@ export default function page() {
             }
             const data = await res.json()
             setExpenses(data.expenses);
-
+        }
+        catch(error){
+            toast.error("Failed loading your expenses try refreshing.")
+        }
+        finally{
+            setLoading(false)
+        }
         }
         fetchExpenses();
     }, [])
     const categoryMap = Object.fromEntries(CATEGORIES.map((c) => [c.id, c]))
 
     return (
+        <>
+        {
+            loading ? (
+                <div className='flex h-screen justify-center items-center text-center'>
+                    <LoaderPinwheel size={48} className='animate-spin text-[#715767]' strokeWidth={2} />
+                </div>
+            ) : (
         <div className={`min-h-screen mx-5 md:mx-10 xl:mx-40 py-10 md:py-20`}>
             <div className="flex  sm:flex-row flex-col gap-4 justify-center sm:justify-between items-center">
                 <div className="text-3xl font-bold text-[#715767]">PennyPal</div>
@@ -58,7 +76,7 @@ export default function page() {
                                     {expense.description}
                                 </p>
                             </div>
-                            <div className="md:flex hidden gap-6 items-center text-center">
+                            <div className="flex gap-6 items-center text-center">
                                <DropdownMenu>
                                 <button>
                                     <DropdownMenuTrigger className={"hover:bg-[#f4d2e5] text-[#715767] p-1 cursor-pointer rounded-full "} >
@@ -79,8 +97,10 @@ export default function page() {
                             </div>
                         </div>
                     )
-                })}
-            </div>
+                })}            </div>
         </div>
+            )
+        }
+        </>
     )
 }
