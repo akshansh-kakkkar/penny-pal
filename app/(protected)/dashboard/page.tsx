@@ -169,7 +169,6 @@ export default function page() {
           ))}
         </div>
       </div>
-      <ExpenseModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </div>
           <ExpensesAppDrawer />
 

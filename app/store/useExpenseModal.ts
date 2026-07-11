@@ -11,3 +11,4 @@ export const useExpenseModal = create<ExpenseModalStore>((set)=>({
     open : ()=>set({isOpen : true}),
     close : ()=>set({isOpen : false})
 }))
+

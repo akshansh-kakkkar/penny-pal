@@ -4,18 +4,23 @@ import { DollarSignIcon, Heart, Loader2, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useExpenseStore } from "@/app/store/UseExpenseStore";
 interface addExpenseProps {
   isOpen: boolean;
   onClose: () => void;
+  onAdded : (expense : any) => void
 }
 
-export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
+export default function ExpenseModal({ isOpen, onClose, onAdded }: addExpenseProps) {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const categories = CATEGORIES;
+  const {setExpenses, expenses} = useExpenseStore();
+  const router = useRouter()
   const handleSubmit = async () => {
     try {
       setLoading(true);
@@ -62,8 +67,8 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
       setCategory('');
       setDate(new Date().toISOString().split("T")[0]);
       setDescription("");
+      setExpenses(data.expense);
       onClose();
-
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);

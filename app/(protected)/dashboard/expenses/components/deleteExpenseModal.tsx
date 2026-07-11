@@ -3,12 +3,16 @@ import { CATEGORIES } from "@/app/lib/Categories";
 import { useDeleteExpenseModal } from "@/app/store/useDeleteExpenseModal"
 import { AnimatePresence, motion } from "framer-motion"
 import { Heart, Trash2Icon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner"
-export default function DeleteExpenseModal() {
+export default function DeleteExpenseModal({onDeleted} : {onDeleted : (id : string)=>void}) {
     const { onClose, isOpen, expenseId } = useDeleteExpenseModal();
     const [loading, setLoading] = useState(false);
     const [expense, setExpense] = useState<any>(null)
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const router = useRouter();
+    const [expenses, setExpenses] = useState<any[]>([])
     const GetExpenseById = async (id: string) => {
         try {
             setLoading(true);
@@ -24,14 +28,39 @@ export default function DeleteExpenseModal() {
             setLoading(false)
         }
     }
-    useEffect(() => {
-        if (isOpen && expenseId) {
+    const deleteExpenseById = async (id: string) => {
+        try {
+            setDeleteLoading(true);
+            const res = await fetch(`/api/expenses/${id}`, { method: "DELETE" });
+            const data = await res.json();
+            if (!res.ok) {
+                 throw new Error("Failed to delete the expense try not to spam.")
+            }
+            toast.success("Treat deleted successfully")
+            onDeleted(id)
+            onClose()
+                }
+        catch (error) {
+            toast.error("failed to delete the treat you can hit this piggy or try hacking the website.")
+        }
+        finally {
+            setDeleteLoading(false)
+        }
+    }
+    useEffect(()=>{
+        if(!isOpen){
+            setExpense(null);
+            return;
+        }
+        if(expenseId){
             GetExpenseById(expenseId)
         }
     }, [isOpen, expenseId])
     if (!isOpen) return null;
+
     const category = CATEGORIES.find(c => c.id === expense?.category)
     const IconComponent = category?.icon
+
     return (
         <AnimatePresence>
             <motion.div
@@ -52,7 +81,7 @@ export default function DeleteExpenseModal() {
                     <div className="flex text-sm font-medium text-[#4D4449] text-center items-center flex w-full">
                         Are you sure you want to remove this expense? This action can't be undone, but your budget is still of you!
                     </div>
-                    <div className="flex mb-8 border-2 border-white shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] justify-between items-center rounded-3xl bg-[#F4D2E5] py-2 px-5 text-center w-full">
+                    <div className="flex mb-4 border-2 border-white shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] justify-between items-center rounded-3xl bg-[#F4D2E5] py-2 px-5 text-center w-full">
                         <div className="flex items-center gap-4 ">
                             <span className="bg-white p-2 rounded-full shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]">
                                 {IconComponent && (
@@ -64,20 +93,24 @@ export default function DeleteExpenseModal() {
                         <div className="text-xl flex gap-2 font-bold text-[#715767] bg-white px-4 py-2 rounded-2xl shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]"><span>$</span><span>{expense?.amount}</span></div>
                     </div>
                     <div className="flex flex-col w-full gap-4">
-                    <button onClick={()=>onClose()} className="w-full cursor-pointer hover:scale-[105%] hover:transition-all duration-300 bg-[#715767] py-4 justify-center items-center text-center  text-2xl rounded-full text-white font-semibold gap-2 flex">
-                        <span>Keep it!</span>
-                        <span>
-                            <Heart size={24} strokeWidth={3} />
-                        </span>
-                    </button>
-                    <button className="text-[#715767] cursor-pointer border-2 rounded-full border-transparent  font-bold text-md gap-2 flex items-center text-center hover:border-[#715767] transition-all duration-300 justify-center w-full py-4">
-                        <span><Trash2Icon size={20}  strokeWidth={2.5} /></span>
-                        <span>Yes, delete</span>
-                    </button>
+                        <button onClick={() => onClose()} className="w-full cursor-pointer hover:scale-[105%] hover:transition-all duration-300 bg-[#715767] py-4 justify-center items-center text-center  text-2xl rounded-full text-white font-semibold gap-2 flex">
+                            <span>Keep it!</span>
+                            <span>
+                                <Heart size={24} strokeWidth={3} />
+                            </span>
+                        </button>
+                        <button onClick={() => {
+                            if (expenseId) {
+                                deleteExpenseById(expenseId)
+                            }
+                        }} className="text-[#715767] cursor-pointer border-2 rounded-full border-transparent  font-bold text-md gap-2 flex items-center text-center hover:border-[#715767] transition-all duration-300 justify-center w-full py-2">
+                            <span><Trash2Icon size={20} strokeWidth={2.5} /></span>
+                            <span>Yes, delete</span>
+                        </button>
                     </div>
                 </motion.div>
             </motion.div>
-        </AnimatePresence>
+        </AnimatePresence >
 
     )
 }

@@ -6,10 +6,14 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { toast } from "sonner";
 import { useDeleteExpenseModal } from '@/app/store/useDeleteExpenseModal';
 import DeleteExpenseModal from './components/deleteExpenseModal';
+import ExpenseModal from '../components/ExpenseModal';
+
 export default function page() {
     const [expenses, setExpenses] = useState<any[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-const {open} = useDeleteExpenseModal()
+
+    const { open } = useDeleteExpenseModal()
     useEffect(() => {
 
         const fetchExpenses = async () => {
@@ -33,6 +37,12 @@ const {open} = useDeleteExpenseModal()
         }
         fetchExpenses();
     }, [])
+    const removeExpense = (id: string) => {
+        setExpenses(prev => prev.filter(exp => exp.id !== id))
+    }
+    const addExpense = (expense: any) => {
+        setExpenses(prev => [expense, ...prev])
+    }
     const categoryMap = Object.fromEntries(CATEGORIES.map((c) => [c.id, c]))
     return (
         <>
@@ -101,7 +111,8 @@ const {open} = useDeleteExpenseModal()
                     </div>
                 )
             }
-            <DeleteExpenseModal />
+            <DeleteExpenseModal onDeleted={removeExpense} />
+            <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAdded={addExpense} />
         </>
     )
 }
