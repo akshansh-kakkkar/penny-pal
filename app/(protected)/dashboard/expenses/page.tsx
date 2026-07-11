@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { CATEGORIES } from "@/app/lib/Categories";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { useDeleteExpenseModal } from '@/app/store/useDeleteExpenseModal';
+import DeleteExpenseModal from './components/deleteExpenseModal';
 export default function page() {
     const [expenses, setExpenses] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
@@ -32,7 +34,7 @@ export default function page() {
         fetchExpenses();
     }, [])
     const categoryMap = Object.fromEntries(CATEGORIES.map((c) => [c.id, c]))
-
+    const {open} = useDeleteExpenseModal();
     return (
         <>
         {
@@ -88,7 +90,7 @@ export default function page() {
                                         <span><PencilIcon size={24} strokeWidth={3} /></span>
                                         <span>edit</span>
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className={`flex focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                    <DropdownMenuItem onClick={()=>open()} className={`flex focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                         <span><Trash2Icon  size={24} strokeWidth={3} /></span>
                                         <span>delete </span>
                                     </DropdownMenuItem>
@@ -101,6 +103,7 @@ export default function page() {
         </div>
             )
         }
+        <DeleteExpenseModal />
         </>
     )
 }
