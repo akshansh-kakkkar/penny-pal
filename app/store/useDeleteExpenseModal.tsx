@@ -1,11 +1,19 @@
-import {create} from "zustand"
+import { create } from "zustand"
 interface deleteExpenseModalStore {
-    isOpen : boolean;
-    open : ()=>void;
-    onClose : ()=>void;
+    isOpen: boolean;
+    open: (id: string) => void;
+    onClose: () => void;
+    expenseId: string | null
 }
-export const useDeleteExpenseModal = create<deleteExpenseModalStore>((set)=>({
+export const useDeleteExpenseModal = create<deleteExpenseModalStore>((set) => ({
     isOpen: false,
-    open : ()=> set({isOpen : true}),
-    onClose :()=>set({isOpen : false})
+    expenseId: null,
+    open: (id) => set({
+        isOpen: true,
+        expenseId: id
+    }),
+    onClose: () => set({
+        isOpen: false,
+        expenseId: null,
+    })
 }))
