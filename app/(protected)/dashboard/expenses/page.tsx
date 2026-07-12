@@ -8,13 +8,16 @@ import { useDeleteExpenseModal } from '@/app/store/useDeleteExpenseModal';
 import DeleteExpenseModal from './components/deleteExpenseModal';
 import ExpenseModal from '../components/ExpenseModal';
 import { useExpenseStore } from '@/app/store/UseExpenseStore';
+import DeleteExpenseDrawer from './components/DeleteExpenseDrawer';
+import { useDeleteDrawer } from '@/app/store/UseDeleteExpenseDrawer';
 
 export default function page() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const { open } = useDeleteExpenseModal();
-    const {expenses, setExpenses} = useExpenseStore();
+    const { expenses, setExpenses } = useExpenseStore();
+    const { oppen } = useDeleteDrawer();
     useEffect(() => {
 
         const fetchExpenses = async () => {
@@ -97,7 +100,11 @@ export default function page() {
                                                         <span><PencilIcon size={24} strokeWidth={3} /></span>
                                                         <span>edit</span>
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => open(expense.id)} className={`flex focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                    <DropdownMenuItem onClick={() => open(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                        <span><Trash2Icon size={24} strokeWidth={3} /></span>
+                                                        <span>delete </span>
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => oppen(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                         <span><Trash2Icon size={24} strokeWidth={3} /></span>
                                                         <span>delete </span>
                                                     </DropdownMenuItem>
@@ -111,6 +118,7 @@ export default function page() {
                 )
             }
             <DeleteExpenseModal onDeleted={removeExpense} />
+            <DeleteExpenseDrawer />
             <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         </>
     )

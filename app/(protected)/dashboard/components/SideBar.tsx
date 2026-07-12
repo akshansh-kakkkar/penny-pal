@@ -50,7 +50,7 @@ export default function SideBar({ openModal }: sideBarProps) {
         </div>
       </div>
       <div className="flex gap-6 flex-col ">
-        <button onClick={async () => { await signOut(); router.refresh() }} className="flex transition-all duration-300 cursor-pointer px-6 py-4 rounded-full hover:text-white hover:bg-[#725868a1] gap-6 items-center text-xl font-semibold text-center text-[#4D4449] mx-4 ">
+        <button onClick={async () => { await signOut(); router.refresh() }} className="flex transition-all duration-300 cursor-pointer px-6 py-4 rounded-full hover:text-white hover:bg-[#725868a1] gap-6 items-center text-xl font-semibold text-center text-[#4D4449]">
           <span>
             <LogOutIcon strokeWidth={3} />
           </span>
