@@ -47,7 +47,6 @@ export default function DeleteExpenseModal({ onDeleted }: { onDeleted: (id: stri
     }
     useEffect(() => {
         if (isOpen && expenseId) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             GetExpenseById(expenseId)
         }
     }, [isOpen, expenseId, GetExpenseById])

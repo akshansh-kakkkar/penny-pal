@@ -13,6 +13,8 @@ import { useDeleteDrawer } from '@/app/store/UseDeleteExpenseDrawer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPiggyBank } from '@fortawesome/free-solid-svg-icons';
 import { useExpenseModal } from '@/app/store/useExpenseModal';
+import ViewExpenseModal from './components/ViewExpensesModal.tsx';
+import { viewExpense } from '@/app/store/UseViewExpenseModal';
 
 export default function ExpensesPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,6 +25,7 @@ export default function ExpensesPage() {
     const { oppen } = useDeleteDrawer();
     const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(1)
+    const {open : openView} = viewExpense()
     // useEffect(() => {
 
     //     const fetchExpenses = async () => {
@@ -145,7 +148,7 @@ return (
                                         <div className="flex flex-1 min-w-0 gap-5 items-center text-center">
                                             <div>
                                                 {category && (
-                                                    <div style={{ backgroundColor: category.background }} className="p-4 w-fit shrink-0 rounded-full " >
+                                                    <div style={{ backgroundColor: category.background , borderColor : category.color}} className="p-4 border-2 w-fit shrink-0 rounded-full " >
                                                         <category.icon color={category.color} size={24} strokeWidth={2} />
                                                     </div>
                                                 )}
@@ -176,7 +179,7 @@ return (
                                                         <span><Trash2Icon size={24} strokeWidth={3} /></span>
                                                         <span>delete </span>
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => open(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                    <DropdownMenuItem onClick={() => openView(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                         <span><Eye size={24} strokeWidth={3} /></span>
                                                         <span>View </span>
                                                     </DropdownMenuItem>
@@ -213,6 +216,7 @@ return (
         <DeleteExpenseModal onDeleted={removeExpense} />
         <DeleteExpenseDrawer deleted={removeExpense} />
         <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        <ViewExpenseModal />
     </>
 )
 }
