@@ -1,5 +1,5 @@
 import { create } from "zustand";
-interface Expense {
+export interface Expense {
     id: string;
     amount: number;
     category: string;

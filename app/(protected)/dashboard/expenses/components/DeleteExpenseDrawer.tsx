@@ -3,42 +3,44 @@ import { useDeleteDrawer } from "@/app/store/UseDeleteExpenseDrawer"
 import { AnimatePresence, motion } from "framer-motion"
 import { Heart, Loader2, LoaderPinwheel, Trash2Icon } from "lucide-react";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CATEGORIES } from "@/app/lib/Categories";
-import { deleteExpense } from "@/app/server/expense.service";
+import { Expense } from "@/app/store/UseExpenseStore";
 export default function DeleteExpenseDrawer({ deleted }: { deleted: (id: string) => void }) {
     const { close, isOpen, expenseId } = useDeleteDrawer();
-    const [expense, setExpense] = useState<any>(null)
+    const [expense, setExpense] = useState<Expense | null>(null)
     const [Loading, setLoading] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
 
-    const fetchExpenseById = async (id: string) => {
+    const fetchExpenseById = useCallback(async (id: string) => {
         try {
             setLoading(true)
             const res = await fetch(`/api/expenses/${id}`, { method: "GET" });
-            const data = await res.json();
             if (!res.ok) {
-                toast.error("Failed to fetch the expense.")
+                return toast.error("Failed to fetch the expense.")
             }
+            const data = await res.json();
             setExpense(data)
         }
-        catch (error) {
+        catch {
             toast.error("Failed to fetch the expense")
         }
         finally {
             setLoading(false)
         }
-    }
+    }, [])
     const DeleteExpenseById = async (id: string) => {
         try {
             setDeleteLoading(true);
             const res = await fetch(`/api/expenses/${id}`, { method: "DELETE" });
-            const data = await res.json();
+            if (!res.ok) {
+                throw new Error("Failed to delete the expense.")
+            }
             toast.success("Expense deleted successfully.")
             deleted(id)
             close()
 
-        } catch (error) {
+        } catch {
             toast.error('Failed to delete expense.')
         }
         finally {
@@ -46,17 +48,12 @@ export default function DeleteExpenseDrawer({ deleted }: { deleted: (id: string)
         }
     }
     useEffect(() => {
-        if (!isOpen) {
-            setExpense(null)
-            return;
-        }
-        if (expenseId) {
+        if (isOpen && expenseId) {
             fetchExpenseById(expenseId)
         }
-    }, [isOpen, expenseId])
+    }, [isOpen, expenseId, fetchExpenseById])
     const category = CATEGORIES.find(c => c.id === expense?.category)
     const IconComponent = category?.icon
-    if (!isOpen) return null;
 
     return (
         <AnimatePresence>
@@ -97,7 +94,7 @@ export default function DeleteExpenseDrawer({ deleted }: { deleted: (id: string)
                                 Delete This Treat?
                             </div>
                             <div className="flex text-sm font-medium text-[#4D4449] text-center items-center  w-full">
-                                Are you sure you want to remove this expense? This action can't be undone, but your budget is still of you!
+                                Are you sure you want to remove this expense? This action can&apos;t be undone, but your budget is still of you!
                             </div>
                             <div className="flex mb-4 border-2 border-white shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] justify-between items-center rounded-3xl bg-[#F4D2E5] py-2 px-5 text-center w-full">
                                 <div className="flex items-center gap-4 ">

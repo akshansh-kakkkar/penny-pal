@@ -3,18 +3,17 @@ import { CATEGORIES } from "@/app/lib/Categories";
 import { useDeleteExpenseModal } from "@/app/store/useDeleteExpenseModal"
 import { AnimatePresence, motion } from "framer-motion"
 import { Heart, Loader2, LoaderPinwheel, Trash2Icon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { toast } from "sonner"
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Expense } from "@/app/store/UseExpenseStore";
 export default function DeleteExpenseModal({ onDeleted }: { onDeleted: (id: string) => void }) {
     const { onClose, isOpen, expenseId } = useDeleteExpenseModal();
     const [loading, setLoading] = useState(false);
-    const [expense, setExpense] = useState<any>(null)
+    const [expense, setExpense] = useState<Expense | null>(null);
     const [deleteLoading, setDeleteLoading] = useState(false);
-    const router = useRouter();
-    const [expenses, setExpenses] = useState<any[]>([])
-    const GetExpenseById = async (id: string) => {
+    const GetExpenseById = useCallback(async (id: string) => {
         try {
+            await Promise.resolve();
             setLoading(true);
             const res = await fetch(`/api/expenses/${id}`, { method: "GET" })
             if (!res.ok) {
@@ -22,17 +21,16 @@ export default function DeleteExpenseModal({ onDeleted }: { onDeleted: (id: stri
             }
             const data = await res.json();
             setExpense(data);
-        } catch (error) {
+        } catch {
             toast.error("failed to fetch the treat you can hit this piggy or try hacking the website.")
         } finally {
             setLoading(false)
         }
-    }
+    }, [])
     const deleteExpenseById = async (id: string) => {
         try {
             setDeleteLoading(true);
             const res = await fetch(`/api/expenses/${id}`, { method: "DELETE" });
-            const data = await res.json();
             if (!res.ok) {
                 throw new Error("Failed to delete the expense try not to spam.")
             }
@@ -40,7 +38,7 @@ export default function DeleteExpenseModal({ onDeleted }: { onDeleted: (id: stri
             onDeleted(id)
             onClose()
         }
-        catch (error) {
+        catch {
             toast.error("failed to delete the treat you can hit this piggy or try hacking the website.")
         }
         finally {
@@ -48,27 +46,24 @@ export default function DeleteExpenseModal({ onDeleted }: { onDeleted: (id: stri
         }
     }
     useEffect(() => {
-        if (!isOpen) {
-            setExpense(null);
-            return;
-        }
-        if (expenseId) {
+        if (isOpen && expenseId) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             GetExpenseById(expenseId)
         }
-    }, [isOpen, expenseId])
-    if (!isOpen) return null;
+    }, [isOpen, expenseId, GetExpenseById])
 
     const category = CATEGORIES.find(c => c.id === expense?.category)
     const IconComponent = category?.icon
 
     return (
         <AnimatePresence>
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => onClose()} className={` bg-black/20 fixed  hidden md:flex inset-0 z-40 backdrop-blur-sm justify-center items-center  `}
-            >
+            {isOpen && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => onClose()} className={` bg-black/20 fixed  hidden md:flex inset-0 z-40 backdrop-blur-sm justify-center items-center  `}
+                >
                 {
                     loading ? (
                         <LoaderPinwheel size={48} className='animate-spin text-[#715767]' strokeWidth={2} />
@@ -83,7 +78,7 @@ export default function DeleteExpenseModal({ onDeleted }: { onDeleted: (id: stri
                                 Delete This Treat?
                             </div>
                             <div className="flex text-sm font-medium text-[#4D4449] text-center items-center flex w-full">
-                                Are you sure you want to remove this expense? This action can't be undone, but your budget is still of you!
+                                Are you sure you want to remove this expense? This action can&apos;t be undone, but your budget is still of you!
                             </div>
                             <div className="flex mb-4 border-2 border-white shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] justify-between items-center rounded-3xl bg-[#F4D2E5] py-2 px-5 text-center w-full">
                                 <div className="flex items-center gap-4 ">
@@ -125,8 +120,8 @@ export default function DeleteExpenseModal({ onDeleted }: { onDeleted: (id: stri
                         </motion.div>
                     )
                 }
-            </motion.div>
+                </motion.div>
+            )}
         </AnimatePresence >
-
     )
 }

@@ -4,7 +4,6 @@ import { DollarSignIcon, Heart, Icon, Loader2, LoaderPinwheel, Plus } from "luci
 import { useState } from "react";
 import { CATEGORIES } from '../../../lib/Categories';
 import { toast } from "sonner";
-import { usePathname } from "next/navigation";
 import { useExpenseModal } from "@/app/store/useExpenseModal";
 import { useExpenseStore } from "@/app/store/UseExpenseStore";
 export default function () {
