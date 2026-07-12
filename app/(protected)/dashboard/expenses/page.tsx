@@ -118,7 +118,7 @@ export default function page() {
                 )
             }
             <DeleteExpenseModal onDeleted={removeExpense} />
-            <DeleteExpenseDrawer />
+            <DeleteExpenseDrawer  deleted={removeExpense}/>
             <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         </>
     )

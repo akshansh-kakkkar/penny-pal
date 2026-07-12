@@ -1,6 +1,6 @@
 "use client"
 import { AnimatePresence, motion } from "framer-motion";
-import { DollarSignIcon, Heart, Icon, Loader2, Plus } from "lucide-react";
+import { DollarSignIcon, Heart, Icon, Loader2, LoaderPinwheel, Plus } from "lucide-react";
 import { useState } from "react";
 import { CATEGORIES } from '../../../lib/Categories';
 import { toast } from "sonner";
@@ -77,6 +77,9 @@ export default function () {
                     exit={{ opacity: 0 }}
                     onClick={() => close()}
                     className={`min-w-screen bg-black/20 fixed md:hidden flex inset-0 z-40 backdrop-blur-sm justify-center items-center`}>
+                   {loading ? (
+                    <LoaderPinwheel />
+                   ) : (
                     <motion.div
                         transition={{ damping: 25, stiffness: 220, type: "spring" }}
                         initial={{ y: "-100%" }}
@@ -139,6 +142,8 @@ export default function () {
                             </button>
                         </div>
                     </motion.div>
+                                       )}
+
                 </ motion.div>
             )}
 
