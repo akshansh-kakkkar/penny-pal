@@ -1,5 +1,5 @@
 "use client"
-import { CircleEllipsis, ListFilter, PencilIcon, Search, Trash2Icon, LoaderPinwheel, Plus } from 'lucide-react';
+import { CircleEllipsis, ListFilter, PencilIcon, Search, Trash2Icon, LoaderPinwheel, Plus, Eye } from 'lucide-react';
 import { useEffect, useState } from "react";
 import { CATEGORIES } from "@/app/lib/Categories";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -47,8 +47,9 @@ export default function ExpensesPage() {
     const removeExpense = (id: string) => {
         setExpenses(expenses.filter(exp => exp.id !== id))
     }
-    const {open : OpenExpenseModal} = useExpenseModal()
+    const { open: OpenExpenseModal } = useExpenseModal()
     const categoryMap = Object.fromEntries(CATEGORIES.map((c) => [c.id, c]))
+
     return (
         <>
             {
@@ -102,6 +103,17 @@ export default function ExpensesPage() {
                             <div className="flex flex-col gap-4 items-center text-center justify-start w-full h-full ">
                                 {expenses.map((expense: Expense) => {
                                     const category = categoryMap[expense.category];
+                                    const date = new Date(expense.createdAt);
+                                    const time = date.toLocaleTimeString("en-IN", {
+                                        hour: 'numeric',
+                                        minute: "2-digit",
+                                        hour12: true
+                                    }).toLowerCase().replace("am", "a.m.").replace("pm", "p.m.")
+                                    const formatted = `${time} ${date.toLocaleDateString("en-IN", {
+                                        day: "numeric",
+                                        month: "numeric",
+                                        year: "2-digit",
+                                    })}`
                                     return (
                                         <div key={expense.id} className="flex w-full px-6 py-6 rounded-full justify-between text-center items-center bg-white shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] gap-4">
                                             <div className="flex flex-1 min-w-0 gap-5 items-center text-center">
@@ -112,9 +124,12 @@ export default function ExpensesPage() {
                                                         </div>
                                                     )}
                                                 </ div>
-                                                <p className="truncate text-lg  md:text-2xl font-bold text-[#1A1C1A]">
-                                                    {expense.description}
-                                                </p>
+                                                <div className='flex text-left flex-col '>
+                                                    <p className="truncate text-lg  md:text-2xl font-bold text-[#715767]">
+                                                        {expense.description}
+                                                    </p>
+                                                    <p className='font-semibold text-[#4D4449] text-sm'>{formatted}</p>
+                                                </div>
                                             </div>
                                             <div className="flex gap-6 items-center text-center">
                                                 <div className='flex text-2xl text-[#715767] font-bold'>${expense.amount}</div>
@@ -134,6 +149,14 @@ export default function ExpensesPage() {
                                                         <DropdownMenuItem onClick={() => oppen(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><Trash2Icon size={24} strokeWidth={3} /></span>
                                                             <span>delete </span>
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={() => open(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                            <span><Eye size={24} strokeWidth={3} /></span>
+                                                            <span>View </span>
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={() => oppen(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                            <span><Eye size={24} strokeWidth={3} /></span>
+                                                            <span>View </span>
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>

@@ -77,7 +77,7 @@ export default function () {
                     onClick={() => close()}
                     className={`min-w-screen bg-black/20 fixed md:hidden flex inset-0 z-40 backdrop-blur-sm justify-center items-center`}>
                    {loading ? (
-                    <LoaderPinwheel />
+                        <LoaderPinwheel size={48} className='animate-spin text-[#715767]' strokeWidth={2} />
                    ) : (
                     <motion.div
                         transition={{ damping: 25, stiffness: 220, type: "spring" }}
