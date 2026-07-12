@@ -33,7 +33,7 @@ export const CATEGORIES = [
         name: "Health",
         icon: Hospital,
         color: "#4F876B",
-        background: "#E1EFE8"
+        background: "#E1EFE8" 
     },
     {
         id: "education",

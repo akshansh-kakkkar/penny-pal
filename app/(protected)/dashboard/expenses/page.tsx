@@ -7,13 +7,14 @@ import { toast } from "sonner";
 import { useDeleteExpenseModal } from '@/app/store/useDeleteExpenseModal';
 import DeleteExpenseModal from './components/deleteExpenseModal';
 import ExpenseModal from '../components/ExpenseModal';
+import { useExpenseStore } from '@/app/store/UseExpenseStore';
 
 export default function page() {
-    const [expenses, setExpenses] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const { open } = useDeleteExpenseModal()
+    const { open } = useDeleteExpenseModal();
+    const {expenses, setExpenses} = useExpenseStore();
     useEffect(() => {
 
         const fetchExpenses = async () => {
@@ -26,7 +27,7 @@ export default function page() {
                     throw new Error("Failed to fetch expenses")
                 }
                 const data = await res.json()
-                setExpenses(data.expenses);
+                setExpenses(data.expenses)
             }
             catch (error) {
                 toast.error("Failed loading your expenses try refreshing.")
@@ -38,11 +39,9 @@ export default function page() {
         fetchExpenses();
     }, [])
     const removeExpense = (id: string) => {
-        setExpenses(prev => prev.filter(exp => exp.id !== id))
+        setExpenses(expenses.filter(exp => exp.id !== id))
     }
-    const addExpense = (expense: any) => {
-        setExpenses(prev => [expense, ...prev])
-    }
+
     const categoryMap = Object.fromEntries(CATEGORIES.map((c) => [c.id, c]))
     return (
         <>
@@ -112,7 +111,7 @@ export default function page() {
                 )
             }
             <DeleteExpenseModal onDeleted={removeExpense} />
-            <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAdded={addExpense} />
+            <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         </>
     )
 }

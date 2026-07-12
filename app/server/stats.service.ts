@@ -16,7 +16,7 @@ export async function getDashboardStats(userId: string) {
     prisma.expense.aggregate({
       where: {
         userId,
-        data: {
+        date: {
           gte: start,
           lt: end,
         },
@@ -35,11 +35,11 @@ export async function getDashboardStats(userId: string) {
     prisma.expense.count({
       where: {
         userId,
-      },
+        },
     }),
   ]);
-  const totalExpenses = total._sum.amount ?? 0;
-  const monthlyExpenses = monthly._sum.amount ?? 0;
+  const totalExpenses = total._sum?.amount ?? 0;
+  const monthlyExpenses = monthly._sum?.amount ?? 0;
   const monthlyBudget = budget?.amount ?? 0;
   return {
     totalExpenses,

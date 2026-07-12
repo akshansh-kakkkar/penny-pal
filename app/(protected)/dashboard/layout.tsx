@@ -3,18 +3,15 @@ import { useState } from "react";
 import AppDrawer from "./components/AppDrawer";
 import ExpenseModal from "./components/ExpenseModal";
 import SideBar from "./components/SideBar";
+import ExpensesAppDrawer from "./components/ExpensesAppDrawer";
 export default function ({ children }: { children: React.ReactNode }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isExpenseDrawer, setIsExpenseDrawer] = useState(false);
-    const [expenses, setExpenses] = useState<any[]>([])
-        const addExpense = (expense : any) =>{
-            setExpenses(prev => [expense, ...prev])
-        }
     return (
         <div className="flex relative bg-[#FAF9F6] min-h-screen flex-1">
-            <ExpenseModal onAdded={addExpense} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             <SideBar openModal={() => setIsModalOpen(true)} />
             <AppDrawer />
+            <ExpensesAppDrawer />
             <main className="w-full lg:ml-[400px]">
                 {children}
             </main>

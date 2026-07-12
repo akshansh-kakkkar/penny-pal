@@ -6,6 +6,7 @@ import { CATEGORIES } from '../../../lib/Categories';
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 import { useExpenseModal } from "@/app/store/useExpenseModal";
+import { useExpenseStore } from "@/app/store/UseExpenseStore";
 export default function () {
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState("");
@@ -14,6 +15,7 @@ export default function () {
     const [loading, setLoading] = useState(false);
     
     const { isOpen, close } = useExpenseModal();
+    const { addExpense } = useExpenseStore();
     const handleSubmit = async () => {
         try {
             setLoading(true);
@@ -55,6 +57,7 @@ export default function () {
             setDescription("")
             setAmount("")
             setCategory("");
+            addExpense(data);
             close();
         } catch (error) {
             if (error instanceof Error) {
