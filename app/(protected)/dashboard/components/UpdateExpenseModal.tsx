@@ -2,61 +2,66 @@
 import { updateExpense } from "@/app/store/UseUpdateExpense";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import {Expense} from "@/app/store/UseExpenseStore"
+import { Expense } from "@/app/store/UseExpenseStore"
 import { toast } from "sonner";
 import { describe } from "node:test";
+import { DollarSignIcon, Heart, LoaderPinwheelIcon } from "lucide-react";
+import { CATEGORIES } from "@/app/lib/Categories";
 export default function UpdateExpenseModal() {
     const { close, isOpen, expenseId } = updateExpense();
     const [expense, setExpense] = useState<Expense | null>(null);
     const [fetchLoading, setFetchLoading] = useState(false);
+    const [category, setCategory] = useState('');
     const [updateLoading, setUpdateLoading] = useState(false);
-    const fetchExpense = async(id : string)=>{
-        try{
+    const fetchExpense = async (id: string) => {
+        try {
             setFetchLoading(true);
-            const res = await fetch(`api/expenses/${id}`, {method : "GET"});
-            if(!res.ok){
+            const res = await fetch(`/api/expenses/${id}`, { method: "GET" });
+            if (!res.ok) {
                 toast.error("Failed to fetch the expense data")
                 return
             }
-           const data =await res.json();
-           setExpense(data); 
+            const data = await res.json();
+            setExpense(data);
 
-        }catch(error){
+        } catch (error) {
             toast.error("failed to fetch the expense data")
         }
-        finally{
+        finally {
             setFetchLoading(false)
         }
     }
-    const updateExpenseData = async(id : string)=>{
-        if(!expenseId || !expense) return null;
-        try{
+    const updateExpenseData = async (id: string) => {
+        if (!expenseId || !expense) return null;
+        try {
             setUpdateLoading(true);
-            const res =await fetch(`/api/expenses/${id}`, {method : "PATCH", headers : {
-                "Content-Type" : "application/json"
-            },
-            body : JSON.stringify({
-                amount : expense.amount,
-                category : expense.category,
-                description : expense.description,
-            })
+            const res = await fetch(`/api/expenses/${id}`, {
+                method: "PATCH", headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    amount: expense.amount,
+                    category: expense.category,
+                    description: expense.description,
+                })
 
-        })
-        if(!res.ok){
-            toast.error("Failed to update  expense")
-        }
-            const data =await res.json();
-        }catch(error){
+            })
+            if (!res.ok) {
+                toast.error("Failed to update  expense")
+            }
+            const data = await res.json();
+        } catch (error) {
             toast.error("Failed to update the expense data please try again.")
         }
-        finally{
+        finally {
             setUpdateLoading(true);
         }
     }
-    useEffect(()=>{
-        if(!isOpen || !expenseId) return;
+    useEffect(() => {
+        if (!isOpen || !expenseId) return;
         fetchExpense(expenseId);
     }, [isOpen, expenseId])
+    const categories = CATEGORIES;
     return (
         <AnimatePresence>
             {isOpen &&
@@ -67,12 +72,61 @@ export default function UpdateExpenseModal() {
                     onClick={close}
                     className={`bg-black/20 fixed  hidden md:flex inset-0 z-40 backdrop-blur-sm justify-center items-center  `}
                 >
-                    <motion.div
-                        onClick={(e) => e.stopPropagation()}
-                        className="bg-white relative lg:w-[800px] sm:w-[400px] w-[320px]   md:w-[600px] flex-col flex justify-center gap-4 items-center  rounded-3xl p-10"
-                    >
+                    {fetchLoading ? (
+                        <LoaderPinwheelIcon size={48} className='animate-spin text-[#715767]' strokeWidth={2} />
 
-                    </motion.div>
+                    ) : (
+                        <motion.div
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-white relative lg:w-[800px] sm:w-[400px] w-[320px]   md:w-[600px] flex-col flex justify-center gap-4 items-center  rounded-3xl p-10"
+                        >
+                            <div className="flex flex-col gap-2">
+                                <div className="text-2xl  text-[#715767] font-bold">
+                                    Want a change in the Treat?
+                                </div>
+                                <div className="text-sm ">
+                                    Every penny tells a story, Bestie. Let's log this one!
+                                </div>
+                            </div>
+                            <div className="relative">
+                                <DollarSignIcon className="absolute  top-1/5 left-6 bg-white  text-[#715767]" strokeWidth={2} size={48} />
+                                <input type="number" className="flex w-full justify-center text-center px-6 items-center text-4xl py-4 rounded-4xl outline-none border-4 text-[#715767] font-bold border-[#F4D2E5]" placeholder="0.00" />
+                            </div>
+                            <div className="flex w-full justify-start font-bold text-[#715767]">
+                                Where did it go?
+                            </div>
+                            <div className=" overflow-x-auto w-full ">
+                                <div className="min-w-max flex gap-8 mb-2">
+                                    {categories.map((item) => {
+                                        const IconComponent = item.icon;
+                                        return (
+                                            <div onClick={() => setCategory(item.id)} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-3xl w-35 h-25 flex-shrink-0 flex-col items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`} key={item.id}>
+                                                <span>
+                                                    <IconComponent className="transition-all duration-300" size={category === item.id ? 48 : 32} />
+                                                </span>
+                                                <span>{item.name}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            <div className="flex gap-4 w-full justify-center items-center ">
+
+                                <div className="flex gap-2 w-full flex-col">
+                                    <div className="text-sm font-bold ml-4 text-[#4D4449]" >When happened?</div>
+                                    <input type="date" className="py-2 font-bold rounded-full border-2 px-4 border-[#F4D2EF] text-[#715767] outline-[#715767]" />
+                                </div>
+                                <div className="flex gap-2 w-full flex-col">
+                                    <div className="text-sm font-bold ml-4 text-[#4D4449]" >Details? darling.</div>
+                                    <input type="text" placeholder="Pink latte with oat milk..." className="py-2 font-bold rounded-full border-2 px-4 border-[#F4D2EF] text-[#715767] outline-[#715767]" />
+                                </div>
+                            </div>
+                            <button className="cursor-pointer hover:scale-[98%] transition-all duration-300 flex justify-center items-center w-full bg-[#715767] rounded-full py-4 text-lg md:text-2xl font-bold text-white gap-2 ">
+                                <span><Heart strokeWidth={3} /></span>
+                                <span>Save Expense</span>
+                            </button>
+                        </motion.div>
+                    )}
                 </ motion.div>
             }
         </AnimatePresence>

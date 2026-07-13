@@ -10,7 +10,7 @@ export default function ViewExpenseDrawer() {
     const { isOpen, close, expenseId } = useViewExpenseDrawer();
     const [expense, setExpense] = useState<Expense | null>(null);
     const [fetchExpenseLoading, setFetchExpenseLoading] = useState(false);
-    
+
     const fetchExpenseById = async (id: string) => {
         try {
             setFetchExpenseLoading(true);

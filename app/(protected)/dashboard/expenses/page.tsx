@@ -150,6 +150,14 @@ export default function ExpensesPage() {
                                                         <CircleEllipsis />
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent>
+                                                        <DropdownMenuItem onClick={() => openView(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                            <span><Eye size={24} strokeWidth={3} /></span>
+                                                            <span>View </span>
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={() => openViewDrawer(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                            <span><Eye size={24} strokeWidth={3} /></span>
+                                                            <span>View </span>
+                                                        </DropdownMenuItem>
                                                         <DropdownMenuItem onClick={() => openUpdateForm(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><PencilIcon size={24} strokeWidth={3} /></span>
                                                             <span>Edit</span>
@@ -166,14 +174,7 @@ export default function ExpensesPage() {
                                                             <span><Trash2Icon size={24} strokeWidth={3} /></span>
                                                             <span>Delete </span>
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => openView(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
-                                                            <span><Eye size={24} strokeWidth={3} /></span>
-                                                            <span>View </span>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => openViewDrawer(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
-                                                            <span><Eye size={24} strokeWidth={3} /></span>
-                                                            <span>View </span>
-                                                        </DropdownMenuItem>
+
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
                                             </div>
