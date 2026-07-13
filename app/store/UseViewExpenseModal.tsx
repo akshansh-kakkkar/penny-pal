@@ -9,6 +9,7 @@ interface ViewExpense{
 
 export const viewExpense = create<ViewExpense>((set)=>({
     isOpen : false,
+    createdAt : '',
     expenseId : null,
     open : (id)=>set({isOpen : true, expenseId : id}),
     close : ()=>set({isOpen : false}),
