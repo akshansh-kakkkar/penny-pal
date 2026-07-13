@@ -18,6 +18,8 @@ import { viewExpense } from '@/app/store/UseViewExpenseModal';
 import { getPagination } from '@/app/lib/helper/pagination';
 import ViewExpenseDrawer from './components/ViewExpenseDrawer';
 import { useViewExpenseDrawer } from '@/app/store/UseViewExpenseDrawer';
+import { updateExpense } from '@/app/store/UseUpdateExpense';
+import UpdateExpenseModal from '../components/UpdateExpenseModal';
 
 export default function ExpensesPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,7 +60,8 @@ export default function ExpensesPage() {
     },
         [page, setExpenses])
     const pagination = getPagination(page, totalPages);
-    const {open : openViewDrawer} = useViewExpenseDrawer()
+    const { open: openViewDrawer } = useViewExpenseDrawer()
+    const { open: openUpdateForm } = updateExpense();
     return (
         <>
             {
@@ -147,17 +150,21 @@ export default function ExpensesPage() {
                                                         <CircleEllipsis />
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent>
-                                                        <DropdownMenuItem className={`flex focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] font-bold text-[#715767] items-center text-md text-center gap-4`}>
+                                                        <DropdownMenuItem onClick={() => openUpdateForm(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><PencilIcon size={24} strokeWidth={3} /></span>
-                                                            <span>edit</span>
+                                                            <span>Edit</span>
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={() => oppen(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                            <span><PencilIcon size={24} strokeWidth={3} /></span>
+                                                            <span>Edit </span>
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem onClick={() => open(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><Trash2Icon size={24} strokeWidth={3} /></span>
-                                                            <span>delete </span>
+                                                            <span>Delete </span>
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem onClick={() => oppen(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><Trash2Icon size={24} strokeWidth={3} /></span>
-                                                            <span>delete </span>
+                                                            <span>Delete </span>
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem onClick={() => openView(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><Eye size={24} strokeWidth={3} /></span>
@@ -204,6 +211,7 @@ export default function ExpensesPage() {
             <DeleteExpenseModal onDeleted={removeExpense} />
             <DeleteExpenseDrawer deleted={removeExpense} />
             <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <UpdateExpenseModal />
             <ViewExpenseModal />
             <ViewExpenseDrawer />
         </>
