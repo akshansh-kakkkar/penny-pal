@@ -41,8 +41,8 @@ export default function ViewExpenseModal() {
     const date = expense ? new Date(expense.createdAt) : null;
     const formattedDate = date?.toLocaleDateString("en-IN", {
         day: "numeric",
-        month: "numeric",
-        year: "2-digit",
+        month: "short",
+        year: "numeric",
     })
 
     const formattedTime = date?.toLocaleTimeString("en-IN", {
@@ -67,7 +67,7 @@ return (
                         <LoaderPinwheel size={48} className='animate-spin text-[#715767]' strokeWidth={2} />
                     ) : (
                         <motion.div onClick={(e) => e.stopPropagation()} className="bg-white  relative p-8 flex-col w-[400px] flex justify-center gap-2 items-center  rounded-3xl">
-                            <button onClick={close} className='absolute top-4 right-4  border-4 cursor-pointer border-[#FEDBE7] cursor-pointer hover:bg-[#715767] hover:text-white transition-all duration-300 bg-[#FFB8D1] rounded-full p-2 text-[#715767]'>
+                            <button onClick={close} className='absolute top-4 right-4  border-4 cursor-pointer border-[#F4D2E5] cursor-pointer hover:border-[#715767] transition-all duration-300 bg-[#F4D2E5] rounded-full p-1 text-[#715767]'>
                                 <X />
                             </ button>
                             <div className='flex justify-center text-center items-center gap-4 flex-col w-full'>

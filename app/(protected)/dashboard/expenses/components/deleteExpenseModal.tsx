@@ -26,7 +26,7 @@ export default function DeleteExpenseModal({ onDeleted }: { onDeleted: (id: stri
         } finally {
             setLoading(false)
         }
-    }, [])
+    }, []);
     const deleteExpenseById = async (id: string) => {
         try {
             setDeleteLoading(true);

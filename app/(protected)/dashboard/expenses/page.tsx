@@ -16,6 +16,8 @@ import { useExpenseModal } from '@/app/store/useExpenseModal';
 import ViewExpenseModal from './components/ViewExpensesModal.tsx';
 import { viewExpense } from '@/app/store/UseViewExpenseModal';
 import { getPagination } from '@/app/lib/helper/pagination';
+import ViewExpenseDrawer from './components/ViewExpenseDrawer';
+import { useViewExpenseDrawer } from '@/app/store/UseViewExpenseDrawer';
 
 export default function ExpensesPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,7 +58,7 @@ export default function ExpensesPage() {
     },
         [page, setExpenses])
     const pagination = getPagination(page, totalPages);
-
+    const {open : openViewDrawer} = useViewExpenseDrawer()
     return (
         <>
             {
@@ -161,7 +163,7 @@ export default function ExpensesPage() {
                                                             <span><Eye size={24} strokeWidth={3} /></span>
                                                             <span>View </span>
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => oppen(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                        <DropdownMenuItem onClick={() => openViewDrawer(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><Eye size={24} strokeWidth={3} /></span>
                                                             <span>View </span>
                                                         </DropdownMenuItem>
@@ -174,7 +176,7 @@ export default function ExpensesPage() {
                             </div>
                             <div className='flex justify-between shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] px-4 py-2 rounded-full items-center gap-6 my-8 bg-white'>
                                 <button
-                                    className='bg-[#FFB8D1] shadow-[0_0_50px_rgba(244,180,210,0.55)] text-[#715767] rounded-full p-2'
+                                    className='bg-[#F4D2E5] shadow-[0_0_50px_rgba(244,180,210,0.55)] text-[#715767] rounded-full p-2'
                                     disabled={page === 1} onClick={() => setPage(page - 1)}>
                                     <ChevronLeft size={32} strokeWidth={4} />
                                 </button>
@@ -183,7 +185,7 @@ export default function ExpensesPage() {
                                     {pagination.map((item, index) => item === '...' ? (
                                         <span className='flex gap-4' key={index}>...</span>
                                     ) : (
-                                        <button key={item} onClick={() => setPage(item)} className={`w-12 h-12 rounded-full shadow-[0_0_50px_rgba(244,180,210,0.55)] text-2xl font-bold transition ${item === page ? "bg-[#715767] text-white border-4 border-[#FEDBE7]" : "text-[#715767] hover:bg-pink-200"}`} >
+                                        <button key={item} onClick={() => setPage(item)} className={`w-12 h-12 rounded-full shadow-[0_0_50px_rgba(244,180,210,0.55)] text-2xl font-bold transition ${item === page ? "bg-[#715767] text-white border-4 border-[#F4D2E5]" : "text-[#715767] hover:bg-pink-200"}`} >
                                             {item}
                                         </button>
                                     ))}
@@ -191,7 +193,7 @@ export default function ExpensesPage() {
                                 <div className='md:hidden flex text-lg text-[#715767] font-bold'>
                                     {page} of {totalPages}
                                 </div>
-                                <button className='text-[#715767] border-2 border-[#FEDBE7] shadow-[0_0_50px_rgba(244,180,210,0.55)] bg-[#FFB8D1] rounded-full p-2'
+                                <button className='text-[#715767] border-2 border-[#FEDBE7] shadow-[0_0_50px_rgba(244,180,210,0.55)] bg-[#F4D2E5] rounded-full p-2'
                                     disabled={page === totalPages} onClick={() => setPage(page + 1)}>
                                     <ChevronRight size={32} strokeWidth={4} />
                                 </button>
@@ -203,6 +205,7 @@ export default function ExpensesPage() {
             <DeleteExpenseDrawer deleted={removeExpense} />
             <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             <ViewExpenseModal />
+            <ViewExpenseDrawer />
         </>
     )
 }
