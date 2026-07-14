@@ -128,7 +128,7 @@ export default function () {
                             <input value={description} onChange={(e) => setDescription(e.target.value)} type="text" placeholder="Pink latte with oat milk..." className="py-2 rounded-full border-2 px-4 border-[#F4D2EF] font-bold text-[#715767] outline-[#715767]" />
                         </div>
                         <div>
-                            <button onClick={handleSubmit} disabled={loading} className="cursor-pointer hover:scale-[98%] transition-all duration-300 flex justify-center items-center w-full bg-[#715767] rounded-full py-4 text-lg md:text-2xl font-bold text-white gap-2 ">
+                            <button onClick={handleSubmit} disabled={loading} className="cursor-pointer hover:scale-[98%] transition-all duration-300 flex justify-center items-center w-full bg-[#715767] rounded-full py-4 text-lg md:text-2xl font-bold text-white gap-2">
                                 {loading ? (
                                     <Loader2 size={32} strokeWidth={2} className="animate-spin" />
                                 ) : (

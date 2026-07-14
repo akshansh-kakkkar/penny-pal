@@ -62,7 +62,7 @@ return (
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={close}
-                    className={` bg-black/20 fixed  hidden md:flex inset-0 z-40 backdrop-blur-sm justify-center items-center`}>
+                    className={` bg-black/20 fixed  hidden lg:flex inset-0 z-40 backdrop-blur-sm justify-center items-center`}>
                     {viewLoading ? (
                         <LoaderPinwheel size={48} className='animate-spin text-[#715767]' strokeWidth={2} />
                     ) : (

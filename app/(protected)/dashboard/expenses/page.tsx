@@ -20,6 +20,8 @@ import ViewExpenseDrawer from './components/ViewExpenseDrawer';
 import { useViewExpenseDrawer } from '@/app/store/UseViewExpenseDrawer';
 import { updateExpense } from '@/app/store/UseUpdateExpense';
 import UpdateExpenseModal from '../components/UpdateExpenseModal';
+import { updateExpenseDrawer } from '@/app/store/UseUpdateExpenseDrawer';
+import UpdateExpenseDrawer from '../components/UpdateExpenseDrawer';
 
 export default function ExpensesPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,6 +32,7 @@ export default function ExpensesPage() {
     const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(1)
     const { open: openView } = viewExpense()
+    const {open : openUpdateDrawer} = updateExpenseDrawer();
     const removeExpense = (id: string) => {
         setExpenses(expenses.filter(exp => exp.id !== id))
     }
@@ -162,7 +165,7 @@ export default function ExpensesPage() {
                                                             <span><PencilIcon size={24} strokeWidth={3} /></span>
                                                             <span>Edit</span>
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => oppen(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                        <DropdownMenuItem onClick={() => openUpdateDrawer(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><PencilIcon size={24} strokeWidth={3} /></span>
                                                             <span>Edit </span>
                                                         </DropdownMenuItem>
@@ -213,6 +216,7 @@ export default function ExpensesPage() {
             <DeleteExpenseDrawer deleted={removeExpense} />
             <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             <UpdateExpenseModal />
+            <UpdateExpenseDrawer />
             <ViewExpenseModal />
             <ViewExpenseDrawer />
         </>
