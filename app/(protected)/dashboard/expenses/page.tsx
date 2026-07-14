@@ -153,27 +153,27 @@ export default function ExpensesPage() {
                                                         <CircleEllipsis />
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent>
-                                                        <DropdownMenuItem onClick={() => openView(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                        <DropdownMenuItem onClick={() => openView(expense.id)} className={` md:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><Eye size={24} strokeWidth={3} /></span>
                                                             <span>View </span>
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => openViewDrawer(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                        <DropdownMenuItem onClick={() => openViewDrawer(expense.id)} className={`flex md:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><Eye size={24} strokeWidth={3} /></span>
                                                             <span>View </span>
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => openUpdateForm(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                        <DropdownMenuItem onClick={() => openUpdateForm(expense.id)} className={`md:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><PencilIcon size={24} strokeWidth={3} /></span>
                                                             <span>Edit</span>
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => openUpdateDrawer(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                        <DropdownMenuItem onClick={() => openUpdateDrawer(expense.id)} className={`flex md:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><PencilIcon size={24} strokeWidth={3} /></span>
                                                             <span>Edit </span>
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => open(expense.id)} className={`lg:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                        <DropdownMenuItem onClick={() => open(expense.id)} className={`md:flex focus:bg-[#f4d2e5] hidden cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><Trash2Icon size={24} strokeWidth={3} /></span>
                                                             <span>Delete </span>
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => oppen(expense.id)} className={`flex lg:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
+                                                        <DropdownMenuItem onClick={() => oppen(expense.id)} className={`flex md:hidden focus:bg-[#f4d2e5] cursor-pointer focus:text-[#715767] text-[#715767] font-bold items-center text-md text-center gap-4`}>
                                                             <span><Trash2Icon size={24} strokeWidth={3} /></span>
                                                             <span>Delete </span>
                                                         </DropdownMenuItem>

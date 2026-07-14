@@ -87,7 +87,7 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
           exit={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           onClick={()=>onClose()}
-          className={` bg-black/20 fixed  hidden md:flex inset-0 z-40 backdrop-blur-sm justify-center items-center  `}
+          className={` bg-black/20 fixed  hidden lg:flex inset-0 z-40 backdrop-blur-sm justify-center items-center  `}
         >
           <div
             onClick={(e) => e.stopPropagation()}

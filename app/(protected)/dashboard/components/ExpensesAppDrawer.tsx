@@ -75,7 +75,7 @@ export default function () {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={() => close()}
-                    className={`min-w-screen bg-black/20 fixed md:hidden flex inset-0 z-40 backdrop-blur-sm justify-center items-center`}>
+                    className={`min-w-screen bg-black/20 fixed lg:hidden flex inset-0 z-40 backdrop-blur-sm justify-center items-center`}>
                    {loading ? (
                         <LoaderPinwheel size={48} className='animate-spin text-[#715767]' strokeWidth={2} />
                    ) : (

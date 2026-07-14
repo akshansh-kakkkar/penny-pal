@@ -11,6 +11,7 @@ export default function UpdateExpenseModal() {
     const [expense, setExpense] = useState<Expense | null>(null);
     const [fetchLoading, setFetchLoading] = useState(false);
     const [category, setCategory] = useState('');
+    const [originalExpense, setOriginalExpense] = useState<Expense | null>(null);
     const [updateLoading, setUpdateLoading] = useState(false);
     const fetchExpense = async (id: string) => {
         try {
@@ -22,7 +23,9 @@ export default function UpdateExpenseModal() {
             }
             const data = await res.json();
             setExpense(data);
+            setOriginalExpense(data)
             setCategory(data.category);
+            toast.success("Treat Updated Successfully.")
 
         } catch (error) {
             toast.error("failed to fetch the expense data")
@@ -33,7 +36,7 @@ export default function UpdateExpenseModal() {
     }
     const date = expense ? new Date(expense.createdAt) : null;
     const formattedDate = date?.toISOString().split("T")[0];
-    const {updatedExpense} = useExpenseStore();
+    const { updatedExpense } = useExpenseStore();
     const updateExpenseData = async (id: string) => {
         if (!expenseId || !expense) return null;
         try {
@@ -56,7 +59,7 @@ export default function UpdateExpenseModal() {
             setExpense(data);
             updatedExpense(data)
             close();
-            
+
         } catch (error) {
             toast.error("Failed to update the expense data please try again.")
         }
@@ -64,10 +67,15 @@ export default function UpdateExpenseModal() {
             setUpdateLoading(false);
         }
     }
+
     useEffect(() => {
         if (!isOpen || !expenseId) return;
         fetchExpense(expenseId);
     }, [isOpen, expenseId])
+    const isChanged = expense && originalExpense && (
+        expense.amount !== originalExpense.amount || expense.category !== originalExpense.category ||
+        expense.description !== originalExpense.description
+    )
     const categories = CATEGORIES;
     return (
         <AnimatePresence>
@@ -126,21 +134,21 @@ export default function UpdateExpenseModal() {
                                     } : prev)} value={expense?.description} type="text" placeholder="Pink latte with oat milk..." className="py-2 font-bold rounded-full border-2 px-4 border-[#F4D2EF] text-[#715767] outline-[#715767]" />
                                 </div>
                             </div>
-                            <button onClick={() => {
+                            <button disabled={updateLoading || !isChanged } onClick={() => {
                                 if (expenseId) {
                                     updateExpenseData(expenseId)
                                 }
-                            }} className="cursor-pointer hover:scale-[98%] transition-all duration-300 flex justify-center items-center w-full bg-[#715767] rounded-full py-4 text-lg md:text-2xl font-bold text-white gap-2 ">
-                                {updateLoading ?(
-<Loader2 className="animate-spin" size={32} strokeWidth={2} />
+                            }} className="cursor-pointer hover:scale-[98%]  disabled:cursor-not-allowed disabled:bg-gray-400 transition-all duration-300 flex justify-center items-center w-full bg-[#715767] rounded-full py-4 text-lg md:text-2xl font-bold text-white gap-2 ">
+                                {updateLoading ? (
+                                    <Loader2 className="animate-spin" size={32} strokeWidth={2} />
                                 ) : (
 
-                                
-                                <div className="flex gap-3 items-center text-center justify-center">
-                                    <span><Heart strokeWidth={3} /></span>
-                                    <span>Update Expense</span>
-                                </div>
-)}
+
+                                    <div className="flex gap-3 items-center text-center justify-center">
+                                        <span><Heart strokeWidth={3} /></span>
+                                        <span>Update Expense</span>
+                                    </div>
+                                )}
                             </button>
                         </motion.div>
                     )}
