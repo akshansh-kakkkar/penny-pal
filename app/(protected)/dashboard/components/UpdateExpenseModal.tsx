@@ -2,10 +2,9 @@
 import { updateExpense } from "@/app/store/UseUpdateExpense";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Expense } from "@/app/store/UseExpenseStore"
+import { Expense, useExpenseStore } from "@/app/store/UseExpenseStore"
 import { toast } from "sonner";
-import { describe } from "node:test";
-import { DollarSignIcon, Heart, LoaderPinwheelIcon } from "lucide-react";
+import { DollarSignIcon, Heart, Loader2, LoaderPinwheelIcon } from "lucide-react";
 import { CATEGORIES } from "@/app/lib/Categories";
 export default function UpdateExpenseModal() {
     const { close, isOpen, expenseId } = updateExpense();
@@ -23,6 +22,7 @@ export default function UpdateExpenseModal() {
             }
             const data = await res.json();
             setExpense(data);
+            setCategory(data.category);
 
         } catch (error) {
             toast.error("failed to fetch the expense data")
@@ -31,6 +31,9 @@ export default function UpdateExpenseModal() {
             setFetchLoading(false)
         }
     }
+    const date = expense ? new Date(expense.createdAt) : null;
+    const formattedDate = date?.toISOString().split("T")[0];
+    const {updatedExpense} = useExpenseStore();
     const updateExpenseData = async (id: string) => {
         if (!expenseId || !expense) return null;
         try {
@@ -50,11 +53,15 @@ export default function UpdateExpenseModal() {
                 toast.error("Failed to update  expense")
             }
             const data = await res.json();
+            setExpense(data);
+            updatedExpense(data)
+            close();
+            
         } catch (error) {
             toast.error("Failed to update the expense data please try again.")
         }
         finally {
-            setUpdateLoading(true);
+            setUpdateLoading(false);
         }
     }
     useEffect(() => {
@@ -90,7 +97,7 @@ export default function UpdateExpenseModal() {
                             </div>
                             <div className="relative">
                                 <DollarSignIcon className="absolute  top-1/5 left-6 bg-white  text-[#715767]" strokeWidth={2} size={48} />
-                                <input type="number" className="flex w-full justify-center text-center px-6 items-center text-4xl py-4 rounded-4xl outline-none border-4 text-[#715767] font-bold border-[#F4D2E5]" placeholder="0.00" />
+                                <input type="number" value={expense?.amount} onChange={(e) => setExpense((prev) => prev ? { ...prev, amount: Number(e.target.value) } : prev)} className="flex w-full justify-center text-center px-6 items-center text-4xl py-4 rounded-4xl outline-none border-4 text-[#715767] font-bold border-[#F4D2E5]" placeholder="0.00" />
                             </div>
                             <div className="flex w-full justify-start font-bold text-[#715767]">
                                 Where did it go?
@@ -100,7 +107,7 @@ export default function UpdateExpenseModal() {
                                     {categories.map((item) => {
                                         const IconComponent = item.icon;
                                         return (
-                                            <div onClick={() => setCategory(item.id)} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-3xl w-35 h-25 flex-shrink-0 flex-col items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`} key={item.id}>
+                                            <div onClick={() => { setCategory(item.id); setExpense((prev) => prev ? { ...prev, category: item.id } : prev) }} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-3xl w-35 h-25 flex-shrink-0 flex-col items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`} key={item.id}>
                                                 <span>
                                                     <IconComponent className="transition-all duration-300" size={category === item.id ? 48 : 32} />
                                                 </span>
@@ -111,19 +118,29 @@ export default function UpdateExpenseModal() {
                                 </div>
                             </div>
                             <div className="flex gap-4 w-full justify-center items-center ">
-
-                                <div className="flex gap-2 w-full flex-col">
-                                    <div className="text-sm font-bold ml-4 text-[#4D4449]" >When happened?</div>
-                                    <input type="date" className="py-2 font-bold rounded-full border-2 px-4 border-[#F4D2EF] text-[#715767] outline-[#715767]" />
-                                </div>
                                 <div className="flex gap-2 w-full flex-col">
                                     <div className="text-sm font-bold ml-4 text-[#4D4449]" >Details? darling.</div>
-                                    <input type="text" placeholder="Pink latte with oat milk..." className="py-2 font-bold rounded-full border-2 px-4 border-[#F4D2EF] text-[#715767] outline-[#715767]" />
+                                    <input onChange={(e) => setExpense((prev) => prev ? {
+                                        ...prev,
+                                        description: e.target.value
+                                    } : prev)} value={expense?.description} type="text" placeholder="Pink latte with oat milk..." className="py-2 font-bold rounded-full border-2 px-4 border-[#F4D2EF] text-[#715767] outline-[#715767]" />
                                 </div>
                             </div>
-                            <button className="cursor-pointer hover:scale-[98%] transition-all duration-300 flex justify-center items-center w-full bg-[#715767] rounded-full py-4 text-lg md:text-2xl font-bold text-white gap-2 ">
-                                <span><Heart strokeWidth={3} /></span>
-                                <span>Save Expense</span>
+                            <button onClick={() => {
+                                if (expenseId) {
+                                    updateExpenseData(expenseId)
+                                }
+                            }} className="cursor-pointer hover:scale-[98%] transition-all duration-300 flex justify-center items-center w-full bg-[#715767] rounded-full py-4 text-lg md:text-2xl font-bold text-white gap-2 ">
+                                {updateLoading ?(
+<Loader2 className="animate-spin" size={32} strokeWidth={2} />
+                                ) : (
+
+                                
+                                <div className="flex gap-3 items-center text-center justify-center">
+                                    <span><Heart strokeWidth={3} /></span>
+                                    <span>Update Expense</span>
+                                </div>
+)}
                             </button>
                         </motion.div>
                     )}

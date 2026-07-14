@@ -5,7 +5,6 @@ interface UpdateExpenseModal {
     open   : (id : string)=> void;
     close : ()=> void;
     expenseId : string | null;
-
 }
 
 export const updateExpense = create<UpdateExpenseModal>((set)=>({
