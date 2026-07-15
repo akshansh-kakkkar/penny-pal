@@ -7,7 +7,7 @@ import ExpensesAppDrawer from "./components/ExpensesAppDrawer";
 export default function ({ children }: { children: React.ReactNode }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     return (
-        <div className="flex relative bg-[#FAF9F6] min-h-screen flex-1">
+        <div className="flex relative max-w-screen bg-[#FAF9F6] min-h-screen flex-1">
             <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             <SideBar openModal={() => setIsModalOpen(true)} />
             <AppDrawer />

@@ -1,7 +1,6 @@
 import { getSession } from "@/app/lib/session";
 import { createBudget, getBudgetByMonth, getBudgets } from "@/app/server/budget.service";
 import { NextRequest, NextResponse } from "next/server";
-import { error } from 'console';
 import { createBudgetSchema } from "@/app/lib/validations/budget";
 
 export async function GET() {
