@@ -1,5 +1,5 @@
 "use client"
-import { CATEGORIES } from "@/app/lib/Categories";
+import { CATEGORIES } from "@/prisma/seed";
 import { Expense, useExpenseStore } from "@/app/store/UseExpenseStore";
 import { updateExpenseDrawer } from "@/app/store/UseUpdateExpenseDrawer"
 import { AnimatePresence, motion } from "framer-motion"

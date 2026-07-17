@@ -1,5 +1,5 @@
 "use client"
-import { CATEGORIES } from "@/app/lib/Categories";
+import { CATEGORIES } from "@/prisma/seed";
 import { useViewExpenseDrawer } from "@/app/store/UseViewExpenseDrawer"
 import { AnimatePresence, motion } from "framer-motion"
 import { X, LoaderPinwheel, Calendar, Clock } from 'lucide-react';

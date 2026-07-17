@@ -1,5 +1,5 @@
 "use client"
-import { CATEGORIES } from "@/app/lib/Categories";
+import { CATEGORIES } from "@/prisma/seed";
 import { useDeleteExpenseModal } from "@/app/store/useDeleteExpenseModal"
 import { AnimatePresence, motion } from "framer-motion"
 import { Heart, Loader2, LoaderPinwheel, Trash2Icon } from "lucide-react";

@@ -1,5 +1,5 @@
 "use client"
-import { CATEGORIES } from '@/app/lib/Categories';
+import { CATEGORIES } from '@/prisma/seed';
 import { useDeleteExpenseModal } from '@/app/store/useDeleteExpenseModal';
 import { Expense, useExpenseStore } from '@/app/store/UseExpenseStore';
 import { viewExpense } from '@/app/store/UseViewExpenseModal';

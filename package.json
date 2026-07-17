@@ -6,8 +6,13 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prisma" : {
+      "seed" : "tsx prisma/seed.ts"
+    }
+  
   },
+
   "dependencies": {
     "@base-ui/react": "^1.6.0",
     "@fortawesome/fontawesome-svg-core": "^7.3.0",

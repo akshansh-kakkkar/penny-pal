@@ -1,5 +1,5 @@
 "use client"
-import { CATEGORIES } from "@/app/lib/Categories";
+import { CATEGORIES } from "@/prisma/seed";
 import { DollarSignIcon, Heart, Loader2, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";

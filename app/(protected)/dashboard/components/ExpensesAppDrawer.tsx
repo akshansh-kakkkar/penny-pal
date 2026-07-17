@@ -2,7 +2,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { DollarSignIcon, Heart, Icon, Loader2, LoaderPinwheel, Plus } from "lucide-react";
 import { useState } from "react";
-import { CATEGORIES } from '../../../lib/Categories';
+import { CATEGORIES } from '../../../../prisma/seed';
 import { toast } from "sonner";
 import { useExpenseModal } from "@/app/store/useExpenseModal";
 import { useExpenseStore } from "@/app/store/UseExpenseStore";

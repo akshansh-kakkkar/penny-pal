@@ -1,6 +1,6 @@
 "use client"
 import { useSession } from "@/app/lib/auth/auth-client"
-import { CATEGORIES } from "@/app/lib/Categories";
+import { CATEGORIES } from "@/prisma/seed";
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DollarSignIcon, LandmarkIcon, Lightbulb, PencilIcon } from "lucide-react";
@@ -59,10 +59,7 @@ export default function page() {
                     <LandmarkIcon className="absolute  right-6 text-[#131D21] opacity-10 top-12" size={164} />
                     <h2 className="font-semibold text-xl md:text-3xl text-[#715767] flex md:justify-center md:items-center text-start items-center justify-items-start">Total Monthly Budget</h2>
                     <div className="flex justify-center items-center  rounded-3xl py-8 px-6 relative">
-                        <div className="absolute hidden sm:block left-12 text-[#715767] opacity-50 ">
-                            <DollarSignIcon size={56} strokeWidth={2.5} />
-                        </div>
-                        <div className="font-bold text-6xl text-[#715767] ">{budget?.amount ?? 0}</div>
+                        <div className="font-bold text-6xl text-[#715767] ">$ {budget?.amount || "__"}</div>
                     </div>
                 </div>
                 <div className="xl:w-[25%] hidden xl:flex z-40 p-6 itemce  text-center flex-col gap-6 bg-[#9FD2F9] rounded-3xl shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]">

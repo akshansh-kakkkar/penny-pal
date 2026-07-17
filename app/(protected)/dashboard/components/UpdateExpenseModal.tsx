@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Expense, useExpenseStore } from "@/app/store/UseExpenseStore"
 import { toast } from "sonner";
 import { DollarSignIcon, Heart, Loader2, LoaderPinwheelIcon } from "lucide-react";
-import { CATEGORIES } from "@/app/lib/Categories";
+import { CATEGORIES } from "@/prisma/seed";
 export default function UpdateExpenseModal() {
     const { close, isOpen, expenseId } = updateExpense();
     const [expense, setExpense] = useState<Expense | null>(null);

@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import { Heart, Loader2, LoaderPinwheel, Trash2Icon } from "lucide-react";
 import { toast } from "sonner";
 import { useCallback, useEffect, useState } from "react";
-import { CATEGORIES } from "@/app/lib/Categories";
+import { CATEGORIES } from "@/prisma/seed";
 import { Expense } from "@/app/store/UseExpenseStore";
 export default function DeleteExpenseDrawer({ deleted }: { deleted: (id: string) => void }) {
     const { close, isOpen, expenseId } = useDeleteDrawer();

@@ -1,7 +1,7 @@
-
-import { CATEGORIES } from "@/app/lib/Categories";
+import { getCategories } from "@/app/server/category.service";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-    return NextResponse.json(CATEGORIES)
+    const categories =await getCategories();
+    return NextResponse.json(categories);
 }

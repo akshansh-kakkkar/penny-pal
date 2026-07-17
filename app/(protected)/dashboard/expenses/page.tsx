@@ -1,7 +1,7 @@
 "use client"
 import { CircleEllipsis, ListFilter, PencilIcon, Search, Trash2Icon, LoaderPinwheel, Plus, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from "react";
-import { CATEGORIES } from "@/app/lib/Categories";
+import { CATEGORIES } from "@/prisma/seed";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { useDeleteExpenseModal } from '@/app/store/useDeleteExpenseModal';
