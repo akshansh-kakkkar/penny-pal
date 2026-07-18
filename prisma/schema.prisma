@@ -69,25 +69,49 @@ model Expense {
   date        DateTime
   userId      String
   createdAt   DateTime @default(now())
-  category    String
-  categoryId String
-  category Category @relation(fields: [userId])
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([date])
-  @@index([category])
+  @@index([categoryId])
 }
 
 model Budget {
-  id        String   @id @default(cuid())
-  amount    Float
-  month     Int
-  year      Int
-  userId    String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+  id         String           @id @default(cuid())
+  amount     Float
+  month      Int
+  year       Int
+  userId     String
+  createdAt  DateTime         @default(now())
+  user       User             @relation(fields: [userId], references: [id])
+  updatedAt  DateTime         @updatedAt
+  categories BudgetCategory[]
 
   @@unique([userId, month, year])
+  @@index([userId])
+}
+
+model BudgetCategory {
+  id         String   @id @default(cuid())
+  budgetId   String
+  budget     Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  amount     Float
+
+  @@unique([budgetId, categoryId])
+  @@index([budgetId])
+  @@index([categoryId])
+}
+
+model Category {
+  id       String           @id
+  name     String           @unique
+  icon     String?
+  color    String?
+  expenses Expense[]
+  budgets  BudgetCategory[]
 }

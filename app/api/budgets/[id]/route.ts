@@ -2,7 +2,6 @@ import { getSession } from "@/app/lib/session";
 import { updateBudgetSchema } from "@/app/lib/validations/budget";
 import { deleteBudget, getBudgetById, updateBudget } from "@/app/server/budget.service";
 import { NextRequest, NextResponse } from "next/server";
-import { success } from "zod";
 
 export async function PATCH(
   req: NextRequest,
@@ -37,7 +36,7 @@ export async function PATCH(
   } catch (error) {
     return NextResponse.json({
       error: "Something went wrong while patching the budget",
-    });
+    }, {status : 500});
   }
 }
 
@@ -67,6 +66,6 @@ export async function DELETE(
    } catch (error) {
     return NextResponse.json({
       error: "Something went wrong while deleting the budget",
-    });
+    }, {status : 500});
   }
 }

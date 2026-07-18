@@ -23,8 +23,8 @@ export async function getExpense(userId: string, page = 1, limit = 10) {
       where: {
         userId,
       },
-      include : {
-        category : true
+      include: {
+        category: true
       },
       orderBy: {
         date: "desc",
@@ -47,35 +47,49 @@ export async function getExpense(userId: string, page = 1, limit = 10) {
 }
 
 export async function getExpenseById(id: string, userId: string) {
-    return prisma.expense.findFirst({
-        where : {
-            id,
-            userId,
-        },
-        include : {
-          category : true,
-        }
-    })
+  return prisma.expense.findFirst({
+    where: {
+      id,
+      userId,
+    },
+    include: {
+      category: true,
+    }
+  })
 }
 
-export async function updateExpense(id : string, data : updateExpenseInput, userId : string) {
-    return prisma.expense.update({
-        where : {
-            id, 
-            userId,
-        },
-        data : {
-            ...data,
-            ...(data.date && {date : new Date(data.date)})
-        }
-    })
+export async function updateExpense(id: string, data: updateExpenseInput, userId: string) {
+  const expense = await prisma.expense.findFirst({
+    where: {
+      id,
+      userId,
+    }
+  })
+  if(!expense){
+    throw new Error("Expense not found")
+  }
+  return prisma.expense.update({
+    where : {id},
+    data: {
+      ...data,
+      ...(data.date && { date: new Date(data.date) })
+    }
+  })
 }
 
-export async function  deleteExpense(id :string, userId : string) {
-    return prisma.expense.delete({
-        where : {
-            id, 
-            userId
-        }
-    })
+export async function deleteExpense(id: string, userId: string) {
+  const expense = await prisma.expense.findFirst({
+    where : {
+      id,
+      userId,
+    }
+  })
+  if(!expense){
+    throw new Error("Expense not found")
+  }
+  return prisma.expense.delete({
+    where: {
+      id,
+    }
+  })
 }
