@@ -1,11 +1,13 @@
 "use client"
 import { useSession } from "@/app/lib/auth/auth-client"
 import { ICON_MAP } from "@/app/lib/icon-map";
+import { useBudgetModal } from "@/app/store/UseBudgetModal";
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LandmarkIcon, Lightbulb, PencilIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner"
+import BudgetModal from "./components/budgetModal";
 type Budget = {
     id: string;
     amount: number;
@@ -58,7 +60,9 @@ export default function page() {
     useEffect(() => {
         getBudget()
     }, [])
+    const {onOpen} = useBudgetModal();
     return (
+        <>
         <div className="min-h-screen flex flex-col mx-5 md:mx-10 xl:mx-20 relative py-10 md:py-20">
             <div className="absolute md:flex hidden -top-30 right-0 w-[350px] h-[350px]  sm:w-[400px] sm:h-[400px] bg-[#F4D2E5] rounded-full blur-[55px] z-10" />
             <div className="flex justify-between items-center ">
@@ -75,7 +79,7 @@ export default function page() {
             </div>
             <div className="w-full z-40 my-6 flex gap-8">
                 <div className="xl:w-[75%] w-full flex gap-12 relative flex-col md:p-20 p-6 bg-white/45 border-2 border-white/60 rounded-3xl shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] ">
-                    <button className="absolute right-4 cursor-pointer hover:scale-[85%] transition-all duration-300 bg-[#715767] text-white p-3 rounded-full top-4">
+                    <button onClick={()=>onOpen()} className="absolute right-4 cursor-pointer hover:scale-[85%] transition-all duration-300 bg-[#715767] text-white p-3 rounded-full top-4">
                         <PencilIcon strokeWidth={2.5} />
                     </button>
                     <LandmarkIcon className="absolute  right-6 text-[#131D21] opacity-10 top-12" size={164} />
@@ -103,7 +107,7 @@ export default function page() {
                     </div>
                 </div>
             </div>
-            <div className=" w-full    xl:w-[73.5%] rounded-3xl bg-white/45 py-8 px-8 shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] ">
+            <div className=" w-full  rounded-3xl bg-white/45 py-8 px-8 shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] ">
                 <div className="flex justify-between items-center text-center ">
                     <div className="flex text-xl font-bold text-[#715767]">
                         Category Breakdown
@@ -129,5 +133,7 @@ export default function page() {
                 </div>
             </div>
         </div>
+        <BudgetModal />
+        </>
     )
 }
