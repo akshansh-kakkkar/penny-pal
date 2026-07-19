@@ -1,20 +1,56 @@
 "use client"
-import { CATEGORIES } from "@/prisma/seed";
-import { Expense, useExpenseStore } from "@/app/store/UseExpenseStore";
+import { ICON_MAP } from "@/app/lib/icon-map";
+import {  useExpenseStore } from "@/app/store/UseExpenseStore";
 import { updateExpenseDrawer } from "@/app/store/UseUpdateExpenseDrawer"
 import { AnimatePresence, motion } from "framer-motion"
 import { DollarSignIcon, Heart, Loader2, LoaderPinwheel } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+interface Category {
+    id: string;
+    name: string;
+    icon: keyof typeof ICON_MAP;
+    color: string;
+    background: string;
+}
+interface Expense {
+    id : string;
+    amount : number;
+    description : string;
+    data : string;
+    title : string;
+    category : {
+        id : string;
+        name : string;
+        icon : keyof typeof ICON_MAP;
+        color : string;
+        background : string;
+    }
+}
 export default function UpdateExpenseDrawer() {
     const { isOpen, close, expenseId } = updateExpenseDrawer();
+    const [categories, setCategories] = useState<Category[]>([]);
     const [expense, setExpense] = useState<Expense | null>(null);
     const [category, setCategory] = useState("");
-    const categories = CATEGORIES;
     const [fetchExpenseLoading, setFetchExpenseLoading] = useState(false);
     const [updateLoading, setUpdateLoading] = useState(false);
     const [originalExpense, setOriginalExpense] = useState<Expense | null>(null);
-    const {updatedExpense} = useExpenseStore();
+    const { updatedExpense } = useExpenseStore();
+    useEffect(() => {
+        async function loadCategories() {
+            try {
+                const res = await fetch('/api/categories');
+                if (!res.ok) {
+                    throw new Error("Can't fetch categories")
+                }
+                const data = await res.json();
+                setCategories(data)
+            } catch {
+                toast.error("Can't fetch categories")
+            }
+        }
+        loadCategories();
+    }, [])
     const getExpenseById = async (id: string) => {
         try {
             setFetchExpenseLoading(true)
@@ -24,7 +60,7 @@ export default function UpdateExpenseDrawer() {
             }
             const data = await res.json();
             setExpense(data);
-            setCategory(data.category)
+            setCategory(data.category.id)
             setOriginalExpense(data)
         } catch (error) {
             return toast.error("Failed to fetch expenses")
@@ -42,7 +78,7 @@ export default function UpdateExpenseDrawer() {
                 body: JSON.stringify({
                     amount: expense?.amount,
                     description: expense?.description,
-                    category: expense?.category,
+                    categoryId: category,
                 })
             })
             if (!res.ok) {
@@ -50,7 +86,7 @@ export default function UpdateExpenseDrawer() {
             }
             const data = await res.json();
             setExpense(data);
-            setCategory(data.category);
+            setCategory(data.category.id);
             updatedExpense(data)
             close();
         } catch (error) {
@@ -60,11 +96,15 @@ export default function UpdateExpenseDrawer() {
         }
     }
     useEffect(() => {
-        if (!isOpen || !expenseId) return;
-        getExpenseById(expenseId)
-    }, [isOpen, expenseId])
+        if (!isOpen){
+            setExpense(null);
+            setExpense(null);
+            setOriginalExpense(null);
+            setCategory("")
+        }
+    }, [isOpen])
     const isChanged = expense && originalExpense && (
-        expense.amount  !== originalExpense?.amount || expense.category !== originalExpense.category || expense.description !== originalExpense.description
+        expense.amount !== originalExpense?.amount || category !== originalExpense.category.id || expense.description !== originalExpense.description
     )
     return (
         <AnimatePresence>
@@ -102,30 +142,32 @@ export default function UpdateExpenseDrawer() {
                                     <p className="justify-start text-sm  font-semibold text-[#4D4449]">Every penny tells a story, Bestie, Lets log this one.</p>
                                     <div className="relative">
                                         <DollarSignIcon className="absolute  top-1/6 left-6 bg-white  text-[#715767]" strokeWidth={2} size={32} />
-                                        <input type='number' onChange={(e)=>setExpense((prev)=> prev ? {...prev, amount : Number(e.target.value)} : prev)} value={expense?.amount} placeholder="0.00" className="flex w-full justify-center text-center px-6 items-center text-2xl py-2 rounded-3xl outline-none border-4 text-[#715767] font-bold border-[#F4D2E5]" />
+                                        <input type='number' onChange={(e) => setExpense((prev) => prev ? { ...prev, amount: Number(e.target.value) } : prev)} value={expense?.amount} placeholder="0.00" className="flex w-full justify-center text-center px-6 items-center text-2xl py-2 rounded-3xl outline-none border-4 text-[#715767] font-bold border-[#F4D2E5]" />
                                     </div>
                                     <div className="flex w-full justify-start flex-col gap-2">
                                         <h2 className="text-sm text-start w-full text-[#4D4449] font-bold">Where did it go?</h2>
                                         <div className="flex overflow-auto min-w-65 max-w-180 p-2 gap-2">
                                             {categories.map((item) => {
-                                                const IconComponent = item.icon;
+                                                const IconComponent = ICON_MAP[item.icon];
                                                 return (
-                                                    <div onClick={() => { setCategory(item.id); setExpense((prev) => prev ? { ...prev, category: item.id } : prev) }} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-xl w-35 h-10 flex-shrink-0  items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`} key={item.id}>
-                                                        <IconComponent />
+                                                    <div onClick={() =>setCategory(item.id)} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-xl w-35 h-10 flex-shrink-0  items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`} key={item.id}>
+                                                        {IconComponent && (
+                                                            <IconComponent />
+                                                        )}
                                                         <div>{item.name}</div>
                                                     </div>
                                                 )
                                             })}
                                         </div>
                                         <h2 className="text-sm text-start w-full text-[#4D4449] font-bold">Details? darling.</h2>
-                                        <input onChange={(e)=>setExpense((prev)=> prev ? {...prev, description : e.target.value} : prev)} value={expense?.description}  type="text" placeholder="Pink latte with oat milk..." className="py-2 rounded-full border-2 px-4 border-[#F4D2EF] font-bold text-[#715767] outline-[#715767]" />
+                                        <input onChange={(e) => setExpense((prev) => prev ? { ...prev, description: e.target.value } : prev)} value={expense?.description} type="text" placeholder="Pink latte with oat milk..." className="py-2 rounded-full border-2 px-4 border-[#F4D2EF] font-bold text-[#715767] outline-[#715767]" />
                                         <button onClick={() => {
                                             if (expenseId) {
                                                 updateExpenseById(expenseId);
                                             }
-                                        }} 
-                                        disabled={!isChanged || updateLoading}
-                                        className="cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-400 mt-2 hover:scale-[98%] transition-all duration-300 flex justify-center items-center w-full bg-[#715767] rounded-full py-4 text-lg md:text-2xl font-bold text-white gap-2 ">
+                                        }}
+                                            disabled={!isChanged || updateLoading}
+                                            className="cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-400 mt-2 hover:scale-[98%] transition-all duration-300 flex justify-center items-center w-full bg-[#715767] rounded-full py-4 text-lg md:text-2xl font-bold text-white gap-2 ">
                                             {
                                                 updateLoading ? (
                                                     <Loader2 className="animate-spin" size={32} strokeWidth={2} />

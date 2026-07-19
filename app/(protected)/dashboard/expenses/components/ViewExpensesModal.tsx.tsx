@@ -1,5 +1,4 @@
 "use client"
-import { CATEGORIES } from '@/prisma/seed';
 import { useDeleteExpenseModal } from '@/app/store/useDeleteExpenseModal';
 import { Expense, useExpenseStore } from '@/app/store/UseExpenseStore';
 import { viewExpense } from '@/app/store/UseViewExpenseModal';
@@ -30,8 +29,7 @@ export default function ViewExpenseModal() {
         }
     }
 
-    const category = CATEGORIES.find((c) => c.id === expense?.category);
-    const IconComponent = category?.icon;
+    const IconComponent = ICON_MAP[]
     useEffect(() => {
         if (!isOpen || !expenseId) return;
         viewExpenseById(expenseId);

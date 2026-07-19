@@ -1,7 +1,6 @@
 "use client"
 import { CircleEllipsis, ListFilter, PencilIcon, Search, Trash2Icon, LoaderPinwheel, Plus, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from "react";
-import { CATEGORIES } from "@/prisma/seed";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { useDeleteExpenseModal } from '@/app/store/useDeleteExpenseModal';
@@ -37,7 +36,6 @@ export default function ExpensesPage() {
         setExpenses(expenses.filter(exp => exp.id !== id))
     }
     const { open: OpenExpenseModal } = useExpenseModal()
-    const categoryMap = Object.fromEntries(CATEGORIES.map((c) => [c.id, c]))
 
     useEffect(() => {
         const fetchExpense = async () => {

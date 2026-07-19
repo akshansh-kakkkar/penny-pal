@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client"
-import { Box, CarTaxiFront, GraduationCap, HandPlatter, Hospital, House, Plane, ReceiptText, ShoppingBag, TvMinimal } from "lucide-react"
 const prisma = new PrismaClient();
 async function main() {
     

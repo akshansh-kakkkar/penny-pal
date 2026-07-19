@@ -1,25 +1,49 @@
 "use client"
-import { CATEGORIES } from "@/prisma/seed";
 import { DollarSignIcon, Heart, Loader2, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useExpenseStore } from "@/app/store/UseExpenseStore";
+import { ICON_MAP } from "@/app/lib/icon-map";
 interface addExpenseProps {
   isOpen: boolean;
   onClose: () => void;
 }
+interface Category {
+  id : string;
+  name : string;
+  icon : keyof typeof ICON_MAP;
+  color : string;
+  background : string;
+}
 
 export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
   const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [category, setCategory] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
-  const categories = CATEGORIES;
   const {setExpenses, expenses, addExpense} = useExpenseStore();
   const router = useRouter()
+
+    useEffect(()=>{
+    async function  loadCategories() {
+      try{
+        const res = await fetch('/api/categories')
+        if(!res.ok){
+          throw new Error("Failed to load categories")
+        }
+        const data = await res.json();
+        setCategories(data)
+      }catch{
+        toast.error("Failed to load categories")
+      }
+    }
+    loadCategories();
+  }, [])
+
   const handleSubmit = async () => {
     try {
       setLoading(true);
@@ -49,9 +73,9 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title: category,
+          title : description,
           amount: Number(amount),
-          category,
+          categoryId : category,
           date,
           description,
         })
@@ -79,6 +103,7 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
       setLoading(false)
     }
   }
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -112,12 +137,14 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
               <div className=" overflow-x-auto w-full ">
                 <div className="min-w-max flex gap-8 my-2">
                   {categories.map((item) => {
-                    const IconComponent = item.icon;
+                    const IconComponent = ICON_MAP[item.icon];
                     return (
-                      <div onClick={() => setCategory(item.id)} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-3xl w-35 h-25 flex-shrink-0 flex-col items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`} key={item.id}>
+                      <div key={item.id} onClick={() => setCategory(item.id)} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-3xl w-35 h-25 flex-shrink-0 flex-col items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`}>
+                       {IconComponent && (  
                         <span>
                           <IconComponent className="transition-all duration-300"  size={category === item.id ? 48 : 32} />
                         </span>
+                         )}
                         <span>{item.name}</span>
                       </div>
                     );

@@ -2,17 +2,54 @@
 import { updateExpense } from "@/app/store/UseUpdateExpense";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Expense, useExpenseStore } from "@/app/store/UseExpenseStore"
+import { useExpenseStore } from "@/app/store/UseExpenseStore"
 import { toast } from "sonner";
 import { DollarSignIcon, Heart, Loader2, LoaderPinwheelIcon } from "lucide-react";
-import { CATEGORIES } from "@/prisma/seed";
+import { ICON_MAP } from "@/app/lib/icon-map";
+interface Category {
+    id : string;
+    name : string;
+    icon : keyof typeof ICON_MAP
+    color : string;
+    background : string;
+}
+interface Expense {
+    id : string;
+    amount : number;
+    description : string;
+    date : string;
+    title : string;
+    category : {
+        id : string;
+        name : string;
+        icon : keyof typeof ICON_MAP;
+        color : string;
+        background : string;
+    }
+}
 export default function UpdateExpenseModal() {
     const { close, isOpen, expenseId } = updateExpense();
     const [expense, setExpense] = useState<Expense | null>(null);
     const [fetchLoading, setFetchLoading] = useState(false);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [category, setCategory] = useState('');
     const [originalExpense, setOriginalExpense] = useState<Expense | null>(null);
     const [updateLoading, setUpdateLoading] = useState(false);
+    useEffect(()=>{
+           async function loadCategories(){
+            try{
+                const res = await fetch('/api/categories/');
+                if(!res.ok){
+                    throw new Error("Failed to load categories");
+                }
+                const data = await res.json();
+                setCategories(data)
+            }catch{
+                throw new Error("Failed to load categories")
+            }
+           }
+           loadCategories();
+    },[])
     const fetchExpense = async (id: string) => {
         try {
             setFetchLoading(true);
@@ -24,7 +61,7 @@ export default function UpdateExpenseModal() {
             const data = await res.json();
             setExpense(data);
             setOriginalExpense(data)
-            setCategory(data.category);
+            setCategory(data.category.id);
             toast.success("Treat Updated Successfully.")
 
         } catch (error) {
@@ -34,9 +71,8 @@ export default function UpdateExpenseModal() {
             setFetchLoading(false)
         }
     }
-    const date = expense ? new Date(expense.createdAt) : null;
-    const formattedDate = date?.toISOString().split("T")[0];
     const { updatedExpense } = useExpenseStore();
+
     const updateExpenseData = async (id: string) => {
         if (!expenseId || !expense) return null;
         try {
@@ -47,7 +83,7 @@ export default function UpdateExpenseModal() {
                 },
                 body: JSON.stringify({
                     amount: expense.amount,
-                    category: expense.category,
+                    categoryId: category,
                     description: expense.description,
                 })
 
@@ -73,10 +109,9 @@ export default function UpdateExpenseModal() {
         fetchExpense(expenseId);
     }, [isOpen, expenseId])
     const isChanged = expense && originalExpense && (
-        expense.amount !== originalExpense.amount || expense.category !== originalExpense.category ||
+        expense.amount !== originalExpense.amount || category !== originalExpense.category.id ||
         expense.description !== originalExpense.description
     )
-    const categories = CATEGORIES;
     return (
         <AnimatePresence>
             {isOpen &&
@@ -113,12 +148,14 @@ export default function UpdateExpenseModal() {
                             <div className=" overflow-x-auto w-full ">
                                 <div className="min-w-max flex gap-8 mb-2">
                                     {categories.map((item) => {
-                                        const IconComponent = item.icon;
+                                        const IconComponent = ICON_MAP[item.icon];
                                         return (
-                                            <div onClick={() => { setCategory(item.id); setExpense((prev) => prev ? { ...prev, category: item.id } : prev) }} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-3xl w-35 h-25 flex-shrink-0 flex-col items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`} key={item.id}>
+                                            <div onClick={() =>setCategory(item.id)} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-3xl w-35 h-25 flex-shrink-0 flex-col items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`} key={item.id}>
+                                             {IconComponent && (
                                                 <span>
                                                     <IconComponent className="transition-all duration-300" size={category === item.id ? 48 : 32} />
                                                 </span>
+                                                )}
                                                 <span>{item.name}</span>
                                             </div>
                                         );

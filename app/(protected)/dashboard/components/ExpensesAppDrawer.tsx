@@ -1,19 +1,43 @@
 "use client"
 import { AnimatePresence, motion } from "framer-motion";
-import { DollarSignIcon, Heart, Icon, Loader2, LoaderPinwheel, Plus } from "lucide-react";
-import { useState } from "react";
-import { CATEGORIES } from '../../../../prisma/seed';
+import { DollarSignIcon, Heart, Loader2, LoaderPinwheel } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useExpenseModal } from "@/app/store/useExpenseModal";
 import { useExpenseStore } from "@/app/store/UseExpenseStore";
+import { ICON_MAP } from "@/app/lib/icon-map";
+interface Category {
+    id : string;
+    name : string;
+    icon : keyof typeof ICON_MAP;
+    color : string;
+    background :string
+}
 export default function () {
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState("");
+    const [categories, setCategories] = useState<Category[]>([]);
     const [date, setDate] = useState(new Date().toISOString().split("T")[0])
     const [description, setDescription] = useState("");
     const [loading, setLoading] = useState(false);
     const { isOpen, close } = useExpenseModal();
     const { addExpense } = useExpenseStore();
+    useEffect(()=>{
+        async function loadCategories() {
+          try{
+            const res = await fetch('/api/categories');
+            if(!res.ok){
+                toast.error("failed to fetch category")
+            }
+            const data = await res.json();
+            setCategories(data)
+          }
+          catch{
+            toast.error("Failed to fetch categories")
+          }
+        }
+        loadCategories();
+    }, [])
     const handleSubmit = async () => {
         try {
             setLoading(true);
@@ -39,9 +63,9 @@ export default function () {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    title: category,
+                    title: description,
                     amount: Number(amount),
-                    category,
+                    categoryId : category,
                     date,
                     description,
                 }),
@@ -65,7 +89,6 @@ export default function () {
             setLoading(false);
         }
     }
-    const categories = CATEGORIES;
 
     return (<>
         <AnimatePresence>
@@ -107,10 +130,12 @@ export default function () {
                             <div className="text-md text-[#4D4449] font-bold">Where did it go?</div>
                             <div className="flex overflow-auto min-w-65 max-w-180 p-2 gap-2">
                                 {categories.map((item) => {
-                                    const IconComponent = item.icon;
+                                    const IconComponent = ICON_MAP[item.icon];
                                     return (
                                         <div onClick={() => setCategory(item.id)} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-xl w-35 h-10 flex-shrink-0  items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`} key={item.id}>
+                                            {IconComponent && (                                        
                                             <IconComponent />
+                                            )}
                                             <div>{item.name}</div>
                                         </div>
                                     )
