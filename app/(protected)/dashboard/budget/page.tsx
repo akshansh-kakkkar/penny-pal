@@ -1,39 +1,61 @@
 "use client"
 import { useSession } from "@/app/lib/auth/auth-client"
-import { CATEGORIES } from "@/prisma/seed";
+import { ICON_MAP } from "@/app/lib/icon-map";
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DollarSignIcon, LandmarkIcon, Lightbulb, PencilIcon } from "lucide-react";
+import { LandmarkIcon, Lightbulb, PencilIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import {toast} from "sonner"
+import { toast } from "sonner"
 type Budget = {
+    id: string;
+    amount: number;
+    month: number;
+    year: number
+}
+interface Category { 
     id : string;
-    amount : number;
-    month : number;
-    year : number
+    name : string;
+    background : string;
+    color : string;
+    icon : keyof typeof  ICON_MAP;
 }
 export default function page() {
-    const categories = CATEGORIES;
     const [fetchBudgetLoading, setFetchBudgetLoading] = useState(false);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [budget, setBudget] = useState<Budget | null>(null)
     const { data: session } = useSession();
-    const getBudget = async()=>{
-        try{
+    useEffect(()=>{
+        async function fetchCategory() {
+            try{
+                const res = await fetch('/api/categories');
+                if(!res.ok){
+                    toast.error("failed to fetch Category")
+                }
+                const data = await res.json();
+                setCategories(data)
+            }catch{
+                toast.error('Failed to fetch Category')
+            }
+        }
+        fetchCategory();
+    }, [])
+    const getBudget = async () => {
+        try {
             setFetchBudgetLoading(true)
             const res = await fetch(`/api/budgets/`);
-            if(!res.ok){
+            if (!res.ok) {
                 toast.error('Failed to fetch the budget')
             }
-            const data =await res.json();
+            const data = await res.json();
             setBudget(data)
-        }catch(error){
+        } catch (error) {
             toast.error("Failed to fetch the budget")
         }
-        finally{
+        finally {
             setFetchBudgetLoading(false)
         }
     }
-    useEffect(()=>{
+    useEffect(() => {
         getBudget()
     }, [])
     return (
@@ -90,12 +112,12 @@ export default function page() {
                 </div>
                 <div className="flex gap-4 py-4 flex-col">
                     {categories.map((category) => {
-                        const IconComponent = category?.icon;
+                        const IconComponent =ICON_MAP[category.icon];
                         return (
-                            <div className="bg-white px-4 py-4 rounded-3xl flex flex-col gap-4 border-2" style={{borderColor : category.color}}>
+                            <div className="bg-white px-4 py-4 rounded-3xl flex flex-col gap-4 border-2" style={{ borderColor: category.color }}>
                                 <div className="flex justify-between text-center items-center">
                                     <div className="flex items-center text-center gap-4">
-                                        <div style={{ backgroundColor: category.background, borderColor: category.color, }} className={`border-4 w-fit p-2 rounded-full`}><IconComponent  color={category.color} size={24} strokeWidth={2.5} /></div>
+                                        <div style={{ backgroundColor: category.background, borderColor: category.color, }} className={`border-4 w-fit p-2 rounded-full`}><IconComponent color={category.color} size={24} strokeWidth={2.5} /></div>
                                         <div className="sm:text-2xl hidden sm:block text-[#191C1E] font-bold">{category?.name}</div>
                                     </div>
                                     <div className="text-xl  text-[#715767] font-bold">$800</div>
