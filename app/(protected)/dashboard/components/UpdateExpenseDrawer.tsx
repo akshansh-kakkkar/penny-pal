@@ -102,7 +102,10 @@ export default function UpdateExpenseDrawer() {
             setOriginalExpense(null);
             setCategory("")
         }
-    }, [isOpen])
+        if(expenseId){
+            getExpenseById(expenseId);
+        }
+    }, [isOpen, expenseId])
     const isChanged = expense && originalExpense && (
         expense.amount !== originalExpense?.amount || category !== originalExpense.category.id || expense.description !== originalExpense.description
     )

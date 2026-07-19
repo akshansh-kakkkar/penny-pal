@@ -7,6 +7,7 @@ import { Calendar, Clock, LoaderPinwheel, Pencil, Trash2, X } from 'lucide-react
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import DeleteExpenseModal from './deleteExpenseModal';
+import { ICON_MAP } from '@/app/lib/icon-map';
 
 export default function ViewExpenseModal() {
     const { isOpen, close, expenseId } = viewExpense();
@@ -29,7 +30,7 @@ export default function ViewExpenseModal() {
         }
     }
 
-    const IconComponent = ICON_MAP[]
+    const IconComponent = expense ? ICON_MAP[expense.category.icon] : null
     useEffect(() => {
         if (!isOpen || !expenseId) return;
         viewExpenseById(expenseId);
@@ -70,8 +71,8 @@ return (
                             </ button>
                             <div className='flex justify-center text-center items-center gap-4 flex-col w-full'>
                                 {IconComponent && (
-                                    <div style={{ backgroundColor: category.background, borderColor: category.color, }} className={`border-4 mb-2   p-4 rounded-full`}>
-                                        <IconComponent color={category.color} size={48} strokeWidth={2} />
+                                    <div style={{ backgroundColor: expense?.category.background, borderColor: expense?.category.color, }} className={`border-4 mb-2   p-4 rounded-full`}>
+                                        <IconComponent color={expense?.category.color} size={48} strokeWidth={2} />
                                     </div>)}
                                 <div className='flex text-2xl font-medium  text-center items-center text-[#1A1C1A]'>
                                     {expense?.description}

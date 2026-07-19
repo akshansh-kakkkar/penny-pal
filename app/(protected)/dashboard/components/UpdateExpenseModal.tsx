@@ -62,7 +62,6 @@ export default function UpdateExpenseModal() {
             setExpense(data);
             setOriginalExpense(data)
             setCategory(data.category.id);
-            toast.success("Treat Updated Successfully.")
 
         } catch (error) {
             toast.error("failed to fetch the expense data")

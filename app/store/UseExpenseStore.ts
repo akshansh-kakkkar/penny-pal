@@ -1,10 +1,18 @@
 import { create } from "zustand";
+import { ICON_MAP } from "../lib/icon-map";
 export interface Expense {
     id: string;
     amount: number;
-    category: string;
     description: string;
     createdAt: string;
+    title : string;
+    category : {
+        id : string;
+        name : string;
+        icon : keyof typeof ICON_MAP;
+        color : string;
+        background : string
+    }
 
 }
 

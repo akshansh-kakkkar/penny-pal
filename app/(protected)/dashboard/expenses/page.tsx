@@ -21,6 +21,7 @@ import { updateExpense } from '@/app/store/UseUpdateExpense';
 import UpdateExpenseModal from '../components/UpdateExpenseModal';
 import { updateExpenseDrawer } from '@/app/store/UseUpdateExpenseDrawer';
 import UpdateExpenseDrawer from '../components/UpdateExpenseDrawer';
+import { ICON_MAP } from '@/app/lib/icon-map';
 
 export default function ExpensesPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -115,7 +116,8 @@ export default function ExpensesPage() {
                             </div>
                             <div className="flex flex-col gap-4 items-center text-center justify-start w-full h-full ">
                                 {expenses.map((expense: Expense) => {
-                                    const category = categoryMap[expense.category];
+                                    const category = expense.category;
+                                    const IconComponent = ICON_MAP[category.icon];
                                     const date = new Date(expense.createdAt);
                                     const time = date.toLocaleTimeString("en-IN", {
                                         hour: 'numeric',
@@ -131,9 +133,9 @@ export default function ExpensesPage() {
                                         <div key={expense.id} className="flex w-full px-6 py-6 rounded-full justify-between text-center items-center bg-white shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] gap-4">
                                             <div className="flex flex-1 gap-5 min-w-0 items-center">
                                                 <div className='shrink-0'>
-                                                    {category && (
+                                                    {IconComponent && (
                                                         <div style={{ backgroundColor: category.background, borderColor: category.color }} className="p-4 border-2 w-fit shrink-0 rounded-full " >
-                                                            <category.icon color={category.color} size={24} strokeWidth={2} />
+                                                            <IconComponent color={category.color} size={24} strokeWidth={2} />
                                                         </div>
                                                     )}
                                                 </ div>

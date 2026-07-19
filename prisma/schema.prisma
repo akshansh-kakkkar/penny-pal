@@ -112,6 +112,7 @@ model Category {
   name     String           @unique
   icon     String?
   color    String?
+  background String?
   expenses Expense[]
   budgets  BudgetCategory[]
 }

@@ -1,11 +1,11 @@
 "use client"
-import { CATEGORIES } from "@/prisma/seed";
 import { useDeleteExpenseModal } from "@/app/store/useDeleteExpenseModal"
 import { AnimatePresence, motion } from "framer-motion"
 import { Heart, Loader2, LoaderPinwheel, Trash2Icon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Expense } from "@/app/store/UseExpenseStore";
+import { ICON_MAP } from "@/app/lib/icon-map";
 export default function DeleteExpenseModal({ onDeleted }: { onDeleted: (id: string) => void }) {
     const { onClose, isOpen, expenseId } = useDeleteExpenseModal();
     const [loading, setLoading] = useState(false);
@@ -51,8 +51,7 @@ export default function DeleteExpenseModal({ onDeleted }: { onDeleted: (id: stri
         }
     }, [isOpen, expenseId, GetExpenseById])
 
-    const category = CATEGORIES.find(c => c.id === expense?.category)
-    const IconComponent = category?.icon
+    const IconComponent = expense ? ICON_MAP[expense?.category.icon] : null;
 
     return (
         <AnimatePresence>

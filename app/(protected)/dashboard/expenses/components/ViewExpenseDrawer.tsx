@@ -1,11 +1,11 @@
 "use client"
-import { CATEGORIES } from "@/prisma/seed";
 import { useViewExpenseDrawer } from "@/app/store/UseViewExpenseDrawer"
 import { AnimatePresence, motion } from "framer-motion"
 import { X, LoaderPinwheel, Calendar, Clock } from 'lucide-react';
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import type { Expense } from "@/app/store/UseExpenseStore"
+import { ICON_MAP } from "@/app/lib/icon-map";
 export default function ViewExpenseDrawer() {
     const { isOpen, close, expenseId } = useViewExpenseDrawer();
     const [expense, setExpense] = useState<Expense | null>(null);
@@ -26,8 +26,8 @@ export default function ViewExpenseDrawer() {
             setFetchExpenseLoading(false);
         }
     }
-    const category = CATEGORIES.find((c) => c.id === expense?.category);
-    const IconComponent = category?.icon;
+    const IconComponent = expense ? ICON_MAP[expense?.category.icon] : null;
+
     useEffect(() => {
         if (!isOpen || !expenseId) return
         fetchExpenseById(expenseId)
@@ -78,12 +78,12 @@ export default function ViewExpenseDrawer() {
                                 <div className="flex flex-col justify-center mt-6 w-full h-full">
                                     {IconComponent && (
                                         <div className="flex w-full justify-center items-center">
-                                            <div style={{ backgroundColor: category.background, borderColor: category.color, }} className={`border-4 w-fit mb-2   p-4 rounded-full`}>
-                                                <IconComponent color={category.color} size={32} strokeWidth={2} />
+                                            <div style={{ backgroundColor: expense?.category.background, borderColor: expense?.category.color, }} className={`border-4 w-fit mb-2   p-4 rounded-full`}>
+                                                <IconComponent color={expense?.category.color} size={32} strokeWidth={2} />
                                             </div>
                                         </div>)}
                                     <div className="flex justify-center items-center w-full text-2xl font-bold text-[#715767]">{expense?.description}</div>
-                                    <div className="flex items-center text-center w-full font-semibold justify-center text-[#4D4449]  text-sm">{category?.name}</div>
+                                    <div className="flex items-center text-center w-full font-semibold justify-center text-[#4D4449]  text-sm">{expense?.category?.name}</div>
                                     <div className="flex justify-center items-center text-center w-full gap-4 text-2xl my-2 font-bold text-[#715767]">
                                         <span className="text-[#1c1a1c]">Amount:</span>$ {expense?.amount}
                                     </div>

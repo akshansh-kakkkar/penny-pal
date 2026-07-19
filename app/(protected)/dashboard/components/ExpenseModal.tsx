@@ -36,6 +36,7 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
           throw new Error("Failed to load categories")
         }
         const data = await res.json();
+        console.log(data)
         setCategories(data)
       }catch{
         toast.error("Failed to load categories")

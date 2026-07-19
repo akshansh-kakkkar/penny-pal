@@ -13,6 +13,9 @@ export async function createExpense(
       date: data.date ? new Date(data.date) : new Date(),
       userId,
     },
+    include : {
+      category : true,
+    },
   });
 }
 
@@ -73,6 +76,9 @@ export async function updateExpense(id: string, data: updateExpenseInput, userId
     data: {
       ...data,
       ...(data.date && { date: new Date(data.date) })
+    },
+    include : {
+      category : true
     }
   })
 }
