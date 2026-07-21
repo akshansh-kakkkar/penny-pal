@@ -60,7 +60,7 @@ export default function page() {
     useEffect(() => {
         getBudget()
     }, [])
-    const {onOpen} = useBudgetModal();
+    const {onOpen, budgetId} = useBudgetModal();
     return (
         <>
         <div className="min-h-screen flex flex-col mx-5 md:mx-10 xl:mx-20 relative py-10 md:py-20">
@@ -79,7 +79,7 @@ export default function page() {
             </div>
             <div className="w-full z-40 my-6 flex gap-8">
                 <div className="xl:w-[75%] w-full flex gap-12 relative flex-col md:p-20 p-6 bg-white/45 border-2 border-white/60 rounded-3xl shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)] ">
-                    <button onClick={()=>onOpen()} className="absolute right-4 cursor-pointer hover:scale-[85%] transition-all duration-300 bg-[#715767] text-white p-3 rounded-full top-4">
+                    <button onClick={()=>budget && onOpen(budget.id)} className="absolute right-4 cursor-pointer hover:scale-[85%] transition-all duration-300 bg-[#715767] text-white p-3 rounded-full top-4">
                         <PencilIcon strokeWidth={2.5} />
                     </button>
                     <LandmarkIcon className="absolute  right-6 text-[#131D21] opacity-10 top-12" size={164} />

@@ -3,6 +3,19 @@ import { updateBudgetSchema } from "@/app/lib/validations/budget";
 import { deleteBudget, getBudgetById, updateBudget } from "@/app/server/budget.service";
 import { NextRequest, NextResponse } from "next/server";
 
+export async function GET(req : NextRequest, {params} : {params : Promise<{id : string}>}) {
+  try{
+    const session =await getSession();
+    if(!session){
+      return NextResponse.json({message : "Unauthorized"}, {status : 401});
+    }
+    const { id } = await params;
+    const budget = await  getBudgetById(id, session.user.id);
+    return NextResponse.json(budget)
+  }catch(error){
+    return NextResponse.json({message : "Something went wrong while fetching the  budget by Id"}, { status : 500})
+  }
+}
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
