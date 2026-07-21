@@ -2,7 +2,7 @@ import {create} from "zustand"
 
 interface UseBudgetProps{
     isOpen : boolean;
-    onOpen : (id : string)=> void;
+    onOpen : (id?: string)=> void;
     onClose : ()=> void;
     budgetId : string | null;
 }
@@ -12,7 +12,7 @@ export const useBudgetModal = create<UseBudgetProps>((set)=>({
     budgetId : null,
     onOpen : (id)=>set({
         isOpen : true,
-        budgetId : id,
+        budgetId : id ?? null,
     }),
     onClose : ()=>set({
         isOpen : false

@@ -2,6 +2,7 @@ import { getSession } from "@/app/lib/session";
 import { createBudget, getBudgetByMonth, getBudgets } from "@/app/server/budget.service";
 import { NextRequest, NextResponse } from "next/server";
 import { createBudgetSchema } from "@/app/lib/validations/budget";
+import { getCurrentMonthAndYear } from "@/app/lib/date";
 
 export async function GET() {
   try {
@@ -9,7 +10,12 @@ export async function GET() {
     if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-    const budget = await getBudgets(session.user.id);
+    const {month, year} = getCurrentMonthAndYear();
+    const budget = await getBudgetByMonth(
+      month,
+      year,
+      session.user.id
+    )
     return NextResponse.json(budget)
   } catch (error) {
     return NextResponse.json(
