@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { useBudgetModal } from "@/app/store/UseBudgetModal";
-import { CircleCheck, DollarSignIcon, Flower, LoaderPinwheelIcon, X } from "lucide-react";
+import { CircleCheck, DollarSignIcon, Flower, Loader2, LoaderPinwheelIcon, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ICON_MAP } from "@/app/lib/icon-map";
@@ -46,7 +46,7 @@ export default function BudgetModal() {
     const { setBudget: zustBudget } = useBudgetStore();
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(false);
-
+    const [initialBudget, setInitialBudget] = useState<BudgetForm | null>(null);
     useEffect(() => {
         if (!isOpen || !isEditing) return;
         async function loadBudget() {
@@ -58,13 +58,16 @@ export default function BudgetModal() {
                     return;
                 }
                 const data = await res.json();
-                setBudget({
+                const loadedBudget = {
                     amount: data.amount,
                     categories: data.categories.map((c: any) => ({
                         categoryId: c.category.id,
                         amount: c.amount,
                     }))
-                })
+                    
+                }
+                setBudget(loadedBudget);
+                setInitialBudget(loadedBudget)
             }
             catch (error) {
                 toast.error("Failed to load Budget")
@@ -83,10 +86,11 @@ export default function BudgetModal() {
             categories: [],
         })
     }, [isOpen, isEditing]);
-
+    
+    const [loadingUpdateSetBudget, setLoadingUpdateSetBudget] = useState(false);
     const handleSubmit = async () => {
         try {
-            setLoading(true)
+            setLoadingUpdateSetBudget(true)
             const payload = {
                 ...budget,
                 month,
@@ -112,7 +116,7 @@ export default function BudgetModal() {
             toast.error("Something went wrong")
         }
         finally {
-            setLoading(false)
+            setLoadingUpdateSetBudget(false)
         }
     }
     useEffect(() => {
@@ -154,7 +158,12 @@ export default function BudgetModal() {
     }
     const allocatedTotal = budget.categories.reduce((sum, c) => sum + c.amount, 0);
     const remaining = budget.amount - allocatedTotal;
-
+    const hasChanges = !initialBudget || JSON.stringify({
+        ...budget,
+        categories : [...budget.categories].sort((a,b)=>
+        a.categoryId.localeCompare(b.categoryId)),
+    }) !== JSON.stringify({...initialBudget, categories : [...initialBudget.categories].sort((a,b)=> a.categoryId.localeCompare(b.categoryId))})
+    const isDisabled = remaining < 0 || loadingUpdateSetBudget || (isEditing && !hasChanges)
     return (
         <AnimatePresence>
             {isOpen && (
@@ -163,13 +172,13 @@ export default function BudgetModal() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={() => onClose()}
-                    className={` bg-black/20 fixed  flex inset-0 z-40 backdrop-blur-sm justify-center items-center  `}>
+                    className={` bg-black/20 fixed hidden lg:flex inset-0 z-40 backdrop-blur-sm justify-center items-center  `}>
                     {loading ? (
                         <LoaderPinwheelIcon size={48} className='animate-spin text-[#715767]' strokeWidth={2} />
                     ) : (
                         <motion.div
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-white relative  lg:w-[800px] sm:w-[400px] w-[320px]   md:w-[600px] flex-col flex gap-4   z-50 rounded-3xl p-6" >
+                            className="bg-white max-h-[800px]  min-h-[650px] overflow-y-auto relative  lg:w-[800px] sm:w-[400px] w-[320px]   md:w-[600px] flex-col flex gap-4   z-50 rounded-3xl p-6" >
                             <X onClick={() => onClose()} className="absolute right-4 text-[#715767] bg-[#F4D2EF] rounded-full p-1 hover:scale-[115%] top-4 cursor-pointer transition-all duration-300" />
                             <div className="flex flex-col">
                                 <h2 className="text-xl text-[#715767] font-bold capitalize">
@@ -190,7 +199,7 @@ export default function BudgetModal() {
                             </div>
                             <h4 className="text-md mx-4 text-[#4D4449] font-medium">Category Breakdown</h4>
 
-                            <div className="flex flex-col gap-8 overflow-y-auto max-h-[300px] mx-2">
+                            <div className="flex flex-col overflow-x-hidden gap-8 overflow-y-auto max-h-[250px] mx-2">
                                 {categories.map((item) => {
                                     const allocated = budget.categories.find((c) => c.categoryId === item.id)
                                     const IconComponent = ICON_MAP[item.icon]
@@ -203,11 +212,11 @@ export default function BudgetModal() {
                                                 </div>
                                                 <div className="flex gap-1 flex-1 items-start text-start flex-col">
                                                     <div className="text-lg font-bold" style={{ color: item.color }}>{item.name}</div>
-                                                    <BudgetSlider value={allocated?.amount ?? 0} max={budget.amount} color={item.color} onChange={(value)=>updateCategoryBudget(item.id, value)}/>
+                                                    <BudgetSlider value={allocated?.amount ?? 0} max={budget.amount} color={item.color} onChange={(value) => updateCategoryBudget(item.id, value)} />
                                                 </div>
                                             </div>
                                             <div className="flex">
-                                                <input min={0} onChange={(e) => updateCategoryBudget(item.id, Number(e.target.value))} value={allocated?.amount ?? 0} style={{ color: item.color }} className="text-xl outline-none bg-transparent w-12 text-right flex font-bold" />
+                                                <input min={0} type="number" onChange={(e) => updateCategoryBudget(item.id, Number(e.target.value))} value={allocated?.amount ?? 0} style={{ color: item.color }} className="text-xl outline-none bg-transparent w-12 text-right flex font-bold" />
                                             </div>
                                         </div>
                                     )
@@ -225,7 +234,7 @@ export default function BudgetModal() {
                                 <div className="flex mt-2 justify-between">
                                     <span className="text-[#4D4449] font-bold">Remaining</span>
                                     <span
-                                    className={`font-bold ${remaining < 0 ? "text-red-500 " : "text-green-500"}`}
+                                        className={`font-bold ${remaining < 0 ? "text-red-500 " : "text-green-500"}`}
                                     >${remaining}</span>
                                 </div>
                             </div>
@@ -234,11 +243,23 @@ export default function BudgetModal() {
                                     <p className="text-red-500 text-sm  flex justify-center items-center font-bold text-center">You've allocated more than your total budget.</p>
                                 )
                             }
-                            <button disabled={remaining < 0 }  onClick={handleSubmit} className={`font-bold transition-all duration-300 text-4xl gap-4 w-full text-center flex justify-center items-center py-4 rounded-full ${remaining < 0 ? "bg-gray-300 text-gray-500 cursor-not-allowed" :"bg-[#F4D2EF] text-[#715767] cursor-pointer hover:scale-[102%] "}`}>
-                                <span>
-                                    <CircleCheck size={40} strokeWidth={2.5} />
-                                </span>
-                                <span>{isEditing ? "Update Budget" : "Set Budget"}</span>
+                            <button disabled={remaining < 0 || loadingUpdateSetBudget || (isEditing && !hasChanges)} onClick={handleSubmit} className={`font-bold transition-all duration-300 text-2xl gap-4 w-full text-center flex justify-center items-center py-4 rounded-full ${isDisabled ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#F4D2EF] text-[#715767] cursor-pointer hover:scale-[102%] "}`}>
+                                {
+                                    loadingUpdateSetBudget ? (
+                                        <div>
+                                            <Loader2 className="text-[#715767] animate-spin" strokeWidth={2.5} size={24} />
+                                        </div>
+
+                                    ) : (
+                                        <div className="flex gap-2 items-center text-center">
+
+                                            <span>
+                                                <CircleCheck size={32} strokeWidth={2.5} />
+                                            </span>
+                                            <span>{isEditing ? "Update Budget" : "Set Budget"}</span>
+                                        </div>
+                                    )
+                                }
                             </button>
                         </motion.div>
                     )}

@@ -7,8 +7,7 @@ interface BudgetSliderProps {
     color: string;
     onChange: (value: number) => void;
 }
-const Handle_Size = 20;
-const Snap_Increment = 1;
+
 export default function BudgetSlider({
     value, max, color, onChange
 }: BudgetSliderProps) {
@@ -17,7 +16,7 @@ export default function BudgetSlider({
     const [width, setWidth] = useState(0);
     const dragging = useRef(false);
     const lastValue = useRef(value)
-    const travel = Math.max(width - Handle_Size, 0)
+    const travel = width
 
     useEffect(() => {
         const el = sliderRef.current;
@@ -46,11 +45,11 @@ export default function BudgetSlider({
         if(!travel) return;
 
         const rect = sliderRef.current.getBoundingClientRect();
-        let position = clientX - rect.left - Handle_Size/2;
+        let position = clientX - rect.left;
         position = Math.max(0,Math.min(position, travel));
         x.set(position);
         const raw = (position/travel) * max;
-        const snapped = Math.round(raw/Snap_Increment) * Snap_Increment;
+        const snapped = Math.min(max, Math.max(0, Math.round(raw)));
         if(snapped !== lastValue.current){
             lastValue.current = snapped;
             onChange(snapped)
@@ -58,7 +57,6 @@ export default function BudgetSlider({
     }
     const handlePointersDown = (e : React.PointerEvent<HTMLDivElement>) =>{
       dragging.current = true;
-      e.currentTarget.setPointerCapture(e.pointerId);
       updateFromPointer(e.clientX);
       const move = (event : PointerEvent)=>{
         updateFromPointer(event.clientX);
@@ -74,12 +72,7 @@ export default function BudgetSlider({
     useEffect(()=>{
         lastValue.current = value;
     }, [value])
-    useEffect(()=>{
-        return ()=>{
-            window.onpointermove = null;
-            window.onpointerup = null
-        }
-    }, [])
+
     return (
         <div 
         ref={sliderRef}
@@ -90,7 +83,7 @@ export default function BudgetSlider({
             style={{ backgroundColor: color , width: fillWidth}}/>
             <motion.div
                 className="absolute top-1/2 h-5 rounded-full w-5 border-2 border-white shadow-lg cursor-grab active:cursor-grabbing" 
-                style={{ backgroundColor: color, x, translateY: "-50%" }} 
+                style={{ backgroundColor: color, x, translateY: "-50%", translateX:'-50%' }} 
                 whileTap={{scale : 1.2}}/>
         </div>
     )
