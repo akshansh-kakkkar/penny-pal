@@ -164,6 +164,7 @@ export default function BudgetModal() {
         a.categoryId.localeCompare(b.categoryId)),
     }) !== JSON.stringify({...initialBudget, categories : [...initialBudget.categories].sort((a,b)=> a.categoryId.localeCompare(b.categoryId))})
     const isDisabled = remaining < 0 || loadingUpdateSetBudget || (isEditing && !hasChanges)
+   
     return (
         <AnimatePresence>
             {isOpen && (
