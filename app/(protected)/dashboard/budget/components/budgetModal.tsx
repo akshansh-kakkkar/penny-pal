@@ -8,6 +8,7 @@ import { getCurrentMonthAndYear } from "@/app/lib/date"
 import { useBudgetStore } from "@/app/store/BudgetStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
+import BudgetSlider from "./Slider";
 type BudgetForm = {
     amount: number;
     categories: {
@@ -45,6 +46,7 @@ export default function BudgetModal() {
     const { setBudget: zustBudget } = useBudgetStore();
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         if (!isOpen || !isEditing) return;
         async function loadBudget() {
@@ -152,9 +154,7 @@ export default function BudgetModal() {
     }
     const allocatedTotal = budget.categories.reduce((sum, c) => sum + c.amount, 0);
     const remaining = budget.amount - allocatedTotal;
-    if(allocatedTotal > budget.amount){
-        toast.error("Allocated Budget cannot exceed the total budget.")
-    }
+
     return (
         <AnimatePresence>
             {isOpen && (
@@ -203,9 +203,7 @@ export default function BudgetModal() {
                                                 </div>
                                                 <div className="flex gap-1 flex-1 items-start text-start flex-col">
                                                     <div className="text-lg font-bold" style={{ color: item.color }}>{item.name}</div>
-                                                    <div className="bg-white shadow-sm w-full h-2 rounded-full overflow-hidden">
-                                                        <motion.div className= {`h-full rounded-full`} style={{ backgroundColor: item.color }} animate={{ width: `${percentage}%` }} transition={{ duration: 0.3 }} />
-                                                    </div>
+                                                    <BudgetSlider value={allocated?.amount ?? 0} max={budget.amount} color={item.color} onChange={(value)=>updateCategoryBudget(item.id, value)}/>
                                                 </div>
                                             </div>
                                             <div className="flex">
