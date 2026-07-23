@@ -9,12 +9,24 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner"
 import BudgetModal from "./components/budgetModal";
 import { useBudgetStore } from "@/app/store/BudgetStore";
+import BudgetAppDrawer from "./components/budgetAppDrawer";
+import { useBudgetDrawer } from "@/app/store/UseBudgetDrawer";
 
 type Budget = {
     id: string;
     amount: number;
     month: number;
-    year: number
+    year: number;
+    categories: {
+        amount: number;
+        category: {
+            id: string;
+            name: string;
+            icon: keyof typeof ICON_MAP;
+            color: string;
+            background: string;
+        }
+    }[]
 }
 interface Category {
     id: string;
@@ -29,6 +41,7 @@ export default function page() {
     const [categories, setCategories] = useState<Category[]>([]);
     const { data: session } = useSession();
     const { budget: budgetZust, setBudget: setBudgetZust } = useBudgetStore();
+    const {onOpen : open} = useBudgetDrawer();
     useEffect(() => {
         async function fetchCategory() {
             try {
@@ -67,6 +80,8 @@ export default function page() {
     useEffect(() => {
         getBudget()
     }, [])
+
+
     return (
         <>
             {fetchBudgetLoading ? (
@@ -95,9 +110,16 @@ export default function page() {
                                 if (budgetZust) {
                                     onOpen(budgetZust.id)
                                 }
-                            }} className="absolute right-4 cursor-pointer hover:scale-[85%] transition-all duration-300 bg-[#715767] text-white p-3 rounded-full top-4">
+                            }} className="absolute right-4 hidden lg:flex cursor-pointer hover:scale-[85%] transition-all duration-300 bg-[#715767] text-white p-3 rounded-full top-4">
                                 <PencilIcon strokeWidth={2.5} />
                             </button>
+                             <button onClick={() => {
+                                if (budgetZust) {
+                                    open(budgetZust.id)
+                                }
+                            }} className="absolute right-4 lg:hidden flex cursor-pointer hover:scale-[85%] transition-all duration-300 bg-[#715767] text-white p-3 rounded-full top-4">
+                                <PencilIcon strokeWidth={2.5} />
+                            </button> 
                             <LandmarkIcon className="absolute  right-6 text-[#131D21] opacity-10 top-12" size={164} />
                             <h2 className="font-semibold text-xl md:text-3xl text-[#715767] flex md:justify-center md:items-center text-start items-center justify-items-start">Total Monthly Budget</h2>
                             <div className="flex justify-center items-center  rounded-3xl py-8 px-6 relative">
@@ -133,6 +155,9 @@ export default function page() {
                         <div className="flex gap-4 py-4 flex-col">
                             {categories.map((category) => {
                                 const IconComponent = ICON_MAP[category.icon];
+                                const allocated = (budgetZust as any)?.categories.find((c: any) => c.category.id === category.id);
+                                const amount = allocated?.amount ?? 0;
+                                const percentage = budgetZust?.amount ? (amount / budgetZust.amount) * 100 : 0
                                 return (
                                     <div key={category.id} className="bg-white px-4 py-4 rounded-3xl flex flex-col gap-4 border-2" style={{ borderColor: category.color }}>
                                         <div className="flex justify-between text-center items-center">
@@ -140,9 +165,11 @@ export default function page() {
                                                 <div style={{ backgroundColor: category.background, borderColor: category.color, }} className={`border-4 w-fit p-2 rounded-full`}><IconComponent color={category.color} size={24} strokeWidth={2.5} /></div>
                                                 <div className="sm:text-2xl hidden sm:block text-[#191C1E] font-bold">{category?.name}</div>
                                             </div>
-                                            <div className="text-xl  text-[#715767] font-bold">$800</div>
+                                            <div className="text-xl  text-[#715767] font-bold">${amount}</div>
                                         </div>
-                                        <div className="bg-gray-200 w-full h-4 rounded-full" />
+                                        <div className="bg-gray-200 w-full h-2 rounded-full">
+                                            <div className="h-full rounded-full transition-all duration-300" style={{ width: `${percentage}%`, backgroundColor: category.color }} />
+                                        </div>
                                     </div>
                                 )
                             })}
@@ -151,7 +178,7 @@ export default function page() {
                     </div>
                 </div>
             )}
-
+            <BudgetAppDrawer />
             <BudgetModal />
         </>
     )

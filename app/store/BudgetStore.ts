@@ -3,6 +3,7 @@ type Budget = {
     id : string;
     name : string;
     amount : number;
+    month : string;
 }
 interface BudgetStore{
     budget : Budget | null;
