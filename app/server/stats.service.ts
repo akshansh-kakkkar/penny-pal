@@ -35,18 +35,23 @@ export async function getDashboardStats(userId: string) {
     prisma.expense.count({
       where: {
         userId,
-        },
+      },
     }),
   ]);
   const totalExpenses = total._sum?.amount ?? 0;
   const monthlyExpenses = monthly._sum?.amount ?? 0;
   const monthlyBudget = budget?.amount ?? 0;
+  const budgetUsage = monthlyBudget === 0 ? 0 : (monthlyExpenses / monthlyBudget) * 100;
+  const averageTransaction = count === 0 ? 0 : totalExpenses / count;
+
   return {
     totalExpenses,
     monthlyExpenses,
     budget: monthlyBudget,
     remainBudget: monthlyBudget - monthlyExpenses,
     transactionCount: count,
+    budgetUsage,
+    averageTransaction
   };
 }
 
@@ -65,32 +70,43 @@ export async function getMonthlyStats(userId: string) {
   });
   const monthlyMap = new Map<string, number>();
   expenses.forEach((expense) => {
-    const key = expense.date.toLocaleDateString("default", {
-      month: "short",
-    });
+    const key = `${expense.date.getFullYear()}-${expense.date.getMonth() + 1}`
     monthlyMap.set(key, (monthlyMap.get(key) ?? 0) + expense.amount);
   });
   return Array.from(
     monthlyMap.entries()
   ).map(
-    ([month ,amount]) => ({
-        month, amount
-    })
+    ([key, amount]) => {
+      const [year, month] = key.split('-');
+      return {
+        month: new Date(Number(year), Number(month) - 1)
+          .toLocaleString("default", { month: "short" }),
+        year: Number(year),
+        amount
+      }
+    }
   )
 }
 
-// export async function getCategoryStats(userId:string) {
-//     const data = await prisma.expense.groupBy({
-//         by : ["category"],
-//         where : {
-//             userId,
-//         },
-//         _sum : {
-//             amount : true
-//         },
-//     });
-    // return data.map((item)=>({
-    //     category : item.category,
-    //     amount : item._sum.amount ?? 0
-    // }))
-// }
+export async function getCategoryStats(userId: string) {
+  const data = await prisma.category.findMany({
+    include: {
+      expenses : {
+        where : {
+          userId,
+        },
+        select : {
+          amount : true
+        }
+      },
+    },
+  });
+  return data.map((item) => ({
+    id : item.id,
+    name : item.name,
+    icon : item.icon,
+    color :  item.color,
+    background : item.background,
+    amount : item.expenses.reduce((sum,expense)=>sum + expense.amount, 0)
+  }))
+}
