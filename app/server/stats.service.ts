@@ -55,37 +55,48 @@ export async function getDashboardStats(userId: string) {
   };
 }
 
-export async function getMonthlyStats(userId: string) {
+export async function getDailyStats(userId: string) {
+  const today = new Date();
+  const start = new Date();
+  start.setDate(today.getDate() -29);
+  start.setHours(0,0,0,0);
+
   const expenses = await prisma.expense.findMany({
     where: {
       userId,
+      date : {
+        gte : start,
+      },
     },
-    select: {
-      amount: true,
-      date: true,
+        orderBy: {
+      date: "asc",
     },
-    orderBy: {
-      date: "desc",
-    },
-  });
-  const monthlyMap = new Map<string, number>();
-  expenses.forEach((expense) => {
-    const key = `${expense.date.getFullYear()}-${expense.date.getMonth() + 1}`
-    monthlyMap.set(key, (monthlyMap.get(key) ?? 0) + expense.amount);
-  });
-  return Array.from(
-    monthlyMap.entries()
-  ).map(
-    ([key, amount]) => {
-      const [year, month] = key.split('-');
-      return {
-        month: new Date(Number(year), Number(month) - 1)
-          .toLocaleString("default", { month: "short" }),
-        year: Number(year),
-        amount
-      }
+    select : {
+      amount : true,
+      date : true,
     }
-  )
+  });
+  if(expenses.length === 0){
+    return[]
+  }
+  const dailyMap = new Map<string, number>();
+  for (const expense of expenses){
+    const key =  `${expense.date.getFullYear()}-${expense.date.getMonth() + 1}-${expense.date.getDate()}`;
+    dailyMap.set(key, (dailyMap.get(key)?? 0) +  expense.amount)
+  }
+  const result = [];
+  for (let i =0; i < 30; i++){
+    const date = new Date(start);
+    date.setDate(start.getDate() + i); 
+    const key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    result.push({
+      day : date.toLocaleDateString("default", {
+        day : "numeric",
+      }),
+      amount : dailyMap.get(key) ??0
+    })
+  }
+  return result;
 }
 
 export async function getCategoryStats(userId: string) {

@@ -6,6 +6,7 @@ import { useState } from "react";
 import ExpensesAppDrawer from "./components/ExpensesAppDrawer";
 import { useExpenseModal } from "@/app/store/useExpenseModal";
 import ExpenseModal from "./components/ExpenseModal";
+import { SpendingFlow } from "./components/SpendingFlowGraph";
 
 export default function page() {
   const cards = [
@@ -169,6 +170,7 @@ export default function page() {
             ))}
           </div>
         </div>
+        <SpendingFlow />
       </div>
       <ExpenseModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
