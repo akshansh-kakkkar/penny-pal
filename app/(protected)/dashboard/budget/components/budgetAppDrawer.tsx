@@ -3,7 +3,7 @@ import { ICON_MAP } from "@/app/lib/icon-map";
 import { useBudgetStore } from "@/app/store/BudgetStore";
 import { useBudgetDrawer } from "@/app/store/UseBudgetDrawer"
 import { AnimatePresence, motion } from "framer-motion"
-import { DollarSignIcon, Flower, LoaderPinwheelIcon } from "lucide-react";
+import { CircleCheck, DollarSignIcon, Flower, Loader2, LoaderPinwheelIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import BudgetSlider from "./Slider";
@@ -213,7 +213,7 @@ export default function () {
                                         <div key={item.id} className="py-4 relative px-4 rounded-2xl flex justify-between items-center border-2 mx-2 " style={{ backgroundColor: item.background, borderColor: item.color }}>
                                             <div className="flex flex-1 items-center gap-2" >
                                                 <div className="flex p-2 rounded-full w-fit" style={{ backgroundColor: item.color, }} >
-                                                    <IconComponent  size={24} style={{ color: item.background }} />
+                                                    <IconComponent size={24} style={{ color: item.background }} />
                                                 </div>
                                                 <div className="flex gap-1 flex-1 items-start text-start flex-col" >
                                                     <div className="flex gap-1 font-bold items-start text-start flex-col" style={{ color: item.color }}>{item.name}</div>
@@ -228,6 +228,46 @@ export default function () {
                                     )
                                 })}
                             </div>
+                            <div className={`rounded-2xl border-2 transition-all ${remaining < 0 ? "bg-red-50 animate-shake border-red-500" : "border-[#F4D2EF] bg-[#F4D2EF]/30"} p-4`}>
+                                <div className="flex justify-between text-[#4D4449]">
+                                    <div className="font-bold">Budget</div>
+                                    <div className="font-bold">${budget.amount}</div>
+                                </div>
+                                <div className="flex justify-between mt-2 text-[#4d4449]">
+                                    <div className="font-bold">Allocated</div>
+                                    <div className="font-bold">${allocatedTotal}</div>
+                                </div>
+                                <div className="flex mt-2 justify-between ">
+                                    <span className="text-[#4D4449] font-bold">Remaining</span>
+                                    <span
+                                        className={`font-bold ${remaining < 0 ? "text-red-500 " : "text-green-500"}`}
+                                    >${remaining}</span>
+                                </div>
+
+                            </div>
+                                                            {
+                                    remaining < 0 && (
+                                        <p className="text-red-500 text-sm  flex justify-center items-center font-bold text-center">You've allocated more than your total budget.</p>
+                                    )
+                                }
+                              <button disabled={remaining < 0 || loadingUpdateSetBudget || (isEditing && !hasChanges)} onClick={handleSubmit} className={`font-bold transition-all duration-300 text-2xl gap-4 w-full text-center flex justify-center items-center py-4 rounded-full ${isDisabled ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#F4D2EF] text-[#715767] cursor-pointer hover:scale-[102%] "}`}>
+                                    {
+                                        loadingUpdateSetBudget ? (
+                                            <div>
+                                                <Loader2 className="text-[#715767] animate-spin" strokeWidth={2.5} size={24} />
+                                            </div>
+
+                                        ) : (
+                                            <div className="flex gap-2 items-center text-center">
+
+                                                <span>
+                                                    <CircleCheck size={32} strokeWidth={2.5} />
+                                                </span>
+                                                <span>{isEditing ? "Update Budget" : "Set Budget"}</span>
+                                            </div>
+                                        )
+                                    }
+                                </button>
                         </motion.div>
                     )}
                 </motion.div>

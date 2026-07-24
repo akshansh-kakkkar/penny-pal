@@ -79,18 +79,18 @@ export async function getMonthlyStats(userId: string) {
   )
 }
 
-export async function getCategoryStats(userId:string) {
-    const data = await prisma.expense.groupBy({
-        by : ["category"],
-        where : {
-            userId,
-        },
-        _sum : {
-            amount : true
-        },
-    });
-    return data.map((item)=>({
-        category : item.category,
-        amount : item._sum.amount ?? 0
-    }))
-}
+// export async function getCategoryStats(userId:string) {
+//     const data = await prisma.expense.groupBy({
+//         by : ["category"],
+//         where : {
+//             userId,
+//         },
+//         _sum : {
+//             amount : true
+//         },
+//     });
+    // return data.map((item)=>({
+    //     category : item.category,
+    //     amount : item._sum.amount ?? 0
+    // }))
+// }

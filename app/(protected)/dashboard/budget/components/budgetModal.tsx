@@ -225,7 +225,7 @@ export default function BudgetModal() {
                             <div className={`rounded-2xl border-2 transition-all ${remaining < 0 ? "bg-red-50 animate-shake border-red-500" : "border-[#F4D2EF] bg-[#F4D2EF]/30"} p-4`}>
                                 <div className="flex justify-between text-[#4D4449]">
                                     <span className="font-bold">Budget</span>
-                                    <span className="font-bold">$ {budget.amount}</span>
+                                    <span className="font-bold">${budget.amount}</span>
                                 </div>
                                 <div className="mt-2 flex justify-between text-[#4D4449]">
                                     <span className="font-bold">Allocated</span>
