@@ -170,7 +170,9 @@ export default function page() {
             ))}
           </div>
         </div>
+        <div className="mt-8">
         <SpendingFlow />
+        </div>
       </div>
       <ExpenseModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
 

@@ -10,13 +10,13 @@ type DailyStat = {
 }
 type Props = {
     data: DailyStat[];
-    width?: number;
+    width : number;
     height?: number
 }
 
 
 export default function SpendingGraph({
-    data, width = 900, height = 320,
+    data, width, height = 320,
 }: Props) {
     if (!data.length) return null;
     const margin = { top: 20, right: 20, bottom: 45, left: 10, };
@@ -66,17 +66,6 @@ export default function SpendingGraph({
                 strokeWidth={5}
                 />
                 
-                {data.map((d) => (
-                    <circle
-                        key={d.day}
-                        cx={xScale(d.day)?? 0}
-                        cy={yScale(d.amount)}
-                        r={5}
-                        fill="white"
-                        stroke="#6E5867"
-                        strokeWidth={3}
-                    />
-                ))}
                 {data.map((d) => (
                     <text
                         key={d.day + '-label'}

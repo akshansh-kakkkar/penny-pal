@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import SpendingGraph from "./SpendingGraph";
-
+import {ParentSize} from "@visx/responsive"
 interface DailyStat {
     day  : string;
     amount : number;
@@ -31,12 +31,16 @@ export function SpendingFlow(){
         loadData();
     }, []);
     return(
-        <div className="rounded-3xl bg-white p-8 shadow-sm">
+        <div className="rounded-3xl bg-white p-12 shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]">
             <div className="mb-8 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-[#715767]">Spending Flow</h2>
             </div>
-            <div className="mt-6 h-[320px]">
-                <SpendingGraph data={data} />
+            <div className="h-[320px] w-full">
+                <ParentSize>
+                    {({width})=>(
+                <SpendingGraph width={width} height={320} data={data} />
+                )}
+                </ParentSize>
             </div>
         </div>
     )

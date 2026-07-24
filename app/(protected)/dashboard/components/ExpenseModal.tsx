@@ -116,9 +116,9 @@ export default function ExpenseModal({ isOpen, onClose }: addExpenseProps) {
           className={` bg-black/20 fixed  hidden lg:flex inset-0 z-40 backdrop-blur-sm justify-center items-center  `}
         >
           <div
-            onClick={(e) =>{ e.stopPropagation(); onClose()}} className="bg-white relative lg:w-[800px] sm:w-[400px] w-[320px]   md:w-[600px] flex-col flex justify-center gap-4 items-center  rounded-3xl p-10"
+            onClick={(e) =>{ e.stopPropagation()}} className="bg-white relative lg:w-[800px] sm:w-[400px] w-[320px]   md:w-[600px] flex-col flex justify-center gap-4 items-center  rounded-3xl p-10"
           >
-            <X className="absolute top-4 right-4 text-[#715767] p-1 rounded-full bg-[#F4D2EF] hover:scale-[116%] transition-all cursor-pointer duration-300" strokeWidth={2.5} size={24} />
+            <X onClick={onClose} className="absolute top-4 right-4 text-[#715767] p-1 rounded-full bg-[#F4D2EF] hover:scale-[116%] transition-all cursor-pointer duration-300" strokeWidth={2.5} size={24} />
             <div className="flex flex-col justify-center text-center items-center">
               <div className="flex flex-col gap-2">
                 <h2 className="text-4xl font-bold text-[#715767]">Treat Yourself?</h2>

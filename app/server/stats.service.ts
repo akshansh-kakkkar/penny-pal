@@ -58,7 +58,7 @@ export async function getDashboardStats(userId: string) {
 export async function getDailyStats(userId: string) {
   const today = new Date();
   const start = new Date();
-  start.setDate(today.getDate() -29);
+  start.setDate(today.getDate() -6);
   start.setHours(0,0,0,0);
 
   const expenses = await prisma.expense.findMany({
@@ -85,7 +85,7 @@ export async function getDailyStats(userId: string) {
     dailyMap.set(key, (dailyMap.get(key)?? 0) +  expense.amount)
   }
   const result = [];
-  for (let i =0; i < 30; i++){
+  for (let i =0; i < 7; i++){
     const date = new Date(start);
     date.setDate(start.getDate() + i); 
     const key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
