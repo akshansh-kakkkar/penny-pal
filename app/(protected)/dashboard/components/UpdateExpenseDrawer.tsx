@@ -1,6 +1,6 @@
 "use client"
 import { ICON_MAP } from "@/app/lib/icon-map";
-import {  useExpenseStore } from "@/app/store/UseExpenseStore";
+import { useExpenseStore } from "@/app/store/UseExpenseStore";
 import { updateExpenseDrawer } from "@/app/store/UseUpdateExpenseDrawer"
 import { AnimatePresence, motion } from "framer-motion"
 import { DollarSignIcon, Heart, Loader2, LoaderPinwheel } from "lucide-react";
@@ -14,17 +14,17 @@ interface Category {
     background: string;
 }
 interface Expense {
-    id : string;
-    amount : number;
-    description : string;
-    data : string;
-    title : string;
-    category : {
-        id : string;
-        name : string;
-        icon : keyof typeof ICON_MAP;
-        color : string;
-        background : string;
+    id: string;
+    amount: number;
+    description: string;
+    data: string;
+    title: string;
+    category: {
+        id: string;
+        name: string;
+        icon: keyof typeof ICON_MAP;
+        color: string;
+        background: string;
     }
 }
 export default function UpdateExpenseDrawer() {
@@ -96,13 +96,13 @@ export default function UpdateExpenseDrawer() {
         }
     }
     useEffect(() => {
-        if (!isOpen){
+        if (!isOpen) {
             setExpense(null);
             setExpense(null);
             setOriginalExpense(null);
             setCategory("")
         }
-        if(expenseId){
+        if (expenseId) {
             getExpenseById(expenseId);
         }
     }, [isOpen, expenseId])
@@ -153,7 +153,7 @@ export default function UpdateExpenseDrawer() {
                                             {categories.map((item) => {
                                                 const IconComponent = ICON_MAP[item.icon];
                                                 return (
-                                                    <div onClick={() =>setCategory(item.id)} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-xl w-35 h-10 flex-shrink-0  items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`} key={item.id}>
+                                                    <div onClick={() => setCategory(item.id)} className={`flex tranition-all font-bold cursor-pointer select-none duration-300 border-4 gap-2 p-2 rounded-xl w-35 h-10 flex-shrink-0  items-center justify-center ${category === item.id ? "bg-[#715767] text-white border-[#F4D2EF]" : "bg-[#ffffff]/50 border-[#F4D2EF]  text-[#715767]"}`} key={item.id}>
                                                         {IconComponent && (
                                                             <IconComponent />
                                                         )}

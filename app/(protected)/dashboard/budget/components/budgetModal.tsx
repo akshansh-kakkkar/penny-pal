@@ -204,9 +204,8 @@ export default function BudgetModal() {
                                 {categories.map((item) => {
                                     const allocated = budget.categories.find((c) => c.categoryId === item.id)
                                     const IconComponent = ICON_MAP[item.icon]
-                                    const percentage = budget.amount === 0 ? 0 : (allocated?.amount ?? 0) / budget.amount * 100;
                                     return (
-                                        <div key={item.id} className="py-4 px-4 rounded-2xl flex justify-between items-center border-2 mx-2 " style={{ backgroundColor: item.background, borderColor: item.color }} >
+                                        <div key={item.id} className="py-4 relative px-4 rounded-2xl flex justify-between items-center border-2 mx-2 " style={{ backgroundColor: item.background, borderColor: item.color }} >
                                             <div className="flex flex-1 items-center gap-2 ">
                                                 <div className="flex p-2 rounded-full w-fit" style={{ backgroundColor: item.color, }}>
                                                     <IconComponent size={24} style={{ color: item.background }} />
@@ -216,8 +215,8 @@ export default function BudgetModal() {
                                                     <BudgetSlider value={allocated?.amount ?? 0} max={budget.amount} color={item.color} onChange={(value) => updateCategoryBudget(item.id, value)} />
                                                 </div>
                                             </div>
-                                            <div className="flex">
-                                                <input min={0} type="number" onChange={(e) => updateCategoryBudget(item.id, Number(e.target.value))} value={allocated?.amount ?? 0} style={{ color: item.color }} className="text-xl outline-none bg-transparent w-12 text-right flex font-bold" />
+                                            <div className="flex absolute right-12">
+                                                <input min={0} type="number" onChange={(e) => updateCategoryBudget(item.id, Number(e.target.value))} value={allocated?.amount ?? 0} style={{ color: item.color }} className="text-xl outline-none bg-transparent w-40 text-right flex font-bold" />
                                             </div>
                                         </div>
                                     )
