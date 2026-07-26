@@ -21,6 +21,7 @@ type Budget = {
         amount: number;
         category: {
             id: string;
+            spent : number;
             name: string;
             icon: keyof typeof ICON_MAP;
             color: string;
@@ -110,12 +111,17 @@ export default function page() {
                                 if (budgetZust) {
                                     onOpen(budgetZust.id)
                                 }
+                                else{
+                                    onOpen()
+                                }
                             }} className="absolute right-4 hidden lg:flex cursor-pointer hover:scale-[85%] transition-all duration-300 bg-[#715767] text-white p-3 rounded-full top-4">
                                 <PencilIcon strokeWidth={2.5} />
                             </button>
                              <button onClick={() => {
                                 if (budgetZust) {
                                     open(budgetZust.id)
+                                }else{
+                                    open()
                                 }
                             }} className="absolute right-4 lg:hidden flex cursor-pointer hover:scale-[85%] transition-all duration-300 bg-[#715767] text-white p-3 rounded-full top-4">
                                 <PencilIcon strokeWidth={2.5} />
@@ -156,8 +162,10 @@ export default function page() {
                             {categories.map((category) => {
                                 const IconComponent = ICON_MAP[category.icon];
                                 const allocated = (budgetZust as any)?.categories.find((c: any) => c.category.id === category.id);
+                                console.log(category.name, allocated)
                                 const amount = allocated?.amount ?? 0;
-                                const percentage = budgetZust?.amount ? (amount / budgetZust.amount) * 100 : 0
+                                const spent = allocated?.spent ?? 0
+                                const percentage = amount  > 0 ? Math.min((spent/amount) * 100, 100) : 0;
                                 return (
                                     <div key={category.id} className="bg-white px-4 py-4 rounded-3xl flex flex-col gap-4 border-2" style={{ borderColor: category.color }}>
                                         <div className="flex justify-between text-center items-center">
@@ -165,7 +173,7 @@ export default function page() {
                                                 <div style={{ backgroundColor: category.background, borderColor: category.color, }} className={`border-4 w-fit p-2 rounded-full`}><IconComponent color={category.color} size={24} strokeWidth={2.5} /></div>
                                                 <div className="sm:text-2xl hidden sm:block text-[#191C1E] font-bold">{category?.name}</div>
                                             </div>
-                                            <div className="text-xl  text-[#715767] font-bold">${amount}</div>
+                                            <div className={`text-xl font-bold ${spent > amount ? "text-red-500" : "text-[#715767]"}`}>{spent}/{amount}</div>
                                         </div>
                                         <div className="bg-gray-200 w-full h-2 rounded-full">
                                             <div className="h-full rounded-full transition-all duration-300" style={{ width: `${percentage}%`, backgroundColor: category.color }} />

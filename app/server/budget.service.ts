@@ -63,7 +63,7 @@ export async function getBudgetByMonth(
   year: number,
   userId: string,
 ) {
-  return prisma.budget.findFirst({
+  const budget = await prisma.budget.findFirst({
     where: {
       month,
       year,
@@ -77,6 +77,28 @@ export async function getBudgetByMonth(
       }
     }
   });
+  if (!budget) return null;
+  const expenses = await prisma.expense.findMany({
+    where: {
+      userId,
+      date: {
+        gte: new Date(year, month - 1, 1),
+        lt: new Date(year, month, 1),
+      }
+    }
+  })
+  const categoriesWithSpent = budget.categories.map((c) => {
+    const spent = expenses.filter((e) => e.categoryId === c.categoryId).reduce((sum, e) => sum + e.amount, 0)
+    return {
+      ...c,
+      spent
+    }
+  })
+
+  return {
+    ...budget,
+    categories: categoriesWithSpent
+  }
 }
 
 export async function updateBudget(
@@ -94,33 +116,33 @@ export async function updateBudget(
   if (!budget) {
     throw new Error("Budget not found");
   }
-  const {categories,...budgetData} = data;
+  const { categories, ...budgetData } = data;
 
-  return prisma.$transaction(async(tx)=>{
+  return prisma.$transaction(async (tx) => {
     const updatedBudget = await tx.budget.update({
-      where : { id },
-      data : budgetData,
+      where: { id },
+      data: budgetData,
     })
-    if(categories){
+    if (categories) {
       await tx.budgetCategory.deleteMany({
-        where : {
-          budgetId : id,
+        where: {
+          budgetId: id,
         }
       })
       await tx.budgetCategory.createMany({
-        data : categories.map((category)=>({
-          budgetId : id,
-          categoryId : category.categoryId,
-          amount : category.amount
+        data: categories.map((category) => ({
+          budgetId: id,
+          categoryId: category.categoryId,
+          amount: category.amount
         }))
       })
     }
     return tx.budget.findUnique({
-      where : { id },
-      include : {
-        categories : {
-          include : {
-            category : true
+      where: { id },
+      include: {
+        categories: {
+          include: {
+            category: true
           }
         }
       }

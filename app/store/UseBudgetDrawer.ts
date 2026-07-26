@@ -2,7 +2,8 @@ import { create } from "zustand";
 
 interface useBudgetProps  {
     isOpen : boolean;
-    onOpen : (id : string)=> void;
+    id? : string;
+    onOpen : (id? : string)=> void;
     onClose : ()=>void;
     budgetId : string | null;
 }
