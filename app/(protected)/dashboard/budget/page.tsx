@@ -62,6 +62,7 @@ export default function page() {
         }
         fetchCategory();
     }, [])
+    
     const getBudget = async () => {
         try {
             setFetchBudgetLoading(true)
@@ -156,7 +157,7 @@ export default function page() {
                             <div className="flex text-xl font-bold text-[#715767]">
                                 Category Breakdown
                             </div>
-                            <div className="font-bold  text-lg text-[#715767] ">Total Spent</div>
+                            <div className="font-bold  text-lg text-[#715767] ">Total Spent (in $)</div>
                         </div>
                         <div className="flex gap-4 py-4 flex-col">
                             {categories.map((category) => {
@@ -167,7 +168,7 @@ export default function page() {
                                 const spent = allocated?.spent ?? 0
                                 const percentage = amount  > 0 ? Math.min((spent/amount) * 100, 100) : 0;
                                 return (
-                                    <div key={category.id} className="bg-white px-4 py-4 rounded-3xl flex flex-col gap-4 border-2" style={{ borderColor: category.color }}>
+                                    <div key={category.id} className="bg-white px-4 py-4 rounded-3xl flex flex-col gap-4 border-2" style={{ borderColor: category.color  }}>
                                         <div className="flex justify-between text-center items-center">
                                             <div className="flex items-center text-center gap-4">
                                                 <div style={{ backgroundColor: category.background, borderColor: category.color, }} className={`border-4 w-fit p-2 rounded-full`}><IconComponent color={category.color} size={24} strokeWidth={2.5} /></div>
@@ -176,13 +177,12 @@ export default function page() {
                                             <div className={`text-xl font-bold ${spent > amount ? "text-red-500" : "text-[#715767]"}`}>{spent}/{amount}</div>
                                         </div>
                                         <div className="bg-gray-200 w-full h-2 rounded-full">
-                                            <div className="h-full rounded-full transition-all duration-300" style={{ width: `${percentage}%`, backgroundColor: category.color }} />
+                                            <div className="h-full rounded-full transition-all duration-300" style={{ width: `${percentage}%`, backgroundColor: spent > amount ?  "#F44336" : category.color }} />
                                         </div>
                                     </div>
                                 )
                             })}
                         </div>
-
                     </div>
                 </div>
             )}

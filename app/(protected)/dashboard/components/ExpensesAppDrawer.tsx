@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useExpenseModal } from "@/app/store/useExpenseModal";
 import { useExpenseStore } from "@/app/store/UseExpenseStore";
 import { ICON_MAP } from "@/app/lib/icon-map";
+import { useBudgetStore } from "@/app/store/BudgetStore";
 interface Category {
     id : string;
     name : string;
@@ -22,6 +23,7 @@ export default function () {
     const [loading, setLoading] = useState(false);
     const { isOpen, close } = useExpenseModal();
     const { addExpense } = useExpenseStore();
+    const {setBudget} = useBudgetStore();
     useEffect(()=>{
         async function loadCategories() {
           try{
@@ -80,6 +82,9 @@ export default function () {
             setAmount("")
             setCategory("");
             addExpense(data);
+            const budgetRes = await fetch('/api/budgets/');
+            const updatedBudget = await budgetRes.json();
+            setBudget(updatedBudget);
             close();
         } catch (error) {
             if (error instanceof Error) {

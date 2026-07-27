@@ -7,6 +7,7 @@ import ExpensesAppDrawer from "./components/ExpensesAppDrawer";
 import { useExpenseModal } from "@/app/store/useExpenseModal";
 import ExpenseModal from "./components/ExpenseModal";
 import { SpendingFlow } from "./components/SpendingFlowGraph";
+import CategoryChart from "./components/CategoryChart";
 
 export default function page() {
   const cards = [
@@ -172,10 +173,10 @@ export default function page() {
         </div>
         <div className="mt-8">
         <SpendingFlow />
+        <CategoryChart />
         </div>
       </div>
       <ExpenseModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-
     </>
   );
 }
