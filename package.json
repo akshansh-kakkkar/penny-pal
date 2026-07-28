@@ -21,6 +21,7 @@
     "@neondatabase/auth": "^0.4.2-beta",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "6",
+    "@react-spring/web": "^10.1.2",
     "@visx/curve": "^4.0.0",
     "@visx/gradient": "^4.0.0",
     "@visx/group": "^4.0.0",
