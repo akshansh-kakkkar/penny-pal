@@ -48,7 +48,7 @@ export async function getDashboardStats(userId: string) {
     totalExpenses,
     monthlyExpenses,
     budget: monthlyBudget,
-    remainBudget: monthlyBudget - monthlyExpenses,
+    remainingBudget: monthlyBudget - monthlyExpenses,
     transactionCount: count,
     budgetUsage,
     averageTransaction

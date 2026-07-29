@@ -1,8 +1,7 @@
-
 import { Group } from "@visx/group";
 import { Pie } from "@visx/shape";
 import { TooltipWithBounds, useTooltip } from "@visx/tooltip";
-import { animated, useSpring } from "@react-spring/web";
+import { animated } from "@react-spring/web";
 type CategoryStat = {
     id: string;
     name: string;
@@ -18,9 +17,13 @@ type props = {
 }
 
 export default function ({ width, height, data, }: props) {
+        console.log("CategoryPieGraph props:", data);
+
     const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip<CategoryStat>();
     if (width < 10 || height < 10) return null;
-    const total = data.reduce((sum, item) => sum + item.amount, 0);
+    const total =(data ?? []).reduce(
+        (sum, item)=> sum + item.amount, 0
+    )
     const radius = Math.min(width, height) / 2.4;
     const innerRadius = radius * 0.65;
     const AnimatedPath = animated("path");
@@ -34,35 +37,45 @@ export default function ({ width, height, data, }: props) {
                         outerRadius={radius}
                         innerRadius={innerRadius}
                         padAngle={0.02}>
-                        {
-                            (pie) => pie.arcs.map((arc) => {
-                                const [centroidX, centroidY] = pie.path.centroid(arc);
-                                const isHovered = tooltipData?.id === arc.data.id;
-                                return (
-                                    <g key={arc.data.id} onMouseMove={(event) => {
-                                        const rect = (event.currentTarget.ownerSVGElement ?? event.currentTarget).getBoundingClientRect();
-                                        showTooltip({
-                                            tooltipData: arc.data,
-                                            tooltipLeft: event.clientX - rect.left,
-                                            tooltipTop: event.clientY - rect.top,
-                                        })
-                                    }}
-                                        onMouseLeave={hideTooltip}
-                                        style={{ cursor: "pointer" }}
-                                    >
-                                        <AnimatedPath
-                                            d={pie.path(arc) ?? ""}
-                                            fill={arc.data.color}
-                                            stroke="white"
-                                            strokeWidth={2}
-                                        />
-                                    </g>
+                            {
+                                (pie) => pie.arcs.map((arc) => (
+                                        <g key={arc.data.id} onMouseMove={(event) => {
+                                            const rect = (event.currentTarget.ownerSVGElement ?? event.currentTarget).getBoundingClientRect();
+                                            showTooltip({
+                                                tooltipData: arc.data,
+                                                tooltipLeft: event.clientX - rect.left,
+                                                tooltipTop: event.clientY - rect.top,
+                                            })
+                                        }}
+                                            onMouseLeave={hideTooltip}
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            <AnimatedPath
+                                                d={pie.path(arc) ?? ""}
+                                                fill={arc.data.color}
+                                                stroke="white"
+                                                strokeWidth={2}
+                                            />
+                                        </g>
+                                    )
                                 )
-                            })
-                        }                    </Pie>
+                            }   
+                    </Pie>
 
                 </Group>
             </svg>
+            {tooltipOpen && tooltipData && (
+                <TooltipWithBounds left={tooltipLeft} top={tooltipTop} className="rounded-xl  border border-white/60 bg-white px-4 py-3 shadow-xl">
+                    <div className="flex text-center justify-center items-center gap-2">
+                       <div className="h-6 w-6 rounded-full" style={{backgroundColor : tooltipData.color}} />
+                            <span className="font-semibold items-center text-center text-[#715767]">
+                                {tooltipData.name}
+                            </span>
+                        <p className="mt-1 text-sm font-semibold text-[#4D4449]">Amount : <span className="font-semibold">$ {tooltipData.amount}</span></p>
+                        <p className="text-sm text-[#4d4449] font-semibold">{((tooltipData.amount/total) * 100).toFixed(1)}%</p>
+                    </div>
+                </TooltipWithBounds>
+            )}
         </div>
     )
 }

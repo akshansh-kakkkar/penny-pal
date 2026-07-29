@@ -3,30 +3,33 @@
 import { ParentSize } from "@visx/responsive";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import CategoryPieGraph from "./CategoryPieGraph";
 
 type CategoryStat = {
-    id : string;
-    name : string;
-    amount : string;
-    icon : string;
+    id: string;
+    background: string;
+    color: string;
+    name: string;
+    amount: number;
+    icon: string;
 }
-export default function CategoryPie(){
+export default function CategoryPie() {
     const [data, setdata] = useState<CategoryStat[]>([]);
     const [loading, setLoading] = useState(true);
-    useEffect(()=>{
-        const fetchCategoryStats = async ()=>{
-            try{
+    useEffect(() => {
+        const fetchCategoryStats = async () => {
+            try {
                 setLoading(true);
                 const res = await fetch('/api/stats/categories');
-                if(!res.ok){
+                if (!res.ok) {
                     throw new Error("Failed to fetch category stats");
                 }
                 const result = await res.json();
                 setdata(result)
-            }catch(err){
+            } catch (err) {
                 toast.error("Failed to fetch category stats");
 
-            }finally{
+            } finally {
                 setLoading(false)
             }
         }
@@ -42,13 +45,13 @@ export default function CategoryPie(){
                     </p>
                 </div>
             </div>
-            <div className="h-[420px w-full">
+            <div className="h-[420px] w-full">
                 <ParentSize>
-                    {({width, height})=>(
+                    {({ width, height }) => (
                         <CategoryPieGraph
-                        width={width}
-                        height={height}
-                        data={data}
+                            width={width}
+                            height={height}
+                            data={data}
                         />
                     )}
                 </ParentSize>

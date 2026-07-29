@@ -2,20 +2,32 @@
 "use client";
 import { Handbag, PiggyBank, Wallet, Plus, LayoutGrid } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ExpensesAppDrawer from "./components/ExpensesAppDrawer";
 import { useExpenseModal } from "@/app/store/useExpenseModal";
 import ExpenseModal from "./components/ExpenseModal";
 import { SpendingFlow } from "./components/SpendingFlowGraph";
 import CategoryChart from "./components/CatygoryPie";
-import CategoryPieGraph from "./components/CategoryPieGraph";
 
+type DashboardStats = {
+  totalExpenses: number;
+  monthlyExpenses: number;
+  budget: number;
+  remainingBudget: number;
+  transactionCount: number;
+  budgetUsage: number;
+  averageTransaction : number;
+}
 export default function page() {
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  useEffect(()=>{
+    fetch('/api/stats').then(res => res.json()).then(setStats);
+  }, [])
   const cards = [
     {
       id: 1,
       title: "Total Saved",
-      value: "$4,250.00",
+      value: `$${stats?.totalExpenses.toFixed(2) ?? "0.00"}`,
       icon: <PiggyBank className="text-[#715767] p-1" size={32} />,
       iconBg: "bg-[#F4D2E5]",
       badgeBg: "bg-[#C8E9E2]",
@@ -25,7 +37,7 @@ export default function page() {
     {
       id: 2,
       title: "Spend this week",
-      value: "$342.50",
+      value: `$${stats?.monthlyExpenses.toFixed(2) ?? "0.00"}`,
       icon: <Handbag className="text-[#93000A] p-1" size={32} />,
       iconBg: "bg-[#FFDAD6]",
     },
@@ -36,7 +48,7 @@ export default function page() {
       iconBg: "bg-[#F9D5B4]",
       badge: "March",
       badgeText: "text-[#765B41]",
-      value: "$425.50",
+      value: `${stats?.budgetUsage}`,
     },
   ];
   const [currentCard, setCurrentCard] = useState(0);
@@ -74,7 +86,7 @@ export default function page() {
                 Total Saved
               </div>
               <div className="md:text-4xl text-3xl font-extrabold text-[#1A1C1A]">
-                $4,250.00
+                ${stats?.totalExpenses.toFixed(2) ?? "0.00"}
               </div>
             </div>
           </div>
@@ -89,7 +101,7 @@ export default function page() {
                 Spent this week
               </div>
               <div className="md:text-4xl text-3xl font-extrabold text-[#1A1C1A]">
-                $342.50
+                ${stats?.monthlyExpenses.toFixed(2) ?? "0.00"}
               </div>
             </div>
           </div>
@@ -107,7 +119,7 @@ export default function page() {
                 Budget Status
               </div>
               <div className="md:text-4xl text-3xl font-extrabold text-[#1A1C1A]">
-                $4,250.00
+                ${stats?.remainingBudget}
               </div>
             </div>
           </div>
@@ -172,9 +184,9 @@ export default function page() {
             ))}
           </div>
         </div>
-        <div className="mt-8">
-        <SpendingFlow />
-        <CategoryPieGraph />
+        <div className="mt-8 flex flex-col gap-6">
+          <SpendingFlow />
+          <CategoryChart />
         </div>
       </div>
       <ExpenseModal isOpen={isOpen} onClose={() => setIsOpen(false)} />

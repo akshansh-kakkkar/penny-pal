@@ -20,6 +20,7 @@ export function SpendingFlow(){
                     throw new Error("Failed to load chart");
                 }
                 const stats = await res.json();
+                console.log("API Response", stats)
                 setData(stats)
 
             }catch{
