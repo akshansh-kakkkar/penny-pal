@@ -4,6 +4,7 @@ import { ParentSize } from "@visx/responsive";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import CategoryPieGraph from "./CategoryPieGraph";
+import { Loader2 } from "lucide-react";
 
 type CategoryStat = {
     id: string;
@@ -36,7 +37,14 @@ export default function CategoryPie() {
         fetchCategoryStats();
     }, [])
     return (
-        <div className="rounded-3xl border-2 border-white/60 bg-white/45 p-6 shadow-[0px_20px_40px_rgba(113,87,103,0.1)]">
+        <div className="rounded-3xl h-[500px] md:h-[550px] border-2 border-white/60 bg-white/45 p-6 shadow-[0px_20px_40px_rgba(113,87,103,0.1)]">
+         {
+            loading ? (
+                <div className="flex justify-center items-center text-center w-full h-full">
+                    <Loader2 className="animate-spin text-[#715767]" size={64} strokeWidth={2.5} />
+                </div>
+            ) : (
+                <>
             <div className="mb-6 flex items-center justify-between">
                 <div>
                     <h2 className="text-2xl font-bold text-[#715767]">Category Spending</h2>
@@ -56,6 +64,9 @@ export default function CategoryPie() {
                     )}
                 </ParentSize>
             </div>
+            </>
+                     )
+         }
         </div>
     )
 }

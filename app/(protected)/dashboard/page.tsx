@@ -8,7 +8,8 @@ import { useExpenseModal } from "@/app/store/useExpenseModal";
 import ExpenseModal from "./components/ExpenseModal";
 import { SpendingFlow } from "./components/SpendingFlowGraph";
 import CategoryChart from "./components/CatygoryPie";
-
+import {toast} from "sonner"
+import WeeklyGraph from "./components/WeeklyGraph";
 type DashboardStats = {
   totalExpenses: number;
   monthlyExpenses: number;
@@ -16,17 +17,32 @@ type DashboardStats = {
   remainingBudget: number;
   transactionCount: number;
   budgetUsage: number;
-  averageTransaction : number;
+  averageTransaction: number;
 }
 export default function page() {
+  const [loader, setLoader] = useState(false);
   const [stats, setStats] = useState<DashboardStats | null>(null);
-  useEffect(()=>{
-    fetch('/api/stats').then(res => res.json()).then(setStats);
-  }, [])
+ const fetchStats = async ()=>{
+  try{
+    setLoader(true)
+    const res = await fetch("/api/stats")
+    const data = await res.json();
+    setStats(data)
+}
+catch(error){
+  toast.error("Failed to fetch Stats")
+}
+finally{
+  setLoader(false)
+}
+ }
+ useEffect(()=>{
+  fetchStats();
+ },[])
   const cards = [
     {
       id: 1,
-      title: "Total Saved",
+      title: "Total Expenses",
       value: `$${stats?.totalExpenses.toFixed(2) ?? "0.00"}`,
       icon: <PiggyBank className="text-[#715767] p-1" size={32} />,
       iconBg: "bg-[#F4D2E5]",
@@ -36,20 +52,25 @@ export default function page() {
     },
     {
       id: 2,
-      title: "Spend this week",
+      title: "Monthly Expenses",
       value: `$${stats?.monthlyExpenses.toFixed(2) ?? "0.00"}`,
       icon: <Handbag className="text-[#93000A] p-1" size={32} />,
       iconBg: "bg-[#FFDAD6]",
     },
     {
       id: 3,
-      title: "Budget Status",
+      title: "Remaining Budget",
       icon: <Wallet className="text-[#765B41] p-1" size={32} />,
       iconBg: "bg-[#F9D5B4]",
       badge: "March",
       badgeText: "text-[#765B41]",
-      value: `${stats?.budgetUsage}`,
-    },
+      value: (
+
+      <div className="h-4 rounded-full bg-[#F5E7D8] overflow-hidden">
+      <div style={{ width: `${Math.min(stats?.budgetUsage ?? 0, 100)}%` }} className="h-4 rounded-full bg-[#715767] duration-700 transition-all" />
+        </div>
+      ),
+    }
   ];
   const [currentCard, setCurrentCard] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -78,12 +99,12 @@ export default function page() {
                 <PiggyBank className="text-[#715767] p-1" size={32} />
               </div>
               <div className="text-[#4C6A65] text-sm md:text-base  rounded-full font-bold py-1 px-4 bg-[#C8E9E2]">
-                +12%
+                +
               </div>
             </div>
             <div className="flex gap-2 w-full flex-col">
               <div className="md:text-2xl text-lg font-semibold text-[#4D4449]">
-                Total Saved
+                Total Expenses
               </div>
               <div className="md:text-4xl text-3xl font-extrabold text-[#1A1C1A]">
                 ${stats?.totalExpenses.toFixed(2) ?? "0.00"}
@@ -98,7 +119,7 @@ export default function page() {
             </div>
             <div className="flex gap-2 w-full flex-col">
               <div className="md:text-2xl text-lg font-semibold text-[#4D4449]">
-                Spent this week
+                Monthly Expenses
               </div>
               <div className="md:text-4xl text-3xl font-extrabold text-[#1A1C1A]">
                 ${stats?.monthlyExpenses.toFixed(2) ?? "0.00"}
@@ -116,10 +137,11 @@ export default function page() {
             </div>
             <div className="flex gap-2 w-full flex-col">
               <div className="md:text-2xl text-lg font-semibold text-[#4D4449]">
-                Budget Status
+                Remaining Budget
               </div>
-              <div className="md:text-4xl text-3xl font-extrabold text-[#1A1C1A]">
-                ${stats?.remainingBudget}
+              <div className="h-4 rounded-full bg-[#F5E7D8] overflow-hidden">
+                <div className="h-4 rounded-full bg-[#715767] transition-all duration-700" 
+                style={{width : `${ Math.min(stats?.budgetUsage ?? 0, 100) }% `}} />
               </div>
             </div>
           </div>
@@ -142,22 +164,20 @@ export default function page() {
               }
             }}
             className="flex"
-            animate={{ x: `-${currentCard * 100}%` }}
+            animate={{ x: `-${currentCard * 100 }% ` }}
           >
             {cards.map((card) => (
-              <div className="min-w-full p-2">
-                <div
-                  key={card.id}
-                  className="bg-white justify-center  flex gap-4 flex-col border-2 rounded-4xl  border-[#715767] p-3 shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]"
+              <div key={card.id} className="min-w-full p-2">
+                <div className="bg-white justify-center  flex gap-4 flex-col border-2 rounded-4xl  border-[#715767] p-3 shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]"
                 >
                   <div className="flex justify-between">
-                    <div className={`p-2 rounded-full ${card.iconBg}`}>
+                    <div className={`p-2 rounded-full ${ card.iconBg } `}>
                       {card.icon}
                     </div>
                     <div>
                       {card.badge && (
                         <div
-                          className={`px-4 py-1 rounded-full ${card.badgeBg ?? ""} font-semibold ${card.badgeText} ?? ""}`}
+                          className={`px-4 py-1 rounded-full ${ card.badgeBg ?? "" } font-semibold ${ card.badgeText } ?? ""}`}
                         >
                           {card.badge}
                         </div>
@@ -179,7 +199,7 @@ export default function page() {
               <button
                 key={index}
                 onClick={() => setCurrentCard(index)}
-                className={`divansition-all cursor-pointer rounded-full ${currentCard === index ? "w-6 h-2 bg-[#715767]" : " w-6 h-2 bg-gray-300"}`}
+                className={`transition-all cursor-pointer rounded-full ${ currentCard === index ? "w-6 h-2 bg-[#715767]" : " w-6 h-2 bg-gray-300" } `}
               ></button>
             ))}
           </div>
@@ -187,6 +207,7 @@ export default function page() {
         <div className="mt-8 flex flex-col gap-6">
           <SpendingFlow />
           <CategoryChart />
+          <WeeklyGraph />
         </div>
       </div>
       <ExpenseModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
