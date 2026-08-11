@@ -121,3 +121,56 @@ export async function getCategoryStats(userId: string) {
     amount : item.expenses.reduce((sum,expense)=>sum + expense.amount, 0)
   }))
 }
+
+export async function getWeeklyStats(userId : string){
+  const now = new Date();
+  const currentWeekStart = new Date(now);
+  const day = currentWeekStart.getDay();
+  const diff = day === 0 ? 6 : day -1;
+  currentWeekStart.setDate(currentWeekStart.getDate() - diff);
+  currentWeekStart.setHours(0,0,0,0);
+  const start = new Date(currentWeekStart);
+
+  start.setDate(start.getDate() -7 * 7 );
+  start.setHours(0,0,0,0);
+  const expenses = await prisma.expense.findMany({
+    where : {
+      userId,
+      date : {
+        gte : start,
+      },
+    },
+    orderBy : {
+      date : "asc",
+    },
+    select : {
+      amount : true,
+      date : true,
+    },
+  })
+  const weeklyMap = new Map<string, number>();
+  for(const expense of expenses){
+    const expenseDate = new Date(expense.date);
+    const day = expenseDate.getDay();
+    const diff = day === 0 ? 6 : day -1;
+    const weekStart = new Date(expenseDate);
+    weekStart.setDate(expenseDate.getDate() - diff);
+    weekStart.setHours(0,0,0,);
+    const key = weekStart.toISOString().split("T")[0];
+    weeklyMap.set(key, (weeklyMap.get(key) ?? 0) + expense.amount);
+  }
+  const result = [];
+  for(let i = 0; i<7; i++){
+    const weekStart = new Date(currentWeekStart);
+    weekStart.setDate(currentWeekStart.getDate() - (6 - i) * 7);
+    const key =weekStart.toISOString().split("T")[0];
+    result.push({
+      week : weekStart.toLocaleDateString("en-US", {
+        month : "short",
+        day : "numeric",
+      }),
+      amount : weeklyMap.get(key) ?? 0,
+    })
+  }
+  return result;
+}

@@ -45,7 +45,7 @@ export default function CategoryPie() {
                 </div>
             ) : (
                 <>
-            <div className="mb-6 flex items-center justify-between">
+            <div className="mb-8 mt-6 ml-6 flex items-center justify-between">
                 <div>
                     <h2 className="text-2xl font-bold text-[#715767]">Category Spending</h2>
                     <p className="text-sm text-[#4D4449]">

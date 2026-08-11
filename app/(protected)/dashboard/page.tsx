@@ -139,9 +139,8 @@ finally{
               <div className="md:text-2xl text-lg font-semibold text-[#4D4449]">
                 Remaining Budget
               </div>
-              <div className="h-4 rounded-full bg-[#F5E7D8] overflow-hidden">
-                <div className="h-4 rounded-full bg-[#715767] transition-all duration-700" 
-                style={{width : `${ Math.min(stats?.budgetUsage ?? 0, 100) }% `}} />
+              <div className="md:text-4xl text-3xl font-extrabold text-[#1A1C1A]">
+                {stats?.budget ? `$${stats.remainingBudget.toFixed(2)}` : "N/A"}
               </div>
             </div>
           </div>
