@@ -39,3 +39,4 @@ or
 npm run dev
 ```
 
+`AI was used really minimally on the places where I got stuck.`
