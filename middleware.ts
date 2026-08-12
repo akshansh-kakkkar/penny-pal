@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  const session = request.cookies.get("better-auth.session_token");
+  const session =
+  request.cookies.get("__Secure-better-auth.session_token") ??
+  request.cookies.get("better-auth.session_token");
   const { pathname } = request.nextUrl;
 
   const isAuthPage = pathname === "/" || pathname.startsWith("/auth");
