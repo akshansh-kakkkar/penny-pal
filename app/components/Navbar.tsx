@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "../lib/auth/auth-client";
+import { toast } from "sonner";
 export default function Navbar() {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +17,9 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
   }, []);
   const router = useRouter();
+  const toastPop = () => {
+    toast.success("This is a placeholder")
+  }
   return (
     <>
       <div
@@ -25,9 +29,9 @@ export default function Navbar() {
           PennyPal
         </Link>
         <div className="hidden md:flex gap-10 text-md font-semibold capitalize text-center items-center">
-          <Link href={"/about-us"}>About Us</Link>
-          <Link href={"/features"}>Features</Link>
-          <Link href={"/join-the-club"}>Join the Club</Link>
+          <div onClick={toastPop} className="cursor-pointer">About Us</div>
+          <div onClick={toastPop} className="cursor-pointer">Features</div>
+          <div onClick={toastPop} className="cursor-pointer">Contact</div>
         </div>
         <div className="hidden md:flex gap-4 text-sm font-bold items-center text-center justify-center">
           {session ? (
@@ -76,9 +80,9 @@ export default function Navbar() {
               className={`fixed z-50 md:hidden bg-[#FAF9F6] text-[#715767] shadow-[0px_60px_60px_rgba(244,210,229,0.4)]  min-h-[120px] shadow-lg ${scrolled ? " rounded-4xl top-20 w-[calc(100vw-2rem)] mx-4 flex justify-center items-center " : " rounded-b-4xl top-20 w-full"}`}
             >
               <div className="font-semibold justify-center items-center py-4 px-4  text-xl gap-4 flex-col flex">
-                <Link href={"/about-us"}>About Us</Link>
-                <Link href={"/features"}>Features</Link>
-                <Link href={"/join-the-club"}>Join the Club</Link>
+                <div onClick={toastPop} className="cursor-pointer">About Us</div>
+                <div onClick={toastPop} className="cursor-pointer">Features</div>
+                <div onClick={toastPop} className="cursor-pointer">Contact</div>
                 <div className="flex gap-2 flex-col">
                   <button
                     onClick={() => router.push("/auth/sign-up")}

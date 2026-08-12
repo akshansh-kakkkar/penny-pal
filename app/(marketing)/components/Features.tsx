@@ -1,6 +1,11 @@
+'use client'
 import { ArrowRight, ChartPie, Hand, Laugh } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Features() {
+  const toastPop = ()=>{
+    toast.success("Thanks for clicking me you can sign-in to experience me!")
+  }
   const Content = [
     {
       id: 1,
@@ -40,11 +45,11 @@ export default function Features() {
     </div>
     <div className="flex gap-10 px-10 xl:px-40 flex-wrap mt-12  justify-center items-center min-h-[70vh]">
         {Content.map((item)=>(
-            <div className={`${item.backgroundColor} cursor-pointer group transition-all duration-500 hover:scale-[120%] md:hover:scale-[110%] w-80 h-120 sm:h-110 text-[#715767] shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]  p-10  flex flex-col justify-start text-start gap-6 rounded-4xl`} key={item.id}>
+            <div onClick={toastPop} className={`${item.backgroundColor} cursor-pointer group transition-all duration-500 hover:scale-[120%] md:hover:scale-[110%] w-80 h-120 sm:h-110 text-[#715767] shadow-[0px_20px_40px_rgba(113,87,103,0.1)] shadow-lg shadow-[0px_10px_20px_rgba(244,210,229,0.2)]  p-10  flex flex-col justify-start text-start gap-6 rounded-4xl`} key={item.id}>
                 <div className={`rounded-full ${item.iconColor} w-fit flex justify-center items-center text-center p-4 `}>{item.icon}</div>
                 <div className="font-semibold  text-3xl">{item.title}</div>
                 <div className="text-[#4D4449] font-medium text-lg">{item.description}</div>
-                <div className="font-bold mt-auto flex gap-2 text-sm items-center text-center  ">{item.hook}<span className="transition-all duration-300 group-hover:translate-x-2">< ArrowRight size={16} strokeWidth={3} /></span></div>
+                <div className="font-bold mt-auto flex gap-2 text-sm items-center text-center" >{item.hook}<span className="transition-all duration-300 group-hover:translate-x-2">< ArrowRight size={16} strokeWidth={3} /></span></div>
             </div>
         ))}
     </div>
